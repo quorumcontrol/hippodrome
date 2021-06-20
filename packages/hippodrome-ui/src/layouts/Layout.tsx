@@ -1,12 +1,16 @@
 import { Box, Heading } from "@chakra-ui/layout";
+import { Flex, Spacer } from "@chakra-ui/react";
 import React from "react";
+import CurrentUser from "../components/CurrentUser";
 
 const Layout: React.FC = ({ children }) => {
   return (
     <Box>
-      <Box w="100%" p={4} borderBottom="1px">
+      <Flex w="100%" p={4} borderBottom="1px">
         <Heading>Hippodrome</Heading>
-      </Box>
+        <Spacer />
+        <CurrentUser />
+      </Flex>
       {children}
     </Box>
   );

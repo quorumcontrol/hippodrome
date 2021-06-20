@@ -67,12 +67,7 @@ export class Chain extends EventEmitter {
     this.address = await this.signer.getAddress()
     this.connected = true
 
-    if (this.network.chainId !== this.expectedChain()) {
-      this.emit('connect')
-      return
-    }
-
-    this.emit('connect')
+    this.emit('connected')
   }
 
   expectedChain() {
