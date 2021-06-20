@@ -4,7 +4,7 @@ import React from "react";
 const Layout: React.FC = ({ children }) => {
   return (
     <Box>
-      <Box bg="black" w="100%" p={4} color="white">
+      <Box w="100%" p={4} borderBottom="1px">
         <Heading>Hippodrome</Heading>
       </Box>
       {children}
