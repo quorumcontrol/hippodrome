@@ -20,7 +20,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "typescript": "^3.9.5",
-    "web-vitals": "^0.2.2"
+    "web-vitals": "^0.2.2",
+    "web3modal": "^1.9.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,5 +43,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.7"
   }
 }
