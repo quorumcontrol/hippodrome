@@ -5,7 +5,7 @@ import {
   Grid,
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher"
-import Swap from "../components/Swap"
+import Swap from "../components/swap/Swap"
 
 const Home:React.FC = () => {
   return (
