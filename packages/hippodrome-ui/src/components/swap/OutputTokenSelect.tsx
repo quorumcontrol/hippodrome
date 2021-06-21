@@ -1,18 +1,20 @@
 import React from "react";
 import { supportedTokens } from "../../models/tokenList";
 import Select from "react-select";
-import { Box } from "@chakra-ui/react";
+import { FormControl, FormLabel, PropsOf } from "@chakra-ui/react";
 
-const OutputTokenSelect: React.FC = () => {
+const OutputTokenSelect: React.FC<Partial<PropsOf<typeof Select>>> = (props) => {
   return (
-    <Box w="lg">
+    <FormControl>
+      <FormLabel>You Receive</FormLabel>
       <Select
+        {...props}
         options={supportedTokens.map((token) => ({
           label: token.name,
           value: token.address,
         }))}
       />
-    </Box>
+    </FormControl>
   );
 };
 

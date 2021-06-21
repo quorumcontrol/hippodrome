@@ -1,18 +1,29 @@
 import React from "react";
 import { inputTokens } from "../../models/tokenList";
 import Select from "react-select";
-import { Box } from "@chakra-ui/react";
+import { FormControl, FormLabel, PropsOf } from "@chakra-ui/react";
 
-const InputTokenSelect: React.FC = () => {
+const InputTokenSelect: React.FC<Partial<PropsOf<typeof Select>>> = (userProps) => {
+  const { onChange, value, ...selectProps } = userProps
+
+  const options = inputTokens.map((token) => ({
+    label: token.name,
+    value: token.symbol,
+  }))
+
   return (
-    <Box w="lg">
+    <FormControl id="inputToken">
+      <FormLabel>You Send</FormLabel>
       <Select
-        options={inputTokens.map((token) => ({
-          label: token.name,
-          value: token.symbol,
-        }))}
+        value={options.find((o) => o.value === value)}
+        onChange={(changeVal) => {
+          console.log('change: ', changeVal)
+          onChange(changeVal?.value)
+        }}
+        options={options}
+        {...selectProps}
       />
-    </Box>
+    </FormControl>
   );
 };
 

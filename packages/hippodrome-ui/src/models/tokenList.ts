@@ -14,16 +14,19 @@ export interface TokenListToken {
 export interface InputToken {
   name: string
   logoURI: string
+  symbol: string
 }
 
 export const inputTokens:InputToken[] = [
   {
     name: 'Dogecoin',
     logoURI: dogeLogo,
+    symbol: 'DOGE',
   },
   {
     name: 'Bitcoin',
     logoURI: bitcoinLogo,
+    symbol: 'BTC',
   }
 ]
 

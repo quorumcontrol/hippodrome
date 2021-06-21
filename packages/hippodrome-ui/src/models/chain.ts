@@ -40,9 +40,9 @@ export class Chain extends EventEmitter {
 
   address?: string
 
-  network?: providers.Network
-
   networkName: KnownNetworkNames
+
+  chainId?: number
 
   constructor(networkName: KnownNetworkNames) {
     super()
@@ -62,7 +62,7 @@ export class Chain extends EventEmitter {
     this.provider = new providers.Web3Provider(web3Provider)
 
     console.log('provider: ', this.provider)
-    this.network = await this.provider.getNetwork()
+    this.chainId = (await this.provider.getNetwork()).chainId
     this.signer = this.provider.getSigner()
     this.address = await this.signer.getAddress()
     this.connected = true

@@ -1,9 +1,11 @@
-import { Box, Heading } from "@chakra-ui/layout";
-import { Flex, Spacer } from "@chakra-ui/react";
+import { Flex, Spacer, Text, Box, Heading, VStack } from "@chakra-ui/react";
 import React from "react";
 import CurrentUser from "../components/CurrentUser";
+import { useChainContext } from "../hooks/useChainContext";
 
 const Layout: React.FC = ({ children }) => {
+  const { address } = useChainContext();
+
   return (
     <Box>
       <Flex w="100%" p={4} borderBottom="1px">
@@ -11,9 +13,14 @@ const Layout: React.FC = ({ children }) => {
         <Spacer />
         <CurrentUser />
       </Flex>
-      {children}
+      {!address && (
+        <VStack>
+          <Text>Please connect your wallet</Text>
+        </VStack>
+      )}
+      {address && children}
     </Box>
   );
 };
 
-export default Layout
+export default Layout;

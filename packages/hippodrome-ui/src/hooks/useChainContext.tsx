@@ -25,6 +25,7 @@ export const ChainContext = createContext<ChainContextData>(
 )
 
 export const ChainProvider: React.FC = ({ children }) => {
+  // re-render on connected vs not connected
   const [connected, setConnected] = useState(chainInstance.connected)
   const [connecting, setConnecting] = useState(false)
 
