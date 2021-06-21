@@ -17,6 +17,8 @@ import { useRenOutput } from "../../hooks/useRen";
 import { KnownInputChains } from "../../models/ren";
 import OutputAmount from "./OutputAmount";
 import { inputTokensBySymbol } from "../../models/tokenList";
+import SwapFees from "./SwapFees";
+import { parseValueToHex } from "../../utils/parse";
 
 const Swap: React.FC = () => {
   const [amount, setAmount] = useState(0);
@@ -65,9 +67,10 @@ const Swap: React.FC = () => {
       <OutputAmount
         input={inputTokensBySymbol[inputToken].renAddress}
         output={outputToken}
-        amount={amount.toString(10)}
+        amount={parseValueToHex(amount)}
       />
-      <Button onClick={onSubmit}>Fees</Button>
+      <SwapFees inputName={inputToken as KnownInputChains} amount={parseValueToHex(amount)}/>
+      <Button onClick={onSubmit}>Swap</Button>
     </VStack>
   );
 };
