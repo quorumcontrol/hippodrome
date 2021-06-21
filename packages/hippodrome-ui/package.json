@@ -20,6 +20,7 @@
     "react-icons": "^3.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-select": "^4.3.1",
     "typescript": "^3.9.5",
     "web-vitals": "^0.2.2",
     "web3modal": "^1.9.3"
@@ -46,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.7"
+    "@types/react-router-dom": "^5.1.7",
+    "@types/react-select": "^4.0.15"
   }
 }
