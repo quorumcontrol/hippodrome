@@ -17,13 +17,12 @@ export const useRenFees = (networkName:KnownInputChains) => {
     revalidate,
     loading: !fees,
   }
-
 }
 
 export const useRenOutput = (networkName: KnownInputChains) => {
   const { fees } = useRenFees(networkName)
 
-  const getOutput = async (amount:BigNumber) => {
+  const getOutput = (amount:BigNumber) => {
     if (!fees || !fees.lock) {
       throw new Error('fees have not loaded yet')
     }

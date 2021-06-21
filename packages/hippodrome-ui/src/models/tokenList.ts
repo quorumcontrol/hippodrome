@@ -41,3 +41,7 @@ export const inputTokensBySymbol = inputTokens.reduce(
 );
 
 export const supportedTokens: TokenListToken[] = quickSwapTokenList.tokens;
+
+export const tokenListTokensByAddress = supportedTokens.reduce((mem:Record<string,TokenListToken>, token) => {
+  return {...mem, [token.address]:token}
+}, {})
