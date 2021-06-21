@@ -16,6 +16,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@ukstv/jazzicon-react": "^1.0.0",
+    "axios": "^0.21.1",
     "ethers": "^5.3.1",
     "framer-motion": "^4.0.0",
     "react": "^17.0.2",

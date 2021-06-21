@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   VStack,
   NumberInput,
@@ -10,20 +10,21 @@ import {
   FormLabel,
   Button,
 } from "@chakra-ui/react";
+import { BigNumber } from 'ethers'
 import OutputTokenSelect from "./OutputTokenSelect";
 import InputTokenSelect from "./InputTokenSelect";
-import { useState } from "react";
-import { useRenFees } from "../../hooks/useRen";
+import {  useRenOutput } from "../../hooks/useRen";
 import { KnownInputChains } from "../../models/ren";
 
 const Swap: React.FC = () => {
   const [amount, setAmount] = useState(0);
   const [inputToken, setInputToken] = useState("DOGE");
 
-  const fees = useRenFees(inputToken as KnownInputChains);
+  const { getOutput } = useRenOutput(inputToken as KnownInputChains)
 
   const onSubmit = async () => {
-    console.log("fees: ", fees);
+    const out = await getOutput(BigNumber.from(amount))
+    console.log("out: ", out.toString())
   };
 
   return (
