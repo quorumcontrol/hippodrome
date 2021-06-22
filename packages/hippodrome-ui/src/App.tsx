@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import { ChainProvider } from "./hooks/useChainContext";
+import Transaction from "./pages/Transaction";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -11,6 +12,9 @@ export const App = () => (
       <Router>
         <Layout>
           <Switch>
+            <Route path="/transaction/mint/:asset/:to/:nonce" exact>
+              <Transaction />
+            </Route>
             <Route path="/">
               <Home />
             </Route>
