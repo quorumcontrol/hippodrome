@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
+  "target": "node",
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@typechain/ethers-v5": "^7.0.1",
