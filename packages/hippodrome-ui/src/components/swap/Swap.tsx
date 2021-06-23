@@ -11,11 +11,9 @@ import {
   Button,
   Spinner,
 } from "@chakra-ui/react";
-import { BigNumber } from "ethers";
 import OutputTokenSelect from "./OutputTokenSelect";
 import InputTokenSelect from "./InputTokenSelect";
-import { useRenOutput } from "../../hooks/useRen";
-import { getLockAndMint, getNextNonce, KnownInputChains, lockAndMint } from "../../models/ren";
+import { getLockAndMint, getNextNonce, KnownInputChains } from "../../models/ren";
 import OutputAmount from "./OutputAmount";
 import { inputTokensBySymbol } from "../../models/tokenList";
 import SwapFees from "./SwapFees";
@@ -92,11 +90,11 @@ const Swap: React.FC = () => {
         }}
         value={outputToken}
       />
-      {/* <OutputAmount
+      <OutputAmount
         input={inputTokensBySymbol[inputToken].renAddress}
         output={outputToken}
         amount={parseValueToHex(amount)}
-      /> */}
+      />
       <SwapFees inputName={inputToken as KnownInputChains} amount={parseValueToHex(amount)}/>
       <Button onClick={onSubmit}>Swap</Button>
     </VStack>

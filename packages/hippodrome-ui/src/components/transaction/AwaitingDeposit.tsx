@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   VStack,
-  Text,
   Heading
 } from '@chakra-ui/react'
 import QRCode from 'qrcode.react'

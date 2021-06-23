@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Box, VStack, Spinner, Text, Button } from '@chakra-ui/react'
-import { LockAndMint, LockAndMintDeposit } from '@renproject/ren/build/main/lockAndMint'
+import { LockAndMint } from '@renproject/ren/build/main/lockAndMint'
 import { useDeposit } from '../../hooks/useRen'
 import { WrappedLockAndMintDeposit } from '../../models/ren'
 
