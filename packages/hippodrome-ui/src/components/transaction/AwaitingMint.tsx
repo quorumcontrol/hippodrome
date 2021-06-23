@@ -17,13 +17,10 @@ const Deposit:React.FC<{deposit: WrappedLockAndMintDeposit}> = ({ deposit:propDe
   const onMint = async () => {
     try {
       setLoading(true)
-      console.log('tx hash: ', deposit.deposit.txHash())
-      console.log('signed')
-      // const res = await deposit.queryTx()
-      // console.log('queryTx: ', res)
-      // if (res && res.out?.revert) {
-      //   await deposit.signed()
-      // }
+      console.log('deposit: ', deposit)
+      const tx = await deposit.deposit.queryTx()
+      console.log(tx)
+      alert('we now have all the params needed for a mint and a swap')
     } catch (err) {
       console.error('erorr minting: ', err)
     } finally {
