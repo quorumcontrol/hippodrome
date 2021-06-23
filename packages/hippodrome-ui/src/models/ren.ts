@@ -177,29 +177,6 @@ export class LockAndMintWrapper extends EventEmitter {
     this.setupListener();
   }
 
-  // async getDeposit(txHash: string) {
-  //   const existing = this.deposits.find((dep) => dep.txHash() === txHash);
-  //   if (existing) {
-  //     return existing;
-  //   }
-  //   return new Promise((resolve) => {
-  //     // need to do the search again inside of the promise incase one came in 
-  //     // while we were creating the promise
-  //     const existing = this.deposits.find((dep) => dep.txHash() === txHash);
-  //     if (existing) {
-  //       return resolve(existing);
-  //     }
-  //     // otherwise we'll wait for it to come in
-  //     const cb = (deposit: LockAndMintDeposit) => {
-  //       if (deposit.txHash() === txHash) {
-  //         resolve(deposit);
-  //         this.off("deposit", cb);
-  //       }
-  //     };
-  //     this.on("deposit", cb);
-  //   });
-  // }
-
   private async handleDeposit(deposit: LockAndMintDeposit) {
     console.log('handle deposit')
     const wrappedDeposit = new WrappedLockAndMintDeposit(deposit)
