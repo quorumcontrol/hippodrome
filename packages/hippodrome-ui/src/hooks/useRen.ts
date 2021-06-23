@@ -1,9 +1,8 @@
 import { BigNumber } from "ethers";
 import useSWR from "swr";
-import { fetchFees, KnownInputChains, lockAndMint } from "../models/ren";
-import { useState, useEffect } from "react";
-import { LockAndMintDeposit } from "@renproject/ren/build/main/lockAndMint";
-import ThenArg from "../utils/ThenArg";
+import { fetchFees, KnownInputChains, getLockAndMint, LockAndMintParams, WrappedLockAndMintDeposit } from "../models/ren";
+import { useState, useEffect, useMemo } from "react";
+import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
 
 export const useRenFees = (networkName: KnownInputChains) => {
   const {
@@ -33,39 +32,27 @@ export const useRenFees = (networkName: KnownInputChains) => {
   };
 };
 
-export const useDeposit = (deposit: LockAndMintDeposit) => {
+export const useDeposit = (deposit: WrappedLockAndMintDeposit) => {
   const [confirmations, setConfirmations] =
-    useState<{ current: number; target: number } | undefined>();
-  const [confirmed, setConfirmed] = useState(false);
+    useState<{ current: number; target: number } | undefined>(
+      (deposit.confirmations && deposit.targetConfirmations) ? 
+        { current: deposit.confirmations, target: deposit.targetConfirmations } :
+        undefined
+    );
+  const [confirmed, setConfirmed] = useState(deposit.confirmed);
+  const [signed, setSigned] = useState(deposit.signed)
 
   useEffect(() => {
-    let canceled = false;
+    const cb = () => {
+      setConfirmations({ current: deposit.confirmations || 0, target: deposit.confirmations || 0})
+      setConfirmed(deposit.confirmed)
+      setSigned(deposit.signed)
+    }
 
-    const confirmed = deposit.confirmed();
-    confirmed.on("target", (target) => {
-      if (!canceled) {
-        setConfirmations((c) => {
-          return { ...(c || { current: 0 }), target };
-        });
-      }
-    });
-
-    confirmed.on("confirmation", (current) => {
-      if (!canceled) {
-        setConfirmations((c) => {
-          return { ...(c || { target: 0 }), current };
-        });
-      }
-    });
-
-    confirmed.then(() => {
-      if (!canceled) {
-        setConfirmed(true);
-      }
-    });
+    deposit.on('update', cb)
 
     return () => {
-      canceled = true;
+      deposit.off('update', cb)
     };
   }, [deposit]);
 
@@ -73,47 +60,37 @@ export const useDeposit = (deposit: LockAndMintDeposit) => {
     deposit: deposit,
     confirmations,
     confirmed,
+    signed,
   };
 };
 
-export const useExistingMintTransaction = (
-  assetName: KnownInputChains,
-  to: string,
-  nonce: number
-) => {
-  const [deposits, setDeposits] = useState<LockAndMintDeposit[]>([]);
+export const useLockAndMint = (params:LockAndMintParams) => {
+  const [deposits, setDeposits] = useState<WrappedLockAndMintDeposit[]>([]);
+  const [lockAndMint, setLockAndMint] = useState<LockAndMint>()
 
-  const {
-    data: transaction,
-    revalidate,
-    isValidating,
-  } = useSWR(["/ren-mint-transaction", assetName, to, nonce], {
-    fetcher: async (_, assetName, to, nonce) => {
-      return lockAndMint(assetName, to, nonce);
-    },
-  });
+  const lockAndMintWrapper = useMemo(() => {
+    return getLockAndMint(params);
+  }, [params])
 
   useEffect(() => {
-    if (!transaction) {
-      return;
-    }
-    setDeposits([]);
-    const cb = (deposit: any) => {
+    setDeposits([...lockAndMintWrapper.deposits]);
+    lockAndMintWrapper.ready.then((lockAndMint) => {
+      setLockAndMint(lockAndMint)
+    })
+    const cb = (deposit: WrappedLockAndMintDeposit) => {
       console.log("deposit: ", deposit);
       setDeposits((c) => [...c, deposit]);
     };
-    transaction.on("deposit", cb);
+    lockAndMintWrapper.on("deposit", cb);
     return () => {
-      transaction.off("deposit", cb);
+      lockAndMintWrapper.off("deposit", cb);
     };
-  }, [transaction]);
+  }, [lockAndMintWrapper]);
 
   return {
-    transaction,
+    lockAndMint,
     deposits,
-    revalidate,
-    isValidating,
-    loading: !transaction,
+    loading: !lockAndMint
   };
 };
 

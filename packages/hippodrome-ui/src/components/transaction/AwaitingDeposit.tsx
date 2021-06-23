@@ -4,23 +4,23 @@ import {
   Text,
   Heading
 } from '@chakra-ui/react'
-import { LockAndMint } from '@renproject/ren/build/main/lockAndMint'
 import QRCode from 'qrcode.react'
+import { LockAndMint } from '@renproject/ren/build/main/lockAndMint'
 
 export interface PendingTransactionProps {
-  transaction?: LockAndMint
+  lockAndMint?: LockAndMint
 }
 
-const AwaitingDeposit:React.FC<PendingTransactionProps> = ({ transaction }) => {
+const AwaitingDeposit:React.FC<PendingTransactionProps> = ({ lockAndMint }) => {
   
-  if (!transaction) {
+  if (!lockAndMint) {
     return null
   }
 
   return (
     <VStack>
-      <Heading>Please deposit {transaction.params.asset} here: {transaction.gatewayAddress}</Heading>
-      <QRCode value={`bitcoin:${transaction.gatewayAddress}`} />
+      <Heading>Please deposit {lockAndMint.params.asset} here: {lockAndMint.gatewayAddress}</Heading>
+      <QRCode value={`bitcoin:${lockAndMint.gatewayAddress}`} />
     </VStack>
   )
 }

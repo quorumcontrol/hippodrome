@@ -1,74 +1,190 @@
-import { Bitcoin, Dogecoin, Polygon } from "@renproject/chains"
+import { Bitcoin, Dogecoin, Polygon } from "@renproject/chains";
 import RenJS from "@renproject/ren";
+import {
+  LockAndMint,
+  LockAndMintDeposit,
+} from "@renproject/ren/build/main/lockAndMint";
 import { utils } from "ethers";
-import chainInstance from './chain'
+import EventEmitter from "events";
+import chainInstance from "./chain";
 
-export type KnownInputChains = 'BTC' | 'DOGE'
-
-const ren = new RenJS('testnet') // TODO: support testnet
-
-export const NETWORKS = {
-  BTC: Bitcoin('testnet'),
-  DOGE: Dogecoin('testnet'),
+export interface LockAndMintParams {
+  lockNetwork: KnownInputChains;
+  to: string;
+  nonce: number;
 }
 
-export const fetchFees = (networkName:KnownInputChains) => {
+export type KnownInputChains = "BTC" | "DOGE";
+
+const ren = new RenJS("testnet"); // TODO: support testnet
+
+export const NETWORKS = {
+  BTC: Bitcoin("testnet"),
+  DOGE: Dogecoin("testnet"),
+};
+
+export const fetchFees = (networkName: KnownInputChains) => {
   try {
     if (!chainInstance.provider) {
-      throw new Error('can only call fetchFees with a provider')
+      throw new Error("can only call fetchFees with a provider");
     }
-    const net = NETWORKS[networkName]
-    console.dir(net)
+    const net = NETWORKS[networkName];
+    console.dir(net);
     return ren.getFees({
       asset: net.asset,
       from: net,
-      to: Polygon(chainInstance.provider.provider as any, 'testnet')
-    })
+      to: Polygon(chainInstance.provider.provider as any, "testnet"),
+    });
   } catch (err) {
-    console.error('fetchFees err', err)
-    throw err
+    console.error("fetchFees err", err);
+    throw err;
   }
-}
+};
 
-const NONCE_KEY = 'ren-nonce'
+const NONCE_KEY = "ren-nonce";
 
 export const getNextNonce = () => {
-  let nonce = 0
-  const currentNonce = localStorage.getItem(NONCE_KEY)
+  let nonce = 0;
+  const currentNonce = localStorage.getItem(NONCE_KEY);
   if (currentNonce) {
-    nonce = parseInt(currentNonce) + 1
+    nonce = parseInt(currentNonce) + 1;
   }
-  localStorage.setItem(NONCE_KEY, nonce.toString())
-  return nonce
-}
+  localStorage.setItem(NONCE_KEY, nonce.toString());
+  return nonce;
+};
 
-export const getDeposit = async (lockChain:KnownInputChains, txHash:Buffer) => {
+const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
+  const net = NETWORKS[lockNetwork];
   if (!chainInstance.provider) {
-    throw new Error('can only call lockAndMint with a provider')
-  }
-
-  const net = NETWORKS[lockChain]
-
-  const selector = ren.renVM.selector({
-    asset: net.asset,
-    from: net,
-    to: Polygon(chainInstance.provider.provider as any, 'testnet')
-  })
-  return ren.renVM.queryMintOrBurn(selector, txHash)
-}
-
-export const lockAndMint = async (networkName:KnownInputChains, to: string, nonce:number) => {
-  const net = NETWORKS[networkName]
-  if (!chainInstance.provider) {
-    throw new Error('can only call lockAndMint with a provider')
+    throw new Error("can only call lockAndMint with a provider");
   }
 
   const lockAndMint = await ren.lockAndMint({
     asset: net.asset,
     from: net,
-    to: Polygon(chainInstance.provider.provider as any, 'testnet').Address(to),
+    to: Polygon(chainInstance.provider.provider as any, "testnet").Address(to),
     nonce: utils.keccak256(Buffer.from(nonce.toString())),
   });
-  console.log('lock and mint: ', lockAndMint)
-  return lockAndMint
+
+  console.log("lock and mint: ", lockAndMint);
+  return lockAndMint;
+};
+
+const lockAndMintRegistry: Record<string, LockAndMintWrapper> = {};
+
+function paramsToRegistryKey({ lockNetwork, to, nonce }: LockAndMintParams) {
+  return `${lockNetwork}-${to}-${nonce}`;
+}
+
+export const getLockAndMint = (params: LockAndMintParams) => {
+  const alreadyRegistered = lockAndMintRegistry[paramsToRegistryKey(params)];
+  if (alreadyRegistered) {
+    return alreadyRegistered;
+  }
+  const wrappedLockAndMint = new LockAndMintWrapper(params);
+  lockAndMintRegistry[paramsToRegistryKey(params)] = wrappedLockAndMint;
+  return wrappedLockAndMint;
+};
+
+export class WrappedLockAndMintDeposit extends EventEmitter {
+  deposit: LockAndMintDeposit
+  confirmed = false
+  signed = false
+  targetConfirmations?:number
+  confirmations?:number
+
+  constructor(deposit:LockAndMintDeposit) {
+    super()
+    this.deposit = deposit
+    this.setupListeners()
+  }
+
+  private async setupListeners() {
+    const confirmed = this.deposit.confirmed()
+
+    this.deposit.confirmations().then((confirmations) =>{
+      this.targetConfirmations = confirmations.target
+      this.confirmations = confirmations.current
+      this.emitUpdate('confirmations')
+    })
+    confirmed.on('confirmation', (current) => {
+      if (current > (this.confirmations || 0)) {
+        this.confirmations = current
+        this.emitUpdate('confirmation', current)
+      }
+    })
+    await confirmed
+    console.log('confirmed')
+    this.confirmed = true
+    this.emitUpdate('confirmed')
+    await this.deposit.signed()
+    console.log('signed')
+    this.signed = true
+    this.emitUpdate('signed')
+  }
+
+  private emitUpdate(additionalName?: string, additionalPayload?: any) {
+    this.emit("update");
+    if (additionalName) {
+      this.emit(additionalName, additionalPayload);
+    }
+  }
+}
+
+export class LockAndMintWrapper extends EventEmitter {
+  ready: Promise<LockAndMint>;
+  deposits: WrappedLockAndMintDeposit[];
+  lockAndMint?: LockAndMint
+
+  constructor(params: LockAndMintParams) {
+    super();
+    this.ready = lockAndMint(params);
+    this.ready.then((lockAndMint) => {
+      this.lockAndMint = lockAndMint
+    })
+    this.deposits = [];
+    this.setupListener();
+  }
+
+  // async getDeposit(txHash: string) {
+  //   const existing = this.deposits.find((dep) => dep.txHash() === txHash);
+  //   if (existing) {
+  //     return existing;
+  //   }
+  //   return new Promise((resolve) => {
+  //     // need to do the search again inside of the promise incase one came in 
+  //     // while we were creating the promise
+  //     const existing = this.deposits.find((dep) => dep.txHash() === txHash);
+  //     if (existing) {
+  //       return resolve(existing);
+  //     }
+  //     // otherwise we'll wait for it to come in
+  //     const cb = (deposit: LockAndMintDeposit) => {
+  //       if (deposit.txHash() === txHash) {
+  //         resolve(deposit);
+  //         this.off("deposit", cb);
+  //       }
+  //     };
+  //     this.on("deposit", cb);
+  //   });
+  // }
+
+  private async handleDeposit(deposit: LockAndMintDeposit) {
+    console.log('handle deposit')
+    const wrappedDeposit = new WrappedLockAndMintDeposit(deposit)
+    this.deposits.push(wrappedDeposit);
+    this.emitUpdate("deposit", wrappedDeposit);
+  }
+
+  private async setupListener() {
+    const lockAndMint = await this.ready;
+    lockAndMint.on("deposit", this.handleDeposit.bind(this));
+  }
+
+  private emitUpdate(additionalName?: string, additionalPayload?: any) {
+    this.emit("update");
+    if (additionalName) {
+      this.emit(additionalName, additionalPayload);
+    }
+  }
 }

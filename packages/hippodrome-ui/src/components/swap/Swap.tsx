@@ -15,7 +15,7 @@ import { BigNumber } from "ethers";
 import OutputTokenSelect from "./OutputTokenSelect";
 import InputTokenSelect from "./InputTokenSelect";
 import { useRenOutput } from "../../hooks/useRen";
-import { getNextNonce, KnownInputChains, lockAndMint } from "../../models/ren";
+import { getLockAndMint, getNextNonce, KnownInputChains, lockAndMint } from "../../models/ren";
 import OutputAmount from "./OutputAmount";
 import { inputTokensBySymbol } from "../../models/tokenList";
 import SwapFees from "./SwapFees";
@@ -44,7 +44,7 @@ const Swap: React.FC = () => {
   const onSubmit = async () => {
     setSubmitting(true)
     try {
-      await lockAndMint(inputToken as KnownInputChains, address!, nonce)
+      getLockAndMint({ lockNetwork: (inputToken as KnownInputChains), to: address!, nonce })
       history.push(mintUrl(inputToken, address!, nonce))
     } catch (err) {
       console.error('error: ', err)

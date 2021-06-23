@@ -1,25 +1,24 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Box, VStack, Spinner, Text, Button } from '@chakra-ui/react'
 import { LockAndMint, LockAndMintDeposit } from '@renproject/ren/build/main/lockAndMint'
-import ThenArg from '../../utils/ThenArg'
 import { useDeposit } from '../../hooks/useRen'
-import { getDeposit } from '../../models/ren'
+import { WrappedLockAndMintDeposit } from '../../models/ren'
 
 export interface AwaitingMintProps {
-  transaction?: LockAndMint
-  deposits?: LockAndMintDeposit[]
+  lockAndMint?: LockAndMint
+  deposits?: WrappedLockAndMintDeposit[]
 }
 
-const Deposit:React.FC<{deposit: LockAndMintDeposit}> = ({ deposit:propDeposit }) => {
+const Deposit:React.FC<{deposit: WrappedLockAndMintDeposit}> = ({ deposit:propDeposit }) => {
   const { deposit, confirmed, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
 
   const onMint = async () => {
     try {
       setLoading(true)
-      console.log('tx hash: ', deposit.txHash())
-      console.log(await getDeposit('BTC', Buffer.from(deposit.txHash(), 'base64')))
+      console.log('tx hash: ', deposit.deposit.txHash())
+      console.log('signed')
       // const res = await deposit.queryTx()
       // console.log('queryTx: ', res)
       // if (res && res.out?.revert) {
@@ -45,23 +44,26 @@ const Deposit:React.FC<{deposit: LockAndMintDeposit}> = ({ deposit:propDeposit }
   return (
     <Box>
       <Text>Awaiting network confirmations</Text>
-      {confirmations?.current} / {confirmations?.target} <Spinner />
+      <VStack>
+        <Box>{confirmations?.current} / {confirmations?.target}</Box>
+        <Spinner />
+      </VStack>
     </Box>
   )
 }
 
-const AwaitingMint:React.FC<AwaitingMintProps> = ({ transaction, deposits }) => {
-  if (!transaction || !deposits) {
+const AwaitingMint:React.FC<AwaitingMintProps> = ({ lockAndMint, deposits }) => {
+  if (!lockAndMint || !deposits) {
     return null
   }
 
-  console.log('awaiting: ', transaction, deposits)
+  console.log('awaiting: ', lockAndMint, deposits)
 
   return (
     <VStack>
       Awaiting your mint
       {deposits.map((deposit) => {
-        return <Deposit deposit={deposit} key={deposit.txHash()}/>
+        return <Deposit deposit={deposit} key={deposit.deposit.txHash()}/>
       })}
     </VStack>
   )

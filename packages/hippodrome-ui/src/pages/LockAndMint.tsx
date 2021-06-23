@@ -1,14 +1,14 @@
 import React from 'react'
 import { VStack, Spinner } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
-import { useExistingMintTransaction } from '../hooks/useRen'
+import { useLockAndMint } from '../hooks/useRen'
 import { KnownInputChains } from '../models/ren'
 import AwaitingDeposit from '../components/transaction/AwaitingDeposit'
 import AwaitingMint from '../components/transaction/AwaitingMint'
 
 const Transaction:React.FC = () => {
   const { asset, to, nonce } = useParams<{asset:KnownInputChains, to: string, nonce:string}>()
-  const { transaction, deposits, loading } = useExistingMintTransaction(asset, to, parseInt(nonce))
+  const { lockAndMint, deposits, loading } = useLockAndMint({ lockNetwork: asset, to, nonce: parseInt(nonce) })
 
   if (loading) {
     return (
@@ -20,12 +20,12 @@ const Transaction:React.FC = () => {
 
   if (deposits.length === 0) {
     return (
-      <AwaitingDeposit transaction={transaction} />
+      <AwaitingDeposit lockAndMint={lockAndMint} />
     )
   }
 
   return (
-    <AwaitingMint transaction={transaction} deposits={deposits} />
+    <AwaitingMint lockAndMint={lockAndMint} deposits={deposits} />
   )
 }
 
