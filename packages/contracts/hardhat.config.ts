@@ -25,14 +25,17 @@ networks['hardhat'] = {
 
 networks['mumbai'] = {
   url: 'https://polygon-mumbai.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
-  chainId: 80001,
-  accounts: [process.env.DEPLOYER_PRIVATE_KEY || '']
+  chainId: 80001
 }
 
 networks['matic'] = {
   url: 'https://mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
-  chainId: 137,
-  accounts: [process.env.DEPLOYER_PRIVATE_KEY || '']
+  chainId: 137
+}
+
+if (process.env.DEPLOYER_PRIVATE_KEY) {
+  networks['mumbai'].accounts = [process.env.DEPLOYER_PRIVATE_KEY]
+  networks['matic'].accounts = [process.env.DEPLOYER_PRIVATE_KEY]
 }
 
 const config: HardhatUserConfig = {
