@@ -2,6 +2,7 @@ import { providers } from 'ethers'
 import EventEmitter from 'events'
 import Web3Modal from 'web3modal'
 import Torus from '@toruslabs/torus-embed'
+import { WalletMaker } from 'kasumah-wallet/dist/src'
 
 export type KnownNetworkNames = 'mumbai' | 'matic'
 
@@ -36,6 +37,8 @@ export class Chain extends EventEmitter {
 
   signer?: providers.JsonRpcSigner
 
+  walletMaker?: WalletMaker
+
   connected = false
 
   address?: string
@@ -65,6 +68,9 @@ export class Chain extends EventEmitter {
     this.chainId = (await this.provider.getNetwork()).chainId
     this.signer = this.provider.getSigner()
     this.address = await this.signer.getAddress()
+
+    this.walletMaker = new WalletMaker({ signer: this.signer, chainId: this.chainId })
+
     this.connected = true
 
     this.emit('connected')
