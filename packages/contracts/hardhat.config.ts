@@ -1,25 +1,16 @@
-import "@nomiclabs/hardhat-waffle"
 import "@nomiclabs/hardhat-ethers"
 import { HardhatUserConfig } from "hardhat/config"
 import 'hardhat-deploy';
 import { NetworkUserConfig } from "hardhat/types";
-import fs from 'fs'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 // these tasks rely on types, which require a compile, but
 // at initial install the types aren't there and so you can't compile.
 // this lets a first run happen.
 if (!process.env.FIRST_RUN) {
   //todo load tasks hre
-}
-
-interface NetworkSecrets {
-  privateKey: string
-}
-
-let secrets:{[key:string]:NetworkSecrets} = {}
-
-if (fs.existsSync('./secrets.json')) {
-  secrets = JSON.parse(fs.readFileSync('./secrets.json').toString())
 }
 
 let networks:{[key:string]:NetworkUserConfig} = {}
@@ -33,29 +24,16 @@ networks['hardhat'] = {
 }
 
 networks['mumbai'] = {
-  // url: 'https://rpc-mumbai.maticvigil.com/v1/c0ce8ac6dcee6f838f2d4cf83d16b6ca1493aa0b',
-  url: 'https://rpc-mumbai.matic.today',
+  url: 'https://polygon-mumbai.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
   chainId: 80001,
+  accounts: [process.env.DEPLOYER_PRIVATE_KEY || '']
 }
 
 networks['matic'] = {
-  // url: 'https://rpc-mainnet.maticvigil.com/v1/c0ce8ac6dcee6f838f2d4cf83d16b6ca1493aa0b',
-  url: 'https://rpc-mainnet.matic.network',
+  url: 'https://mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
   chainId: 137,
+  accounts: [process.env.DEPLOYER_PRIVATE_KEY || '']
 }
-
-if (secrets['80001']) {
-  networks['mumbai'].accounts = [secrets['80001'].privateKey]
-}
-
-if (secrets['137']) {
-  networks['matic'].accounts = [secrets['137'].privateKey]
-}
-
-// Enable this to turn on logging while running the tests
-// networks['hardhat'] = {
-//   loggingEnabled: true,
-// }
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
