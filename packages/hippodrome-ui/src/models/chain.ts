@@ -2,7 +2,12 @@ import { providers } from 'ethers'
 import EventEmitter from 'events'
 import Web3Modal from 'web3modal'
 import Torus from '@toruslabs/torus-embed'
-import { WalletMaker } from 'kasumah-wallet/dist/src'
+import { WalletMaker, safeFromAddr } from 'kasumah-wallet/dist/src'
+import { GnosisSafe } from 'kasumah-wallet/dist/types/ethers-contracts';
+import {
+  Relayer,
+} from 'kasumah-relay-wrapper/dist/src/relayers'
+import { createRelayer, createSafe } from './safe'
 
 export type KnownNetworkNames = 'mumbai' | 'matic'
 
@@ -18,7 +23,7 @@ const chainIds: Record<string, number> = {
 
 const networkName = (new URLSearchParams(window.location.search).get(
   'network'
-) || 'matic') as KnownNetworkNames
+) || 'mumbai') as KnownNetworkNames // TODO: default to mainnet
 
 const providerOptions = {
   torus: {
@@ -37,15 +42,21 @@ export class Chain extends EventEmitter {
 
   signer?: providers.JsonRpcSigner
 
+  relayer?: Relayer
+
   walletMaker?: WalletMaker
 
   connected = false
 
   address?: string
 
+  safeAddress?: string
+
   networkName: KnownNetworkNames
 
   chainId?: number
+
+  safe?: Promise<GnosisSafe>
 
   constructor(networkName: KnownNetworkNames) {
     super()
@@ -70,6 +81,10 @@ export class Chain extends EventEmitter {
     this.address = await this.signer.getAddress()
 
     this.walletMaker = new WalletMaker({ signer: this.signer, chainId: this.chainId })
+    this.safeAddress = await this.walletMaker.walletAddressForUser(this.address)
+    this.relayer = createRelayer(this.signer, this.provider, this.chainId)
+
+    this.setupSafe() // TODO: no need to do this right on connect, wait until they've sent a deposit
 
     this.connected = true
 
@@ -78,6 +93,26 @@ export class Chain extends EventEmitter {
 
   expectedChain() {
     return chainIds[this.networkName]
+  }
+
+  private setupSafe() {
+    this.safe = new Promise(async (resolve,reject) => {
+      try {
+        if (!this.signer || !this.walletMaker || !this.address || !this.provider || !this.chainId) {
+          throw new Error('missing connected bits for setupSafe')
+        }
+        const isDeployed = await this.walletMaker.isDeployed(this.address)
+        if (!isDeployed) {
+          console.log('deploying safe')
+          const safeTx = await createSafe(this.provider, this.address, this.chainId)
+          await safeTx.wait()
+        }
+
+        resolve(safeFromAddr(this.signer, this.address))
+      } catch(err) {
+        reject(err)
+      }
+    }) 
   }
 }
 

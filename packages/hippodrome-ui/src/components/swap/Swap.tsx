@@ -24,7 +24,7 @@ import { useMemo } from "react";
 import { useChainContext } from "../../hooks/useChainContext";
 
 const Swap: React.FC = () => {
-  const { address } = useChainContext()
+  const { safeAddress } = useChainContext()
   const [amount, setAmount] = useState(0);
   const [inputToken, setInputToken] = useState("DOGE");
   const history = useHistory()
@@ -42,8 +42,8 @@ const Swap: React.FC = () => {
   const onSubmit = async () => {
     setSubmitting(true)
     try {
-      getLockAndMint({ lockNetwork: (inputToken as KnownInputChains), to: address!, nonce })
-      history.push(mintUrl(inputToken, address!, nonce))
+      getLockAndMint({ lockNetwork: (inputToken as KnownInputChains), to: safeAddress!, nonce })
+      history.push(mintUrl(inputToken, safeAddress!, nonce))
     } catch (err) {
       console.error('error: ', err)
       alert('something went wrong')

@@ -1,4 +1,3 @@
-import env from 'react-dotenv'
 import chainInstance from './chain'
 import {
   GnosisBiconomy,
@@ -12,9 +11,9 @@ const voidSigner = new VoidSigner(constants.AddressZero)
 
 export const voidMasterCopy = new GnosisSafe__factory(voidSigner).attach(constants.AddressZero)
 
-const BICONOMY_API_KEY:string = env.REACT_APP_BICONOMY_API_KEY
-const WALLET_FACTORY_API_ID:string = env.REACT_APP_PROXY_FACTORY_API
-const WALLET_EXEC_API_ID:string = env.REACT_APP_WALLET_EXEC_API
+const BICONOMY_API_KEY = process.env.REACT_APP_BICONOMY_API_KEY
+const WALLET_FACTORY_API_ID = process.env.REACT_APP_PROXY_FACTORY_API
+const WALLET_EXEC_API_ID = process.env.REACT_APP_WALLET_EXEC_API
 
 // gnosis safe wallet master copy
 const MASTER_COPY_ADDR = '0x6851D6fDFAfD08c0295C392436245E5bc78B0185'
@@ -40,20 +39,22 @@ export const createRelayer = (userSigner: Signer, provider:providers.Provider, c
   return new GnosisBiconomy({
     userSigner,
     chainId,
-    apiKey: BICONOMY_API_KEY,
-    apiId: WALLET_EXEC_API_ID,
+    apiKey: BICONOMY_API_KEY!,
+    apiId: WALLET_EXEC_API_ID!,
     targetChainProvider: provider,
   })
 }
 
-export const createSafe = async (address:string, chainId:number) => {
+export const createSafe = async (provider: providers.Provider, address:string, chainId:number) => {
   const resp = await backOff(
-    () => {
+    async () => {
+      const setupData = await setupDataForUser(address)
       return axios.post(
         "https://api.biconomy.io/api/v2/meta-tx/native",
         {
+          userAddress: address,
           apiId: WALLET_FACTORY_API_ID,
-          params: [MASTER_COPY_ADDR, setupDataForUser(address), chainId],
+          params: [MASTER_COPY_ADDR, setupData, chainId],
           gasLimit: 9500000,
         },
         {
@@ -75,4 +76,34 @@ export const createSafe = async (address:string, chainId:number) => {
       maxDelay: 5000,
     }
   );
+  return txFromHash(provider, resp.data.txHash);
+}
+
+async function txFromHash(provider: providers.Provider, txHash: string) {
+  try {
+    const tx = await backOff(
+      async () => {
+        const tx = await provider.getTransaction(txHash);
+        if (!tx) {
+          throw new Error("missing tx - inside backoff");
+        }
+        return tx;
+      },
+      {
+        numOfAttempts: 10,
+        retry: (e, attempts) => {
+          console.dir(e);
+          console.error(`error fetching Tx, retrying. attempt: ${attempts}`);
+          return true;
+        },
+        startingDelay: 700,
+        maxDelay: 10000, // max 10s delays
+      }
+    );
+
+    return tx;
+  } catch (error) {
+    console.error("error fetching tx: ", error);
+    throw error;
+  }
 }

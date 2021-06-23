@@ -14,6 +14,10 @@ export interface LockAndMintParams {
   nonce: number;
 }
 
+const CONTRACT_ADDRESSES:Record<string,string> = {
+  mumbai: '0xD7bb140b53EB814aa10f051B76B0e5b2458fBcAd'
+}
+
 export type KnownInputChains = "BTC" | "DOGE";
 
 const ren = new RenJS("testnet"); // TODO: support testnet
@@ -33,8 +37,8 @@ export const fetchFees = (networkName: KnownInputChains) => {
     return ren.getFees({
       asset: net.asset,
       from: net,
-      to: Polygon(chainInstance.provider.provider as any, "testnet"),
-    });
+      to: Polygon(chainInstance.provider.provider as any, "testnet")
+    })
   } catch (err) {
     console.error("fetchFees err", err);
     throw err;
@@ -58,12 +62,39 @@ const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
   if (!chainInstance.provider) {
     throw new Error("can only call lockAndMint with a provider");
   }
+ 
+  const nonceHash = utils.keccak256(Buffer.from(nonce.toString()))
+
+  const addr = CONTRACT_ADDRESSES[chainInstance.networkName]
+  if (!addr) {
+    throw new Error(`no contract address for ${chainInstance.networkName}`)
+  }
 
   const lockAndMint = await ren.lockAndMint({
     asset: net.asset,
     from: net,
-    to: Polygon(chainInstance.provider.provider as any, "testnet").Address(to),
-    nonce: utils.keccak256(Buffer.from(nonce.toString())),
+    to: Polygon(chainInstance.provider.provider as any, "testnet").Contract({
+      // The contract we want to interact with
+      sendTo: addr,
+  
+      // The name of the function we want to call
+      contractFn: "temporaryMint",
+  
+      // Arguments expected for calling `deposit`
+      contractParams: [
+        {
+          name: "to",
+          type: "address",
+          value: to,
+        },
+        {
+          name: "nonce",
+          type: "bytes32",
+          value: nonceHash,
+        },
+      ],
+    }),
+    nonce: nonceHash
   });
 
   console.log("lock and mint: ", lockAndMint);
