@@ -6,6 +6,7 @@ interface ChainContextData {
   connect:()=>void
   connecting:boolean
   address?:string
+  safeAddress?:string
   chain: Chain
 }
 
@@ -53,6 +54,7 @@ export const ChainProvider: React.FC = ({ children }) => {
         connected,
         connecting,
         address: chainInstance.address,
+        safeAddress: chainInstance.safeAddress,
       }}
     >
       {children}

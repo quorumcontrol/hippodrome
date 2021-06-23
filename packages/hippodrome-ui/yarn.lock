@@ -5929,7 +5929,7 @@ debug@^3.1.1, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.1"
   resolved "https://registry.npmjs.org/debug/-/debug-4.3.1.tgz"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
@@ -6911,7 +6911,7 @@ ethers@^4.0.27:
     uuid "2.0.1"
     xmlhttprequest "1.8.0"
 
-ethers@^5.3.1:
+ethers@^5.3.0, ethers@^5.3.1:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.3.1.tgz#1f018f0aeb651576cd84fd987a45f0b99646d761"
   integrity sha512-xCKmC0gsZ9gks89ZfK3B1y6LlPdvX5fxDtu9SytnpdDJR1M7pmJI+4H0AxQPMgUYr7GtQdmECLR0gWdJQ+lZYw==
@@ -7065,6 +7065,11 @@ expect@^26.6.0, expect@^26.6.2:
     jest-matcher-utils "^26.6.2"
     jest-message-util "^26.6.2"
     jest-regex-util "^26.0.0"
+
+exponential-backoff@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/exponential-backoff/-/exponential-backoff-3.1.0.tgz#9409c7e579131f8bd4b32d7d8094a911040f2e68"
+  integrity sha512-oBuz5SYz5zzyuHINoe9ooePwSu0xApKWgeNzok4hZ5YKXFh9zrQBEM15CXqoZkJJPuI2ArvqjPQd8UKJA753XA==
 
 express@^4.17.1:
   version "4.17.1"
@@ -9274,6 +9279,25 @@ jssha@2.3.1:
   dependencies:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
+
+kasumah-relay-wrapper@^0.0.37:
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/kasumah-relay-wrapper/-/kasumah-relay-wrapper-0.0.37.tgz#c02e4170d4f46b89ec93f511b4c08fb8d11e47ba"
+  integrity sha512-CzkXC2Lv2ltMF1g4d8DHF4BjEefN/xuKbj4QBYqulV1fQ+q4zmwNLGUV+KdD63XP3I14P9DKhIC3he5JH08E7g==
+  dependencies:
+    axios "^0.21.1"
+    debug "^4.3.1"
+    ethers "^5.3.0"
+    exponential-backoff "^3.1.0"
+    kasumah-wallet "^0.0.37"
+
+kasumah-wallet@^0.0.37:
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/kasumah-wallet/-/kasumah-wallet-0.0.37.tgz#26e4cf5b075672505379e5edbc013a4cc9b7a93b"
+  integrity sha512-F1co96vO5kcBCYyKyd62B73XSH8gT3IDGixPAWOpQVw0QahfV34qdogZmjuBn08GRwGvqFmkjr/Gc1A30KhkFA==
+  dependencies:
+    debug "^4.3.1"
+    ethers "^5.3.0"
 
 keccak@^3.0.0, keccak@^3.0.1:
   version "3.0.1"
