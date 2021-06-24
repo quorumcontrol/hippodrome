@@ -13,17 +13,19 @@ export type KnownNetworkNames = 'mumbai' | 'matic'
 
 export const networkNames: Record<number, string> = {
   137: 'Matic Mainnet',
-  80001: 'Matic Mumbai Network'
+  80001: 'Matic Mumbai Network',
+  31337: 'localhost'
 }
 
 const chainIds: Record<string, number> = {
   mumbai: 80001,
-  matic: 137
+  matic: 137,
+  localhost: 31337
 }
 
 const networkName = (new URLSearchParams(window.location.search).get(
   'network'
-) || 'mumbai') as KnownNetworkNames // TODO: default to mainnet
+) || 'matic') as KnownNetworkNames // TODO: default to mainnet
 
 const providerOptions = {
   torus: {
@@ -77,6 +79,7 @@ export class Chain extends EventEmitter {
 
     console.log('provider: ', this.provider)
     this.chainId = (await this.provider.getNetwork()).chainId
+    console.log('chainId: ', this.chainId)
     this.signer = this.provider.getSigner()
     this.address = await this.signer.getAddress()
 
@@ -104,8 +107,7 @@ export class Chain extends EventEmitter {
         const isDeployed = await this.walletMaker.isDeployed(this.address)
         if (!isDeployed) {
           console.log('deploying safe')
-          const safeTx = await createSafe(this.provider, this.address, this.chainId)
-          await safeTx.wait()
+          await createSafe(this.provider, this.address, this.chainId)
         }
 
         resolve(safeFromAddr(this.signer, this.address))

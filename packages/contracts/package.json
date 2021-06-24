@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "hardhat node",
     "build": "hardhat compile && npm run typechain && rm -rf ../hippodrome-ui/src/types && cp -r types ../hippodrome-ui/src/",
     "typechain": "typechain 'artifacts/!(build-info)/**/+([a-zA-Z0-9]).json' --target ethers-v5",
     "test": "hardhat test"

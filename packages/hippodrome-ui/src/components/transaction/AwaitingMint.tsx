@@ -40,7 +40,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       if (tx.out && !tx.out.revert) {
         console.log("amount: ", tx.out.amount.toString());
         console.log("nhash: ", tx.out.nhash.toString("hex"));
-        console.log("nhash: ", tx.out.nhash.toString("hex"));
+        console.log("phash: ", ((tx.in as any).phash as any).toString('hex'));
         console.log("signature: ", tx.out.signature?.toString("hex"));
       }
       console.log(tx);

@@ -9,6 +9,10 @@ import EventEmitter from "events";
 import chainInstance from "./chain";
 import { MINTER_ADDRESSES } from "./contracts";
 
+export const isTestnet = (new URLSearchParams(window.location.search).get(
+  'testnet'
+))
+
 export interface LockAndMintParams {
   lockNetwork: KnownInputChains;
   to: string;
@@ -17,11 +21,11 @@ export interface LockAndMintParams {
 
 export type KnownInputChains = "BTC" | "DOGE";
 
-const ren = new RenJS("testnet"); // TODO: support testnet
+const ren = new RenJS(isTestnet ? "testnet" : undefined); // TODO: support testnet
 
 export const NETWORKS = {
-  BTC: Bitcoin("testnet"),
-  DOGE: Dogecoin("testnet"),
+  BTC: Bitcoin(isTestnet ? "testnet" : undefined),
+  DOGE: Dogecoin(isTestnet ? "testnet" : undefined),
 };
 
 export const fetchFees = (networkName: KnownInputChains) => {
@@ -34,7 +38,7 @@ export const fetchFees = (networkName: KnownInputChains) => {
     return ren.getFees({
       asset: net.asset,
       from: net,
-      to: Polygon(chainInstance.provider.provider as any, "testnet")
+      to: Polygon(chainInstance.provider.provider as any, isTestnet ? "testnet" : 'mainnet')
     })
   } catch (err) {
     console.error("fetchFees err", err);
@@ -70,7 +74,7 @@ const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
   const lockAndMint = await ren.lockAndMint({
     asset: net.asset,
     from: net,
-    to: Polygon(chainInstance.provider.provider as any, "testnet").Contract({
+    to: Polygon(chainInstance.provider.provider as any, isTestnet ? "testnet" : 'mainnet').Contract({
       // The contract we want to interact with
       sendTo: addr,
   

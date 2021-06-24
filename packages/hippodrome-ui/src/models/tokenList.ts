@@ -1,6 +1,7 @@
 import quickSwapTokenList from "./quickswapTokenList.json";
 import dogeLogo from "../assets/doge-icon.svg";
 import bitcoinLogo from "../assets/btc-icon.svg";
+import { isTestnet } from './ren'
 
 export interface TokenListToken {
   name: string;
@@ -26,15 +27,13 @@ export const inputTokens: InputToken[] = [
     name: "Dogecoin",
     logoURI: dogeLogo,
     symbol: "DOGE",
-    // renAddress: "0xcE829A89d4A55a63418bcC43F00145adef0eDB8E", // mainnet
-    renAddress: testDogeAddr,
+    renAddress: isTestnet ? testDogeAddr : '0xcE829A89d4A55a63418bcC43F00145adef0eDB8E',
   },
   {
     name: "Bitcoin",
     logoURI: bitcoinLogo,
     symbol: "BTC",
-    // renAddress: "0xDBf31dF14B66535aF65AaC99C32e9eA844e14501", //mainnet
-    renAddress: testBitcoinAddr,
+    renAddress: isTestnet ? testBitcoinAddr : '0xDBf31dF14B66535aF65AaC99C32e9eA844e14501',
   },
 ];
 

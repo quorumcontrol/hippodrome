@@ -19,7 +19,7 @@ export const useTokenQuote = (
             return constants.Zero;
           }
           const resp = await axios.get(
-            `https://api.1inch.exchange/v3.0/${chainInstance.chainId}/quote`,
+            `https://api.1inch.exchange/v3.0/137/quote`,
             {
               // TODO: support mumbai
               params: {

@@ -3,6 +3,7 @@ import { HardhatUserConfig } from "hardhat/config"
 import 'hardhat-deploy';
 import { NetworkUserConfig } from "hardhat/types";
 import dotenv from 'dotenv'
+import './tasks/deployer'
 
 dotenv.config()
 
@@ -17,7 +18,7 @@ let networks:{[key:string]:NetworkUserConfig} = {}
 
 networks['hardhat'] = {
   forking: {
-    url: `https://polygon-mumbai.infura.io/v3/419395b72785472bb0ee52583b7b4abd`,
+    url: `https://polygon-mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd`,
   },
   allowUnlimitedContractSize: true,
 }
@@ -28,7 +29,7 @@ networks['mumbai'] = {
 }
 
 networks['matic'] = {
-  url: 'https://mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
+  url: 'https://polygon-mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
   chainId: 137
 }
 
