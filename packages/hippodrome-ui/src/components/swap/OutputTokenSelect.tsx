@@ -1,31 +1,45 @@
 import React from "react";
 import { supportedTokens } from "../../models/tokenList";
-import Select from "react-select";
-import { FormControl, FormLabel, PropsOf } from "@chakra-ui/react";
+import { HStack, Text, FormControl, PropsOf, Menu, MenuButton, MenuList, MenuItem, Image } from "@chakra-ui/react";
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
-const OutputTokenSelect: React.FC<Partial<PropsOf<typeof Select>>> = (userProps) => {
-  const { onChange, value, ...selectProps} = userProps
+interface OutputTokenSelectProps {
+  onChange: (val:string) => void
+  value: string
+}
 
-  const options = supportedTokens.map((token) => ({
-    label: token.name,
-    value: token.address,
-  }))
+const OutputTokenSelect: React.FC<Partial<PropsOf<typeof Menu>> & OutputTokenSelectProps> = (userProps) => {
+  const { onChange, value, ...menuProps} = userProps
+
+  const selected = supportedTokens.find((t) => t.address === value )
+
+  if (!selected) {
+    throw new Error('value set to unknown token')
+  }
 
   return (
-    <FormControl>
-      <FormLabel>You Receive</FormLabel>
-      <Select
-        value={options.find((o) => o.value === value)}
-        onChange={(changeVal) => {
-          console.log('change: ', changeVal)
-          onChange(changeVal?.value)
-        }}
-        options={supportedTokens.map((token) => ({
-          label: token.name,
-          value: token.address,
-        }))}
-        {...selectProps}
-      />
+    <FormControl id="outputToken">
+      <Menu {...menuProps}>
+        <MenuButton>
+          <HStack>
+            <Image w="40px" src={selected.logoURI} />
+            <Text fontSize="lg">{selected.name}</Text>
+            <ChevronDownIcon />
+          </HStack>
+        </MenuButton>
+        <MenuList>
+          {supportedTokens.map((token) => {
+            return (
+              <MenuItem key={`output-token-${token.address}`} onClick={() => onChange(token.address)}>
+                <HStack>
+                  <Image w="20px" src={token.logoURI} />
+                  <Text fontSize="lg">{token.name}</Text>
+                </HStack>
+              </MenuItem>
+            )
+          })}
+        </MenuList>
+      </Menu>
     </FormControl>
   );
 };

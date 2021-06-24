@@ -5,21 +5,21 @@ import {
   VStack,
   Spinner,
   Text,
+  Heading,
   Button,
   CircularProgress,
   CircularProgressLabel,
 } from "@chakra-ui/react";
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
+import { motion } from "framer-motion";
 import { useDeposit } from "../../hooks/useRen";
 import { WrappedLockAndMintDeposit } from "../../models/ren";
-import { motion } from "framer-motion";
+import Card from "../Card";
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint;
   deposits?: WrappedLockAndMintDeposit[];
 }
-
-const PulsingProgress = motion(CircularProgress);
 
 const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   deposit: propDeposit,
@@ -38,10 +38,10 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       console.log("deposit: ", deposit);
       const tx = await deposit.deposit.queryTx();
       if (tx.out && !tx.out.revert) {
-        console.log('amount: ', tx.out.amount.toString())
-        console.log('nhash: ', tx.out.nhash.toString('hex'))
-        console.log('nhash: ', tx.out.nhash.toString('hex'))
-        console.log('signature: ', tx.out.signature?.toString('hex'))
+        console.log("amount: ", tx.out.amount.toString());
+        console.log("nhash: ", tx.out.nhash.toString("hex"));
+        console.log("nhash: ", tx.out.nhash.toString("hex"));
+        console.log("signature: ", tx.out.signature?.toString("hex"));
       }
       console.log(tx);
 
@@ -64,22 +64,31 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   }
 
   return (
-    <Box>
-      <Text>Awaiting network confirmations</Text>
-      <VStack>
-        <PulsingProgress
-          value={progressPercentage}
-          color="green.400"
+    <Card>
+      <VStack spacing="4">
+        <motion.div
           animate={{
-            scale: [1, 1.2, 1],
+            scale: [1, 1.2, 1], 
           }}
-        >
-          <CircularProgressLabel>
-            {confirmations?.current} / {confirmations?.target}
-          </CircularProgressLabel>
-        </PulsingProgress>
+          transition={{
+            duration: 2,
+            ease: "easeInOut",
+            times: [0, 0.5, 1],
+            loop: Infinity,
+            repeatDelay: 1
+          }}
+          >
+          <CircularProgress value={progressPercentage} size="2xl" color="green.400">
+            <CircularProgressLabel>
+              {confirmations?.current} / {confirmations?.target}
+            </CircularProgressLabel>
+          </CircularProgress>
+        </motion.div>
+        <Heading>Waiting for {confirmations?.target} confirmations</Heading>
+        {/* TODO: give the user an estimate of time */}
+        <Text>We need to wait for the miners on the chain to confirm your transaction. This could take a little while.</Text>
       </VStack>
-    </Box>
+    </Card>
   );
 };
 
@@ -94,12 +103,15 @@ const AwaitingMint: React.FC<AwaitingMintProps> = ({
   console.log("awaiting: ", lockAndMint, deposits);
 
   return (
+    <Card>
+
     <VStack>
       Awaiting your mint
       {deposits.map((deposit) => {
         return <Deposit deposit={deposit} key={deposit.deposit.txHash()} />;
       })}
     </VStack>
+    </Card>
   );
 };
 

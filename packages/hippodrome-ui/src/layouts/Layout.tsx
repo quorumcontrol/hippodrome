@@ -8,8 +8,8 @@ const Layout: React.FC = ({ children }) => {
 
   return (
     <Box>
-      <Flex w="100%" p={4} borderBottom="1px">
-        <Heading>Hippodrome</Heading>
+      <Flex w="100%" p={10} mb={4}>
+        <Heading size="lg" fontWeight="medium">hippodrome</Heading>
         <Spacer />
         <CurrentUser />
       </Flex>
