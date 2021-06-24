@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Heading, Box, Text } from "@chakra-ui/react";
+import { VStack, Heading, Text } from "@chakra-ui/react";
 import QRCode from "qrcode.react";
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
 import Card from "../Card";
