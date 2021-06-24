@@ -1,27 +1,33 @@
-import React from 'react'
-import {
-  VStack,
-  Heading
-} from '@chakra-ui/react'
-import QRCode from 'qrcode.react'
-import { LockAndMint } from '@renproject/ren/build/main/lockAndMint'
+import React from "react";
+import { VStack, Heading, Box, Text } from "@chakra-ui/react";
+import QRCode from "qrcode.react";
+import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
+import Card from "../Card";
 
 export interface PendingTransactionProps {
-  lockAndMint?: LockAndMint
+  lockAndMint?: LockAndMint;
 }
 
-const AwaitingDeposit:React.FC<PendingTransactionProps> = ({ lockAndMint }) => {
-  
+const AwaitingDeposit: React.FC<PendingTransactionProps> = ({
+  lockAndMint,
+}) => {
   if (!lockAndMint) {
-    return null
+    return null;
   }
 
   return (
-    <VStack>
-      <Heading>Please deposit {lockAndMint.params.asset} here: {lockAndMint.gatewayAddress}</Heading>
-      <QRCode value={`bitcoin:${lockAndMint.gatewayAddress}`} />
-    </VStack>
-  )
-}
+    <Card>
+      <VStack spacing="8">
+        <Heading>Send {lockAndMint.params.asset} to</Heading>
+        <VStack spacing="2">
+          {/* TODO: add the copy button and background color */}
+          <Text>{lockAndMint.gatewayAddress}</Text>
+          <QRCode value={`bitcoin:${lockAndMint.gatewayAddress}`} />
+        </VStack>
+        <Text>Once you deposit BTC, this page will change.</Text>
+      </VStack>
+    </Card>
+  );
+};
 
-export default AwaitingDeposit
+export default AwaitingDeposit;
