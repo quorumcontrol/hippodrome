@@ -7,15 +7,12 @@ import {
 import { utils } from "ethers";
 import EventEmitter from "events";
 import chainInstance from "./chain";
+import { MINTER_ADDRESSES } from "./contracts";
 
 export interface LockAndMintParams {
   lockNetwork: KnownInputChains;
   to: string;
   nonce: number;
-}
-
-const CONTRACT_ADDRESSES:Record<string,string> = {
-  mumbai: '0xD7bb140b53EB814aa10f051B76B0e5b2458fBcAd'
 }
 
 export type KnownInputChains = "BTC" | "DOGE";
@@ -65,7 +62,7 @@ const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
  
   const nonceHash = utils.keccak256(Buffer.from(nonce.toString()))
 
-  const addr = CONTRACT_ADDRESSES[chainInstance.networkName]
+  const addr = MINTER_ADDRESSES[chainInstance.networkName]
   if (!addr) {
     throw new Error(`no contract address for ${chainInstance.networkName}`)
   }
@@ -134,6 +131,7 @@ export class WrappedLockAndMintDeposit extends EventEmitter {
     const confirmed = this.deposit.confirmed()
 
     this.deposit.confirmations().then((confirmations) =>{
+      console.log('confirmations found: ', confirmations, this)
       this.targetConfirmations = confirmations.target
       this.confirmations = confirmations.current
       this.emitUpdate('confirmations')

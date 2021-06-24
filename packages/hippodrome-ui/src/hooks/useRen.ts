@@ -44,7 +44,7 @@ export const useDeposit = (deposit: WrappedLockAndMintDeposit) => {
 
   useEffect(() => {
     const cb = () => {
-      setConfirmations({ current: deposit.confirmations || 0, target: deposit.confirmations || 0})
+      setConfirmations({ current: deposit.confirmations || 0, target: deposit.targetConfirmations || 0})
       setConfirmed(deposit.confirmed)
       setSigned(deposit.signed)
     }

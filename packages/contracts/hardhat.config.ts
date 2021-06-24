@@ -16,10 +16,9 @@ if (!process.env.FIRST_RUN) {
 let networks:{[key:string]:NetworkUserConfig} = {}
 
 networks['hardhat'] = {
-  // forking: {
-  //   // url: `https://rpc-mainnet.matic.network`,
-  //   url: `https://rpc-mainnet.maticvigil.com/v1/c0ce8ac6dcee6f838f2d4cf83d16b6ca1493aa0b`,
-  // },
+  forking: {
+    url: `https://polygon-mumbai.infura.io/v3/419395b72785472bb0ee52583b7b4abd`,
+  },
   allowUnlimitedContractSize: true,
 }
 
