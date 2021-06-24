@@ -6,7 +6,7 @@ const ConnectButton:React.FC = () => {
   const { connect } = useChainContext()
 
   return (
-    <Button onClick={connect}>Connect</Button>
+    <Button onClick={connect}>Connect Wallet</Button>
   )
 }
 

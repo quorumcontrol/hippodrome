@@ -1,10 +1,11 @@
 import * as React from "react";
-import { ChakraProvider, theme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import Home from "./pages/Home";
+import Swap from "./pages/Swap";
 import { ChainProvider } from "./hooks/useChainContext";
 import LockAndMint from "./pages/LockAndMint";
+import theme from './theme'
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -16,7 +17,7 @@ export const App = () => (
               <LockAndMint />
             </Route>
             <Route path="/">
-              <Home />
+              <Swap />
             </Route>
           </Switch>
         </Layout>

@@ -1,17 +1,18 @@
 import React, { useMemo } from "react";
-import { Box, Spinner, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Spinner, Text } from "@chakra-ui/react";
 import { useRenFees } from "../../hooks/useRen";
 import { KnownInputChains } from "../../models/ren";
 import { usePrice } from "../../hooks/usePrice";
 import { BigNumber } from "ethers";
 import { formatCurrency } from "../../utils/humanNumbers";
 
-export interface SwapFeesProps {
+export interface SwapFeesProps extends BoxProps {
   inputName: KnownInputChains
   amount: string // hex encoded big number (10**18 decimals)
 }
 
-const SwapFees: React.FC<SwapFeesProps> = ({ inputName, amount:amountString }) => {
+const SwapFees: React.FC<SwapFeesProps> = (props) => {
+  const { inputName, amount:amountString, ...boxProps } = props
   const { fees } = useRenFees(inputName);
   const { rate } = usePrice(inputName)
 
@@ -22,7 +23,7 @@ const SwapFees: React.FC<SwapFeesProps> = ({ inputName, amount:amountString }) =
 
   if (loading) {
     return (
-      <Box>
+      <Box {...boxProps}>
         <Spinner />
       </Box>
     );
@@ -38,7 +39,7 @@ const SwapFees: React.FC<SwapFeesProps> = ({ inputName, amount:amountString }) =
   const minerFeeInUSD = rate * minerFee
 
   return (
-    <Box>
+    <Box {...boxProps}>
       <Text>
         RenFee: {fees.mint / 100}%, {renFeeInUnderlying} (${formatCurrency(renFeeInUSD)})
       </Text>

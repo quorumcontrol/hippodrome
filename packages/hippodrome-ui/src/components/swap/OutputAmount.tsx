@@ -15,7 +15,7 @@ const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => 
   if (loading) {
     return (
       <Box>
-        <Text>This will spin forever because on testnet for now</Text>
+        <Text>(testnet does not complete)</Text>
         <Spinner />
       </Box>
     )
@@ -23,7 +23,7 @@ const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => 
 
   return (
     <Box>
-      <Text>You receive: {utils.formatEther(amountOut || 0)}</Text>
+      <Text fontSize="2xl">{utils.formatEther(amountOut || 0)}</Text>
     </Box>
   )
   
