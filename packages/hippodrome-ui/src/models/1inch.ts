@@ -8,7 +8,7 @@ const BASE_URL = "https://api.1inch.exchange/v3.0/137";
 
 // see https://docs.1inch.io/api/approve
 export const fetchApprove = async (input: Address) => {
-  const resp = await fetchWithBackOff("/quote", {
+  const resp = await fetchWithBackOff("/approve/calldata", {
     tokenAddress: input,
   });
   return {
@@ -30,6 +30,7 @@ export const fetchSwap = async (
   const resp = await fetchWithBackOff("/swap", {
     fromTokenAddress: input,
     toTokenAddress: output,
+    disableEstimate: true,
     amount: amount.toString(),
     fromAddress: seller,
     slippage: 1, // 1%

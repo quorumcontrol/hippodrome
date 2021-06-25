@@ -38,10 +38,8 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       setLoading(true);
       console.log("deposit: ", deposit);
       await doSwap(
-        depsoit,
+        deposit,
         deposit.lockAndMint.params,
-        
-
       )
       // const tx = await deposit.deposit.queryTx();
       // if (tx.out && !tx.out.revert) {
