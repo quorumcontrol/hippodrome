@@ -1,6 +1,6 @@
 import chainInstance from './chain'
 import {
-  GnosisBiconomy,
+  GnosisBiconomy, GnosisLocalRelayer,
 } from 'kasumah-relay-wrapper/dist/src/relayers'
 import axios from 'axios'
 import { backOff } from "exponential-backoff";
@@ -36,6 +36,14 @@ export const userHasSafe = async (address:string) => {
 }
 
 export const createRelayer = (userSigner: Signer, provider:providers.Provider, chainId:number ) => {
+  if (chainId === 31337) {
+    return new GnosisLocalRelayer({
+      transmitSigner: userSigner,
+      userSigner,
+      chainId,
+    })
+  }
+
   return new GnosisBiconomy({
     userSigner,
     chainId,
@@ -46,6 +54,13 @@ export const createRelayer = (userSigner: Signer, provider:providers.Provider, c
 }
 
 export const createSafe = async (provider: providers.Provider, address:string, chainId:number) => {
+  if (chainId === 31337) {
+    if (!chainInstance.walletMaker) {
+      throw new Error('no wallets')
+    }
+    return chainInstance.walletMaker.deployWallet(address)
+  }
+
   const resp = await backOff(
     async () => {
       const setupData = await setupDataForUser(address)
@@ -76,7 +91,9 @@ export const createSafe = async (provider: providers.Provider, address:string, c
       maxDelay: 5000,
     }
   );
-  return txFromHash(provider, resp.data.txHash);
+  const tx = await txFromHash(provider, resp.data.txHash);
+  console.log('safe created: ', tx.hash)
+  await tx.wait()
 }
 
 async function txFromHash(provider: providers.Provider, txHash: string) {

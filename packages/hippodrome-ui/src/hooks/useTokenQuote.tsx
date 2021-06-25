@@ -1,7 +1,6 @@
 import { BigNumber, constants } from "ethers";
 import useSWR from "swr";
 import axios from "axios";
-import chainInstance from '../models/chain'
 
 export const useTokenQuote = (
   input: string,
@@ -19,9 +18,8 @@ export const useTokenQuote = (
             return constants.Zero;
           }
           const resp = await axios.get(
-            `https://api.1inch.exchange/v3.0/${chainInstance.chainId}/quote`,
+            `https://api.1inch.exchange/v3.0/137/quote`,
             {
-              // TODO: support mumbai
               params: {
                 fromTokenAddress: input,
                 toTokenAddress: output,

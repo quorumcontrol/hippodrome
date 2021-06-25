@@ -40,7 +40,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       if (tx.out && !tx.out.revert) {
         console.log("amount: ", tx.out.amount.toString());
         console.log("nhash: ", tx.out.nhash.toString("hex"));
-        console.log("nhash: ", tx.out.nhash.toString("hex"));
+        console.log("phash: ", ((tx.in as any).phash as any).toString('hex'));
         console.log("signature: ", tx.out.signature?.toString("hex"));
       }
       console.log(tx);
@@ -64,21 +64,20 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   }
 
   return (
-    <Card>
       <VStack spacing="4">
         <motion.div
           animate={{
-            scale: [1, 1.2, 1], 
+            scale: [1, 1.1, 1], 
           }}
           transition={{
             duration: 2,
             ease: "easeInOut",
             times: [0, 0.5, 1],
             loop: Infinity,
-            repeatDelay: 1
+            repeatDelay: 0.25
           }}
           >
-          <CircularProgress value={progressPercentage} size="2xl" color="green.400">
+          <CircularProgress value={progressPercentage} size="120px" color="green.400">
             <CircularProgressLabel>
               {confirmations?.current} / {confirmations?.target}
             </CircularProgressLabel>
@@ -88,7 +87,6 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
         {/* TODO: give the user an estimate of time */}
         <Text>We need to wait for the miners on the chain to confirm your transaction. This could take a little while.</Text>
       </VStack>
-    </Card>
   );
 };
 

@@ -3,7 +3,13 @@ import { wrapContract } from 'kasumah-relay-wrapper/dist/src'
 import { UnderwriteableMinter, UnderwriteableMinter__factory } from '../types/ethers-contracts'
 
 export const MINTER_ADDRESSES:Record<string,string> = {
-  mumbai: '0xD7bb140b53EB814aa10f051B76B0e5b2458fBcAd'
+  mumbai: '0xD7bb140b53EB814aa10f051B76B0e5b2458fBcAd',
+  matic: '0xD7bb140b53EB814aa10f051B76B0e5b2458fBcAd',
+}
+
+const getLocalForkMinter = async () => {
+  const vals = await import('../deployments/localhost/UnderwriteableMinter.json')
+  return vals.address
 }
 
 export const minter = () => {

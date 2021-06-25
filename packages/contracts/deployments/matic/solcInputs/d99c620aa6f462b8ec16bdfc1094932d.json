@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/UnderwriteableMinter.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.5;\n\ninterface IERC20 {\n    function balanceOf(address account) external view returns (uint256);\n    function transfer(address recipient, uint256 amount) external returns (bool);\n}\n\ninterface IGateway {\n    function mint(\n        bytes32 _pHash,\n        uint256 _amount,\n        bytes32 _nHash,\n        bytes calldata _sig\n    ) external returns (uint256);\n\n    function burn(bytes calldata _to, uint256 _amount)\n        external\n        returns (uint256);\n}\n\ninterface IGatewayRegistry {\n    function getGatewayBySymbol(string calldata _tokenSymbol)\n        external\n        view\n        returns (IGateway);\n\n    function getTokenBySymbol(string calldata _tokenSymbol)\n        external\n        view\n        returns (IERC20);\n}\n\n// This is an evolving contract starting with just a simple mint.\n// eventually we want to get to this flow:\n//    user registers their lockAndMint on this contract\n//    underwriter waits for a single confirmation of the deposit\n//    underwriter underwrites the mint for a fee (0.3% ?) (maybe set by the user?)\n//    underwriter watches the deposit and once it's confirmed, can come here and\n//    claim the full amount\n\ncontract UnderwriteableMinter {\n    IGatewayRegistry public registry;\n\n    constructor(IGatewayRegistry _registry) {\n        registry = _registry;\n    }\n\n    function temporaryMint(\n        // Parameters from users\n       address to,\n       bytes32 nonce,\n       string calldata symbol,\n        // Parameters from Darknodes\n        uint256        _amount,\n        bytes32        _nHash,\n        bytes calldata _sig\n    ) external {\n        bytes32 pHash = keccak256(abi.encode(to, nonce));\n        uint256 mintedAmount = registry.getGatewayBySymbol(symbol).mint(pHash, _amount, _nHash, _sig);\n        require(registry.getTokenBySymbol(symbol).transfer(to, mintedAmount), 'failed to transfer token');\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

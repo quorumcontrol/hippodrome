@@ -3,7 +3,7 @@
 set -x -e
 
 pushd ../contracts
-yarn install
+yarn install || true #WTF netlify? why you no build
 yarn build
 popd
 
