@@ -13,7 +13,7 @@ export const App = () => (
       <Router>
         <Layout>
           <Switch>
-            <Route path="/transaction/mint/:asset/:to/:nonce" exact>
+            <Route path="/transaction/mint/:asset/:to/:nonce/:outputToken" exact>
               <LockAndMint />
             </Route>
             <Route path="/">

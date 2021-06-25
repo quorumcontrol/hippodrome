@@ -17,11 +17,12 @@ export interface LockAndMintParams {
   lockNetwork: KnownInputChains;
   to: string;
   nonce: number;
+  outputToken: string; // address of output token (only used by hippodrome and not ren)
 }
 
 export type KnownInputChains = "BTC" | "DOGE";
 
-const ren = new RenJS(isTestnet ? "testnet" : undefined); // TODO: support testnet
+const ren = new RenJS(isTestnet ? "testnet" : undefined);
 
 export const NETWORKS = {
   BTC: Bitcoin(isTestnet ? "testnet" : undefined),

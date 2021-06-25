@@ -43,8 +43,6 @@ const Swap: React.FC = () => {
     return getNextNonce();
   }, []);
 
-  // const { getOutput } = useRenOutput(inputToken as KnownInputChains);
-
   const onSubmit = async () => {
     setSubmitting(true);
     try {
@@ -52,8 +50,9 @@ const Swap: React.FC = () => {
         lockNetwork: inputToken as KnownInputChains,
         to: safeAddress!,
         nonce,
+        outputToken,
       });
-      history.push(mintUrl(inputToken, safeAddress!, nonce));
+      history.push(mintUrl(inputToken, safeAddress!, nonce, outputToken));
     } catch (err) {
       console.error("error: ", err);
       alert("something went wrong");
