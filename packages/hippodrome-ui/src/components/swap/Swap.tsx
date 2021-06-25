@@ -113,7 +113,7 @@ const Swap: React.FC = () => {
           <OutputAmount
             input={inputTokensBySymbol[inputToken].renAddress}
             output={outputToken}
-            amount={parseValueToHex(amount)}
+            amount={parseValueToHex(amount)} // TODO: subtract fees
           />
         </HStack>
       </Box>
