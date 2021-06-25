@@ -120,14 +120,16 @@ export const getLockAndMint = (params: LockAndMintParams) => {
 };
 
 export class WrappedLockAndMintDeposit extends EventEmitter {
+  lockAndMint: LockAndMintWrapper
   deposit: LockAndMintDeposit
   confirmed = false
   signed = false
   targetConfirmations?:number
   confirmations?:number
 
-  constructor(deposit:LockAndMintDeposit) {
+  constructor(deposit:LockAndMintDeposit, lockAndMint:LockAndMintWrapper) {
     super()
+    this.lockAndMint = lockAndMint
     this.deposit = deposit
     this.setupListeners()
   }
@@ -169,9 +171,11 @@ export class LockAndMintWrapper extends EventEmitter {
   ready: Promise<LockAndMint>;
   deposits: WrappedLockAndMintDeposit[];
   lockAndMint?: LockAndMint
+  params: LockAndMintParams
 
   constructor(params: LockAndMintParams) {
     super();
+    this.params = params
     this.ready = lockAndMint(params);
     this.ready.then((lockAndMint) => {
       this.lockAndMint = lockAndMint
@@ -182,7 +186,7 @@ export class LockAndMintWrapper extends EventEmitter {
 
   private async handleDeposit(deposit: LockAndMintDeposit) {
     console.log('handle deposit')
-    const wrappedDeposit = new WrappedLockAndMintDeposit(deposit)
+    const wrappedDeposit = new WrappedLockAndMintDeposit(deposit, this)
     this.deposits.push(wrappedDeposit);
     this.emitUpdate("deposit", wrappedDeposit);
   }

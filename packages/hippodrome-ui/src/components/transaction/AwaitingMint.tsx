@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import { useDeposit } from "../../hooks/useRen";
 import { WrappedLockAndMintDeposit } from "../../models/ren";
 import Card from "../Card";
+import { doSwap } from "../../models/swap";
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint;
@@ -36,14 +37,20 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
     try {
       setLoading(true);
       console.log("deposit: ", deposit);
-      const tx = await deposit.deposit.queryTx();
-      if (tx.out && !tx.out.revert) {
-        console.log("amount: ", tx.out.amount.toString());
-        console.log("nhash: ", tx.out.nhash.toString("hex"));
-        console.log("phash: ", ((tx.in as any).phash as any).toString('hex'));
-        console.log("signature: ", tx.out.signature?.toString("hex"));
-      }
-      console.log(tx);
+      await doSwap(
+        depsoit,
+        deposit.lockAndMint.params,
+        
+
+      )
+      // const tx = await deposit.deposit.queryTx();
+      // if (tx.out && !tx.out.revert) {
+      //   console.log("amount: ", tx.out.amount.toString());
+      //   console.log("nhash: ", tx.out.nhash.toString("hex"));
+      //   console.log("phash: ", ((tx.in as any).phash as any).toString('hex'));
+      //   console.log("signature: ", tx.out.signature?.toString("hex"));
+      // }
+      // console.log(tx);
 
       alert("we now have all the params needed for a mint and a swap");
     } catch (err) {
