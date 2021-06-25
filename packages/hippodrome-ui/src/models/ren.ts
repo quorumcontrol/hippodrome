@@ -7,7 +7,7 @@ import {
 import { utils } from "ethers";
 import EventEmitter from "events";
 import chainInstance from "./chain";
-import { MINTER_ADDRESSES } from "./contracts";
+import { MINTER_ADDRESS } from "./contracts";
 
 export const isTestnet = (new URLSearchParams(window.location.search).get(
   'testnet'
@@ -67,17 +67,12 @@ const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
  
   const nonceHash = utils.keccak256(Buffer.from(nonce.toString()))
 
-  const addr = MINTER_ADDRESSES[chainInstance.networkName]
-  if (!addr) {
-    throw new Error(`no contract address for ${chainInstance.networkName}`)
-  }
-
   const lockAndMint = await ren.lockAndMint({
     asset: net.asset,
     from: net,
     to: Polygon(chainInstance.provider.provider as any, isTestnet ? "testnet" : 'mainnet').Contract({
       // The contract we want to interact with
-      sendTo: addr,
+      sendTo: MINTER_ADDRESS,
   
       // The name of the function we want to call
       contractFn: "temporaryMint",

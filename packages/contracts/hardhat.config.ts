@@ -4,6 +4,7 @@ import 'hardhat-deploy';
 import { NetworkUserConfig } from "hardhat/types";
 import dotenv from 'dotenv'
 import './tasks/deployer'
+import './tasks/balances'
 
 dotenv.config()
 

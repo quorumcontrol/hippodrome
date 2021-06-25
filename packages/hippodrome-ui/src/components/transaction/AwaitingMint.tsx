@@ -36,21 +36,14 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   const onMint = async () => {
     try {
       setLoading(true);
-      console.log("deposit: ", deposit);
+      console.log("swapping: ", deposit);
+
       await doSwap(
         deposit,
         deposit.lockAndMint.params,
       )
-      // const tx = await deposit.deposit.queryTx();
-      // if (tx.out && !tx.out.revert) {
-      //   console.log("amount: ", tx.out.amount.toString());
-      //   console.log("nhash: ", tx.out.nhash.toString("hex"));
-      //   console.log("phash: ", ((tx.in as any).phash as any).toString('hex'));
-      //   console.log("signature: ", tx.out.signature?.toString("hex"));
-      // }
-      // console.log(tx);
 
-      alert("we now have all the params needed for a mint and a swap");
+      alert("swapped!");
     } catch (err) {
       console.error("erorr minting: ", err);
     } finally {

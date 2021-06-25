@@ -10,9 +10,11 @@ const BASE_URL = "https://api.1inch.exchange/v3.0/137";
 export const fetchApprove = async (input: Address) => {
   const resp = await fetchWithBackOff("/approve/calldata", {
     tokenAddress: input,
+    infinity: true,
   });
+  console.log("approve: ", resp.data)
   return {
-    to: input,
+    to: resp.data.to,
     calldata: resp.data.data,
   };
 };
@@ -27,17 +29,21 @@ export const fetchSwap = async (
   if (input === output) {
     return undefined;
   }
-  const resp = await fetchWithBackOff("/swap", {
+
+  const params = {
     fromTokenAddress: input,
     toTokenAddress: output,
     disableEstimate: true,
     amount: amount.toString(),
     fromAddress: seller,
-    slippage: 1, // 1%
-  });
+    destReceiver: seller,
+    slippage: 10, // 10% - TODO: this isn't production ready, but for local testing makes sense
+  }
+  const resp = await fetchWithBackOff("/swap", params);
   return {
-    to: resp.data.to,
-    calldata: resp.data.calldata,
+    to: resp.data.tx.to,
+    calldata: resp.data.tx.data,
+    from: resp.data.tx.from,
   };
 };
 
