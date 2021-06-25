@@ -21,6 +21,7 @@ networks['hardhat'] = {
     url: `https://polygon-mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd`,
   },
   allowUnlimitedContractSize: true,
+  blockGasLimit: 20000000, // necessary to deploy the gateway for ren mock in test
 }
 
 networks['mumbai'] = {
@@ -59,6 +60,9 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: '0.5.17'
+      }
     ],
   },
   networks,

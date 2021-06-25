@@ -1,0 +1,137 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "MintGatewayStateV1",
+  "sourceName": "@renproject/gateway-sol/contracts/Gateway/MintGatewayV1.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "burnFee",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "feeRecipient",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minimumBurnAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "mintAuthority",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "mintFee",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "nextN",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "status",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "token",
+      "outputs": [
+        {
+          "internalType": "contract RenERC20LogicV1",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052600060055534801561001557600080fd5b50610334806100256000396000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c806394c238ac1161005b57806394c238ac1461018d578063aa4df9ad146101ab578063fc0c546a146101c9578063fce589d81461021357610088565b806313966db51461008d57806346904840146100b357806352ad0d5e146100fd5780639340b21e14610143575b600080fd5b610095610239565b604051808261ffff1661ffff16815260200191505060405180910390f35b6100bb61024d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101296004803603602081101561011357600080fd5b8101908080359060200190929190505050610273565b604051808215151515815260200191505060405180910390f35b61014b610293565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101956102b9565b6040518082815260200191505060405180910390f35b6101b36102bf565b6040518082815260200191505060405180910390f35b6101d16102c5565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61021b6102eb565b604051808261ffff1661ffff16815260200191505060405180910390f35b600360149054906101000a900461ffff1681565b600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60046020528060005260406000206000915054906101000a900460ff1681565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60005481565b60055481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600360169054906101000a900461ffff168156fea265627a7a723158201280f2e29dca69157dd91af67caddb0de4aa61127c0313265473e5b3f39ca5f464736f6c63430005110032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100885760003560e01c806394c238ac1161005b57806394c238ac1461018d578063aa4df9ad146101ab578063fc0c546a146101c9578063fce589d81461021357610088565b806313966db51461008d57806346904840146100b357806352ad0d5e146100fd5780639340b21e14610143575b600080fd5b610095610239565b604051808261ffff1661ffff16815260200191505060405180910390f35b6100bb61024d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101296004803603602081101561011357600080fd5b8101908080359060200190929190505050610273565b604051808215151515815260200191505060405180910390f35b61014b610293565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101956102b9565b6040518082815260200191505060405180910390f35b6101b36102bf565b6040518082815260200191505060405180910390f35b6101d16102c5565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61021b6102eb565b604051808261ffff1661ffff16815260200191505060405180910390f35b600360149054906101000a900461ffff1681565b600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60046020528060005260406000206000915054906101000a900460ff1681565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60005481565b60055481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600360169054906101000a900461ffff168156fea265627a7a723158201280f2e29dca69157dd91af67caddb0de4aa61127c0313265473e5b3f39ca5f464736f6c63430005110032",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

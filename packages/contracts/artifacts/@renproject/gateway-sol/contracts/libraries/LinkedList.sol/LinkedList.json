@@ -1,0 +1,26 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "LinkedList",
+  "sourceName": "@renproject/gateway-sol/contracts/libraries/LinkedList.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "NULL",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60ba610025600b82828239805160001a60731461001857fe5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060335760003560e01c8063f26be3fc146038575b600080fd5b603e6080565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008156fea265627a7a7231582099c84bd2773891ebffc9215aa81f23da4e0059abac0ba2fa04a25211c479940564736f6c63430005110032",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040526004361060335760003560e01c8063f26be3fc146038575b600080fd5b603e6080565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008156fea265627a7a7231582099c84bd2773891ebffc9215aa81f23da4e0059abac0ba2fa04a25211c479940564736f6c63430005110032",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

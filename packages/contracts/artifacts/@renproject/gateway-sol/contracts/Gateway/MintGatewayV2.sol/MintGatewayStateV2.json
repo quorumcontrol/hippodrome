@@ -1,0 +1,26 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "MintGatewayStateV2",
+  "sourceName": "@renproject/gateway-sol/contracts/Gateway/MintGatewayV2.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "selectorHash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b5060848061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80632976297614602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b6001548156fea265627a7a72315820b28bed982dc53c62ec8b7307470ba0e9479259db3970fb0ee119e0f4de35dc2164736f6c63430005110032",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80632976297614602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b6001548156fea265627a7a72315820b28bed982dc53c62ec8b7307470ba0e9479259db3970fb0ee119e0f4de35dc2164736f6c63430005110032",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

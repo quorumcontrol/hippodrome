@@ -45,6 +45,1630 @@
         "IGatewayRegistry",
         "UnderwriteableMinter"
       ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/contracts/ImportsForTest.sol": {
+      "lastModificationDate": 1624607557673,
+      "contentHash": "a4dbdb8e483d87a82ac7ea498ae1f357",
+      "sourceName": "contracts/ImportsForTest.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@renproject/gateway-sol/contracts/Gateway/GatewayFactory.sol",
+        "@renproject/gateway-sol/contracts/Gateway/adapters/BasicAdapter.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": []
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/GatewayFactory.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "83efe6a0d89ff24188cdf15c1f75b590",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/GatewayFactory.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../Governance/Claimable.sol",
+        "./GatewayRegistry.sol",
+        "./MintGatewayV2.sol",
+        "./RenERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "GatewayFactory"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/adapters/BasicAdapter.sol": {
+      "lastModificationDate": 1624607416318,
+      "contentHash": "cb999dd50465148185eb8e423cba5bfc",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/adapters/BasicAdapter.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol",
+        "../interfaces/IGateway.sol",
+        "../interfaces/IGatewayRegistry.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "BasicAdapter"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Governance/Claimable.sol": {
+      "lastModificationDate": 1624607415904,
+      "contentHash": "34ed07df37610e2f6c5e67346e4a2710",
+      "sourceName": "@renproject/gateway-sol/contracts/Governance/Claimable.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-ethereum-package/contracts/ownership/Ownable.sol",
+        "@openzeppelin/upgrades/contracts/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "Claimable"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/GatewayRegistry.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "432ca907ec346bc2cb5cd511e346d95e",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/GatewayRegistry.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "../Governance/Claimable.sol",
+        "./RenERC20.sol",
+        "../libraries/LinkedList.sol",
+        "./interfaces/IGateway.sol",
+        "../libraries/CanReclaimTokens.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "GatewayRegistry"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/MintGatewayV2.sol": {
+      "lastModificationDate": 1624607415904,
+      "contentHash": "442a2ff1df31239b97ea80c0275dba59",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/MintGatewayV2.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/cryptography/ECDSA.sol",
+        "@openzeppelin/upgrades/contracts/upgradeability/InitializableAdminUpgradeabilityProxy.sol",
+        "../Governance/Claimable.sol",
+        "../libraries/String.sol",
+        "./RenERC20.sol",
+        "./interfaces/IGateway.sol",
+        "../libraries/CanReclaimTokens.sol",
+        "./MintGatewayV1.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "MintGatewayLogicV2",
+        "MintGatewayProxy",
+        "MintGatewayStateV2"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/RenERC20.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "37725be6221d70f01c1101d62c1f6ddd",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/RenERC20.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-ethereum-package/contracts/ownership/Ownable.sol",
+        "@openzeppelin/upgrades/contracts/upgradeability/InitializableAdminUpgradeabilityProxy.sol",
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol",
+        "../Governance/Claimable.sol",
+        "../libraries/CanReclaimTokens.sol",
+        "./ERC20WithRate.sol",
+        "./ERC20WithPermit.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.16"
+      ],
+      "artifacts": [
+        "RenERC20LogicV1",
+        "RenERC20Proxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/ownership/Ownable.sol": {
+      "lastModificationDate": 1624607415955,
+      "contentHash": "3c68a657fce962342c3a6071850959f4",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/ownership/Ownable.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "../GSN/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/Initializable.sol": {
+      "lastModificationDate": 1624607415541,
+      "contentHash": "402d88f041ed1754339d60ae70077cd9",
+      "sourceName": "@openzeppelin/upgrades/contracts/Initializable.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.7.0"
+      ],
+      "artifacts": [
+        "Initializable"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol": {
+      "lastModificationDate": 1624607415920,
+      "contentHash": "eab2f9561946bf87eb5bc14b02faeeab",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/libraries/LinkedList.sol": {
+      "lastModificationDate": 1624607415902,
+      "contentHash": "fdff78ea39fb06562a1e4bfcaf088593",
+      "sourceName": "@renproject/gateway-sol/contracts/libraries/LinkedList.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "LinkedList"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/libraries/CanReclaimTokens.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "a0b57313a0adaaf1686000f73aa94603",
+      "sourceName": "@renproject/gateway-sol/contracts/libraries/CanReclaimTokens.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-ethereum-package/contracts/ownership/Ownable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol",
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "../Governance/Claimable.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "CanReclaimTokens"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/InitializableAdminUpgradeabilityProxy.sol": {
+      "lastModificationDate": 1624607416164,
+      "contentHash": "e3522d3fd0b828ee04177919a094d9c8",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/InitializableAdminUpgradeabilityProxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./BaseAdminUpgradeabilityProxy.sol",
+        "./InitializableUpgradeabilityProxy.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "InitializableAdminUpgradeabilityProxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol": {
+      "lastModificationDate": 1624607416326,
+      "contentHash": "22076986300063e63abd95b123a0e773",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "../../GSN/Context.sol",
+        "./IERC20.sol",
+        "../../math/SafeMath.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol": {
+      "lastModificationDate": 1624607416326,
+      "contentHash": "0ee74d89b27247bb5d100dc4bc2de516",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "./IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "ERC20Detailed"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/ERC20WithRate.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "a1ec997e6398ddb6ecbb6669f0aa26a8",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/ERC20WithRate.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol",
+        "../Governance/Claimable.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "ERC20WithRate"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/ERC20WithPermit.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "649e61dd7b3426c2834caefdda09e3f3",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/ERC20WithPermit.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "ERC20WithPermit"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/BaseAdminUpgradeabilityProxy.sol": {
+      "lastModificationDate": 1624607416165,
+      "contentHash": "a700de1d5fa4e30a65048a42c1019e4f",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/BaseAdminUpgradeabilityProxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./UpgradeabilityProxy.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "BaseAdminUpgradeabilityProxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/InitializableUpgradeabilityProxy.sol": {
+      "lastModificationDate": 1624607416165,
+      "contentHash": "50ee48ee01e9018b4bd91b4d0b245fbe",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/InitializableUpgradeabilityProxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./BaseUpgradeabilityProxy.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "InitializableUpgradeabilityProxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/UpgradeabilityProxy.sol": {
+      "lastModificationDate": 1624607416165,
+      "contentHash": "1aa384007aa26f14904359f7bf8f9b0d",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/UpgradeabilityProxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./BaseUpgradeabilityProxy.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "UpgradeabilityProxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/BaseUpgradeabilityProxy.sol": {
+      "lastModificationDate": 1624607416165,
+      "contentHash": "ac4b5731261638436f353a536bc6455d",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/BaseUpgradeabilityProxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./Proxy.sol",
+        "../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "BaseUpgradeabilityProxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/upgradeability/Proxy.sol": {
+      "lastModificationDate": 1624607416165,
+      "contentHash": "9425865caf236f283ee7683039ba9623",
+      "sourceName": "@openzeppelin/upgrades/contracts/upgradeability/Proxy.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "Proxy"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/upgrades/contracts/utils/Address.sol": {
+      "lastModificationDate": 1624607416164,
+      "contentHash": "7ea532d4e55bc12e6fcbcefc0c29b56e",
+      "sourceName": "@openzeppelin/upgrades/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "OpenZeppelinUpgradesAddress"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1624607416326,
+      "contentHash": "183ff1f5e5f04bcfa85cee597bcb0236",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol": {
+      "lastModificationDate": 1624607415953,
+      "contentHash": "d208da96b6f6c1d204ee8248087cf2d7",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "SafeMath"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol": {
+      "lastModificationDate": 1624607416326,
+      "contentHash": "83fbce907d2b44fae67a751b83804e02",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol",
+        "../../math/SafeMath.sol",
+        "../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "SafeERC20"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/utils/Address.sol": {
+      "lastModificationDate": 1624607415988,
+      "contentHash": "a41701ff3cdbb98920cd49750549d127",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.5"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/cryptography/ECDSA.sol": {
+      "lastModificationDate": 1624607415928,
+      "contentHash": "eb9f2a0bde674643d72cfa71dcbc4eb9",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/cryptography/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/libraries/String.sol": {
+      "lastModificationDate": 1624607415901,
+      "contentHash": "4e841c6333c8a60cdd28fcfb31b0736c",
+      "sourceName": "@renproject/gateway-sol/contracts/libraries/String.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.17"
+      ],
+      "artifacts": [
+        "String"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/MintGatewayV1.sol": {
+      "lastModificationDate": 1624607415903,
+      "contentHash": "95f8a9194ef93bb414f8fc5c06d26c4d",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/MintGatewayV1.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol",
+        "@openzeppelin/contracts-ethereum-package/contracts/cryptography/ECDSA.sol",
+        "@openzeppelin/upgrades/contracts/upgradeability/InitializableAdminUpgradeabilityProxy.sol",
+        "../Governance/Claimable.sol",
+        "../libraries/String.sol",
+        "./RenERC20.sol",
+        "./interfaces/IGateway.sol",
+        "../libraries/CanReclaimTokens.sol"
+      ],
+      "versionPragmas": [
+        "0.5.17"
+      ],
+      "artifacts": [
+        "BCHGateway",
+        "BTCGateway",
+        "MintGatewayLogicV1",
+        "MintGatewayStateV1",
+        "ZECGateway"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol": {
+      "lastModificationDate": 1624607415920,
+      "contentHash": "22d73eac57ff1cf264737e84c5cb9f0a",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/upgrades/contracts/Initializable.sol",
+        "./IRelayRecipient.sol",
+        "./IRelayHub.sol",
+        "./Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "GSNRecipient"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/GSN/IRelayRecipient.sol": {
+      "lastModificationDate": 1624607415923,
+      "contentHash": "6411caddd58f04a2ed6a671ed1ecbea6",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/GSN/IRelayRecipient.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "IRelayRecipient"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@openzeppelin/contracts-ethereum-package/contracts/GSN/IRelayHub.sol": {
+      "lastModificationDate": 1624607415921,
+      "contentHash": "c2d722a33a7d945df10c9288afcd9093",
+      "sourceName": "@openzeppelin/contracts-ethereum-package/contracts/GSN/IRelayHub.sol",
+      "solcConfig": {
+        "version": "0.5.17",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.5.0"
+      ],
+      "artifacts": [
+        "IRelayHub"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/interfaces/IGatewayRegistry.sol": {
+      "lastModificationDate": 1624607416318,
+      "contentHash": "5c9f16e10eb0a296e06c97ba34648879",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/interfaces/IGatewayRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.5",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "./IERC20Standard.sol",
+        "./IGateway.sol"
+      ],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IGatewayRegistry"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/interfaces/IERC20Standard.sol": {
+      "lastModificationDate": 1624607416318,
+      "contentHash": "622a27edbc04be9bc6686b3fbf08e3ef",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/interfaces/IERC20Standard.sol",
+      "solcConfig": {
+        "version": "0.8.5",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IERC20Standard"
+      ]
+    },
+    "/Users/tobowers/code/hippodrome/packages/contracts/node_modules/@renproject/gateway-sol/contracts/Gateway/interfaces/IGateway.sol": {
+      "lastModificationDate": 1624607416317,
+      "contentHash": "1c9a2437137fbb57a8d16c114689470f",
+      "sourceName": "@renproject/gateway-sol/contracts/Gateway/interfaces/IGateway.sol",
+      "solcConfig": {
+        "version": "0.8.5",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.5.0"
+      ],
+      "artifacts": [
+        "IBurnGateway",
+        "IGateway",
+        "IMintGateway"
+      ]
     }
   }
 }
