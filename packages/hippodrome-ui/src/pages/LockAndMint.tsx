@@ -7,8 +7,8 @@ import AwaitingDeposit from '../components/transaction/AwaitingDeposit'
 import AwaitingMint from '../components/transaction/AwaitingMint'
 
 const Transaction:React.FC = () => {
-  const { asset, to, nonce } = useParams<{asset:KnownInputChains, to: string, nonce:string}>()
-  const { lockAndMint, deposits, loading } = useLockAndMint({ lockNetwork: asset, to, nonce: parseInt(nonce) })
+  const { asset, to, nonce, outputToken } = useParams<{asset:KnownInputChains, to: string, nonce:string, outputToken:string}>()
+  const { lockAndMint, deposits, loading } = useLockAndMint({ lockNetwork: asset, to, nonce: parseInt(nonce), outputToken })
 
   if (loading) {
     return (
