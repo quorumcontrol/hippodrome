@@ -2,6 +2,7 @@ import React from 'react'
 import { utils } from 'ethers'
 import { useTokenQuote } from '../../hooks/useTokenQuote'
 import { Spinner, Box, Text } from '@chakra-ui/react'
+import { isTestnet } from '../../models/ren'
 
 export interface OutputAmountProps {
   input:string
@@ -15,7 +16,7 @@ const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => 
   if (loading) {
     return (
       <Box>
-        <Text>(testnet does not complete)</Text>
+        {isTestnet && <Text>(testnet does not complete)</Text>}
         <Spinner />
       </Box>
     )

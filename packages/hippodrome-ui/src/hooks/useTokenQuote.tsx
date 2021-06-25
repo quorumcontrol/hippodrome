@@ -1,7 +1,6 @@
 import { BigNumber, constants } from "ethers";
 import useSWR from "swr";
 import axios from "axios";
-import chainInstance from '../models/chain'
 
 export const useTokenQuote = (
   input: string,
