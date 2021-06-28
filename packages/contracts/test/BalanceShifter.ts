@@ -32,7 +32,7 @@ describe('BalanceShifter', () => {
   })
 
   it('shifts', async () => {
-    let [,alice] = await ethers.getSigners()
+    let [alice] = await ethers.getSigners()
     
     const token = RenERC20LogicV1__factory.connect(fraudSHIBAddr, vitalik)
     const vitalikBalance = await token.balanceOf(vitalik.address)
