@@ -7,7 +7,7 @@ import {
 import { utils } from "ethers";
 import EventEmitter from "events";
 import chainInstance from "./chain";
-import { MINTER_ADDRESSES } from "./contracts";
+import { MINTER_ADDRESS } from "./contracts";
 
 export const isTestnet = (new URLSearchParams(window.location.search).get(
   'testnet'
@@ -17,11 +17,12 @@ export interface LockAndMintParams {
   lockNetwork: KnownInputChains;
   to: string;
   nonce: number;
+  outputToken: string; // address of output token (only used by hippodrome and not ren)
 }
 
 export type KnownInputChains = "BTC" | "DOGE";
 
-const ren = new RenJS(isTestnet ? "testnet" : undefined); // TODO: support testnet
+const ren = new RenJS(isTestnet ? "testnet" : undefined);
 
 export const NETWORKS = {
   BTC: Bitcoin(isTestnet ? "testnet" : undefined),
@@ -66,17 +67,12 @@ const lockAndMint = async ({ lockNetwork, nonce, to }: LockAndMintParams) => {
  
   const nonceHash = utils.keccak256(Buffer.from(nonce.toString()))
 
-  const addr = MINTER_ADDRESSES[chainInstance.networkName]
-  if (!addr) {
-    throw new Error(`no contract address for ${chainInstance.networkName}`)
-  }
-
   const lockAndMint = await ren.lockAndMint({
     asset: net.asset,
     from: net,
     to: Polygon(chainInstance.provider.provider as any, isTestnet ? "testnet" : 'mainnet').Contract({
       // The contract we want to interact with
-      sendTo: addr,
+      sendTo: MINTER_ADDRESS,
   
       // The name of the function we want to call
       contractFn: "temporaryMint",
@@ -119,14 +115,16 @@ export const getLockAndMint = (params: LockAndMintParams) => {
 };
 
 export class WrappedLockAndMintDeposit extends EventEmitter {
+  lockAndMint: LockAndMintWrapper
   deposit: LockAndMintDeposit
   confirmed = false
   signed = false
   targetConfirmations?:number
   confirmations?:number
 
-  constructor(deposit:LockAndMintDeposit) {
+  constructor(deposit:LockAndMintDeposit, lockAndMint:LockAndMintWrapper) {
     super()
+    this.lockAndMint = lockAndMint
     this.deposit = deposit
     this.setupListeners()
   }
@@ -168,9 +166,11 @@ export class LockAndMintWrapper extends EventEmitter {
   ready: Promise<LockAndMint>;
   deposits: WrappedLockAndMintDeposit[];
   lockAndMint?: LockAndMint
+  params: LockAndMintParams
 
   constructor(params: LockAndMintParams) {
     super();
+    this.params = params
     this.ready = lockAndMint(params);
     this.ready.then((lockAndMint) => {
       this.lockAndMint = lockAndMint
@@ -181,7 +181,7 @@ export class LockAndMintWrapper extends EventEmitter {
 
   private async handleDeposit(deposit: LockAndMintDeposit) {
     console.log('handle deposit')
-    const wrappedDeposit = new WrappedLockAndMintDeposit(deposit)
+    const wrappedDeposit = new WrappedLockAndMintDeposit(deposit, this)
     this.deposits.push(wrappedDeposit);
     this.emitUpdate("deposit", wrappedDeposit);
   }

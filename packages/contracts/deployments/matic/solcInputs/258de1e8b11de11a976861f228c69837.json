@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/BalanceShifter.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.5;\n\ninterface IShiftableERC20 {\n    function balanceOf(address account) external view returns (uint256);\n     function transferFrom(\n        address sender,\n        address recipient,\n        uint256 amount\n    ) external returns (bool);\n}\n\n/**\nBalance shifter takes any ERC20 addresses and shifts the total balances over to a new address.\nUseful for when you don't know the balance before executing a transaction.\n */\ncontract BalanceShifter {\n\n  function shift(address[] calldata tokens, address from, address to) public returns (bool) {\n    require(from == msg.sender, 'may only transfer your own tokens');\n    \n    for(uint i; i < tokens.length; i++) {\n      IShiftableERC20 token = IShiftableERC20(tokens[i]);\n      require(token.transferFrom(from, to, token.balanceOf(from)), 'failed transfer');\n    }\n    return true;\n  }\n\n}"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

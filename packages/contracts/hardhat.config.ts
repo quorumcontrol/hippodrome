@@ -3,7 +3,6 @@ import { HardhatUserConfig } from "hardhat/config"
 import 'hardhat-deploy';
 import { NetworkUserConfig } from "hardhat/types";
 import dotenv from 'dotenv'
-import './tasks/deployer'
 
 dotenv.config()
 
@@ -11,7 +10,8 @@ dotenv.config()
 // at initial install the types aren't there and so you can't compile.
 // this lets a first run happen.
 if (!process.env.FIRST_RUN) {
-  //todo load tasks hre
+  require('./tasks/deployer')
+  require('./tasks/balances')
 }
 
 let networks:{[key:string]:NetworkUserConfig} = {}
