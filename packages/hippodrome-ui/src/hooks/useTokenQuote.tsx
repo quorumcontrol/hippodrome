@@ -1,6 +1,8 @@
-import { BigNumber, constants } from "ethers";
+import { BigNumber } from "ethers";
 import useSWR from "swr";
-import axios from "axios";
+import { fetchQuote } from "../models/1inch";
+
+// TODO: why are we converting to 10**18 but then back down to 10**8
 
 export const useTokenQuote = (
   input: string,
@@ -9,25 +11,17 @@ export const useTokenQuote = (
 ) => {
   console.log("fetching amount for: ", amount);
   const { data, isValidating, revalidate } = useSWR(
-    ["/1inch-quote", input, output, BigNumber.from(amount).div(1e10.toString()).toHexString()],
+    [
+      "/1inch-quote",
+      input,
+      output,
+      BigNumber.from(amount).div((1e10).toString()).toHexString(),
+    ],
     {
       fetcher: async (_, input, output, amtString) => {
         try {
           const amount = BigNumber.from(amtString);
-          if (amount.eq(0)) {
-            return constants.Zero;
-          }
-          const resp = await axios.get(
-            `https://api.1inch.exchange/v3.0/137/quote`,
-            {
-              params: {
-                fromTokenAddress: input,
-                toTokenAddress: output,
-                amount: amount.toString(),
-              },
-            }
-          );
-          return BigNumber.from(resp.data.toTokenAmount);
+          return fetchQuote(input, output, amount);
         } catch (err) {
           console.error("error fetching 1inch quote: ", err);
           throw err;

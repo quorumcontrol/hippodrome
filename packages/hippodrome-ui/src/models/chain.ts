@@ -106,9 +106,9 @@ export class Chain extends EventEmitter {
         }
         const isDeployed = await this.walletMaker.isDeployed(this.address)
         if (!isDeployed) {
-          console.log('deploying safe')
           await createSafe(this.provider, this.address, this.chainId)
         }
+        console.log('deployed safe for ', this.address, ' safe addr: ', await this.walletMaker.walletAddressForUser(this.address))
 
         resolve(safeFromAddr(this.signer, this.address))
       } catch(err) {
