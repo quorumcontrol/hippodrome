@@ -24,10 +24,13 @@ const AwaitingDeposit: React.FC<PendingTransactionProps> = ({
           <Text>{lockAndMint.gatewayAddress}</Text>
           <QRCode value={`bitcoin:${lockAndMint.gatewayAddress}`} />
         </VStack>
-        <Text>Once you deposit BTC, this page will change.</Text>
+        <Text>
+          Once you deposit {lockAndMint.params.asset}, this page will
+          change.
+        </Text>
       </VStack>
     </Card>
-  );
+  )
 };
 
 export default AwaitingDeposit;
