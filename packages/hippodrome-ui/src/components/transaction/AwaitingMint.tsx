@@ -17,9 +17,13 @@ import { motion } from "framer-motion"
 import { useDeposit } from "../../hooks/useRen"
 import { WrappedLockAndMintDeposit } from "../../models/ren"
 import Card from "../Card"
-import { supportedTokens } from "../../models/tokenList"
+import { inputTokensBySymbol, supportedTokens } from "../../models/tokenList"
 import { doSwap } from "../../models/swap"
 import { useMemo } from "react"
+import { useTokenQuote } from "../../hooks/useTokenQuote"
+import { parseValueToHex } from "../../utils/parse"
+import humanBigNumber, { formatCurrency } from "../../utils/humanNumbers"
+import { BigNumber, utils } from "ethers"
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -32,12 +36,36 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   const { deposit, confirmed, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
 
+  const depositAmount = useMemo(() => {
+    return BigNumber.from(deposit.deposit.depositDetails.amount)
+      .div(10000 * 10000)
+      .toString()
+  }, [deposit])
+
+  const { amountOut, loading: tokenQuoteLoading } = useTokenQuote(
+    inputTokensBySymbol[deposit.lockAndMint.params.lockNetwork].renAddress,
+    deposit.lockAndMint.params.outputToken,
+    parseValueToHex(depositAmount)
+  )
+
   const progressPercentage = Math.max(
     10,
     ((confirmations?.current || 0) / (confirmations?.target || 1)) * 100
   )
 
-  const selected = useMemo(
+  const fee = useMemo(() => {
+    const nDepositAmount = Number(depositAmount || "0") || 1
+
+    return (nDepositAmount * 0.15) / 100
+  }, [depositAmount])
+
+  const conversionRate = useMemo(() => {
+    const nOutPutAmount = Number(utils.formatEther(amountOut || 0))
+    const nDepositAmount = Number(depositAmount || "0") || 1
+    return formatCurrency(nOutPutAmount / nDepositAmount)
+  }, [amountOut, depositAmount])
+
+  const outputToken = useMemo(
     () =>
       supportedTokens.find(
         (t) => t.address === deposit.lockAndMint.params.outputToken
@@ -76,13 +104,13 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
           thickness="10px"
         >
           <CircularProgressLabel fontSize="sm">
-            50 / {confirmations?.target}
+            {confirmations?.target} / {confirmations?.target}
           </CircularProgressLabel>
         </CircularProgress>
 
         <VStack spacing="8" width="100%">
           <Heading marginTop="30px" fontSize="3xl" textAlign="center">
-            {deposit.lockAndMint.params.lockNetwork} recieved
+            {depositAmount} {deposit.lockAndMint.params.lockNetwork} recieved
           </Heading>
 
           <Box width="100%">
@@ -96,34 +124,39 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
               paddingY="5"
             >
               <HStack>
-                <Image w="40px" src={selected?.logoURI} />
-                <Text fontSize="lg">{selected?.name}</Text>
+                <Image w="40px" src={outputToken?.logoURI} />
+                <Text fontSize="lg">{outputToken?.name}</Text>
               </HStack>
 
-              <Text fontSize="lg" fontWeight="medium">
-                2330.35
-              </Text>
+              {tokenQuoteLoading ? (
+                <Spinner />
+              ) : (
+                <Text fontSize="lg" fontWeight="medium">
+                  {humanBigNumber(amountOut || "0")}
+                </Text>
+              )}
             </HStack>
-            <Text color="white">Price: 1 Dogecoin = 0.43 MATIC</Text>
+            {!tokenQuoteLoading && (
+              <Text color="white">
+                Price: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
+                {`${conversionRate} ${outputToken?.name}`}
+              </Text>
+            )}
           </Box>
 
           <Box width="100%" marginTop="">
             <Text color="gray.300">Reciepient address</Text>
             <Text color="gray.100" fontWeight="medium">
-              0xfe9951b3De9eD98c1169ACD1c3f8d2a84418dA40
+              {deposit.lockAndMint.params.to}
             </Text>
           </Box>
 
-          <VStack width="100%">
-            <HStack width="100%" justifyContent="space-between">
-              <Text>FEES</Text>
-              <Text>1.2%</Text>
-            </HStack>
-            <HStack width="100%" justifyContent="space-between">
-              <Text>MINERS FEE</Text>
-              <Text>5.232 DOGE ($3.43)</Text>
-            </HStack>
-          </VStack>
+          <HStack width="100%" justifyContent="space-between">
+            <Text>FEE</Text>
+            <Text>
+              {fee}(0.15%) {deposit.lockAndMint.params.lockNetwork}
+            </Text>
+          </HStack>
 
           {!loading && (
             <Button width="100%" onClick={onMint}>
