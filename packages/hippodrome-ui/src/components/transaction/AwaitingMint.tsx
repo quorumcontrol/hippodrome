@@ -11,9 +11,12 @@ import {
   Image,
   CircularProgress,
   CircularProgressLabel,
+  useToast,
 } from "@chakra-ui/react"
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint"
 import { motion } from "framer-motion"
+import { BigNumber, utils } from "ethers"
+import { useHistory } from "react-router-dom"
 import { useDeposit } from "../../hooks/useRen"
 import { WrappedLockAndMintDeposit } from "../../models/ren"
 import Card from "../Card"
@@ -23,7 +26,6 @@ import { useMemo } from "react"
 import { useTokenQuote } from "../../hooks/useTokenQuote"
 import { parseValueToHex } from "../../utils/parse"
 import humanBigNumber, { formatCurrency } from "../../utils/humanNumbers"
-import { BigNumber, utils } from "ethers"
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -35,6 +37,8 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
 }) => {
   const { deposit, confirmed, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const history = useHistory()
 
   const depositAmount = useMemo(() => {
     return BigNumber.from(deposit.deposit.depositDetails.amount)
@@ -80,9 +84,22 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
 
       await doSwap(deposit, deposit.lockAndMint.params)
 
-      alert("swapped!")
+      history.push("/")
+
+      toast({
+        title: "Swap completed",
+        description: "Check wallet to confirm swap amount",
+        duration: 9000,
+        status: "success",
+      })
     } catch (err) {
       console.error("erorr minting: ", err)
+      toast({
+        title: "Swap unable to complete",
+        description: "Error swapping, token please try again",
+        duration: 9000,
+        status: "error",
+      })
     } finally {
       setLoading(false)
     }
