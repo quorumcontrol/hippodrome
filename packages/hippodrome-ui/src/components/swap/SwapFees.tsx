@@ -23,10 +23,10 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
 
   if (loading) {
     return (
-      <Box {...boxProps}>
+      <Box {...boxProps} w="100%">
         <Spinner />
       </Box>
-    );
+    )
   }
 
   if (!fees || !rate) {
@@ -39,7 +39,7 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
   const minerFeeInUSD = rate * minerFee
 
   return (
-    <Box {...boxProps}>
+    <Box {...boxProps} w="100%">
       <Text>
         RenFee: {fees.mint / 100}%, {renFeeInUnderlying} (${formatCurrency(renFeeInUSD)})
       </Text>

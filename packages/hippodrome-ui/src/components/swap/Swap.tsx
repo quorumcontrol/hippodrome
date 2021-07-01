@@ -1,113 +1,137 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Box,
   VStack,
   HStack,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   FormControl,
   Button,
   Spinner,
+  Heading,
   Text,
-} from "@chakra-ui/react";
-import OutputTokenSelect from "./OutputTokenSelect";
-import InputTokenSelect from "./InputTokenSelect";
+} from "@chakra-ui/react"
+import OutputTokenSelect from "./OutputTokenSelect"
+import InputTokenSelect from "./InputTokenSelect"
 import {
   getLockAndMint,
   getNextNonce,
   KnownInputChains,
-} from "../../models/ren";
-import OutputAmount from "./OutputAmount";
-import { inputTokensBySymbol } from "../../models/tokenList";
-import SwapFees from "./SwapFees";
-import { parseValueToHex } from "../../utils/parse";
-import { useHistory } from "react-router-dom";
-import { mintUrl } from "../../utils/urls";
-import { useMemo } from "react";
-import { useChainContext } from "../../hooks/useChainContext";
+} from "../../models/ren"
+import OutputAmount from "./OutputAmount"
+import {
+  inputTokens,
+  inputTokensBySymbol,
+  supportedTokens,
+} from "../../models/tokenList"
+import SwapFees from "./SwapFees"
+import { parseValueToHex } from "../../utils/parse"
+import { useHistory } from "react-router-dom"
+import { mintUrl } from "../../utils/urls"
+import { useMemo } from "react"
+import { useChainContext } from "../../hooks/useChainContext"
 
 const Swap: React.FC = () => {
-  const { safeAddress } = useChainContext();
-  const [amount, setAmount] = useState(0);
-  const [inputToken, setInputToken] = useState("DOGE");
-  const history = useHistory();
+  const { safeAddress } = useChainContext()
+  const [amount, setAmount] = useState(0)
+  const [inputToken, setInputToken] = useState("DOGE")
+  const history = useHistory()
   const [outputToken, setOutputToken] = useState(
     "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
-  ); // dai - todo: wptg
-  const [submitting, setSubmitting] = useState(false);
+  ) // dai - todo: wptg
+  const [submitting, setSubmitting] = useState(false)
+
+  const selectedInputToken = useMemo(
+    () => inputTokens.find((t) => t.symbol === inputToken),
+    [inputToken]
+  )
+  const selectedOutputToken = useMemo(
+    () => supportedTokens.find((t) => t.address === outputToken),
+    [outputToken]
+  )
 
   const nonce = useMemo(() => {
-    return getNextNonce();
-  }, []);
+    return getNextNonce()
+  }, [])
 
   const onSubmit = async () => {
-    setSubmitting(true);
+    setSubmitting(true)
     try {
       getLockAndMint({
         lockNetwork: inputToken as KnownInputChains,
         to: safeAddress!,
         nonce,
         outputToken,
-      });
-      history.push(mintUrl(inputToken, safeAddress!, nonce, outputToken));
+      })
+      history.push(mintUrl(inputToken, safeAddress!, nonce, outputToken))
     } catch (err) {
-      console.error("error: ", err);
-      alert("something went wrong");
+      console.error("error: ", err)
+      alert("something went wrong")
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   if (submitting) {
     return (
       <VStack w="lg">
         <Spinner />
       </VStack>
-    );
+    )
   }
 
   return (
-    <Box w="lg">
-      <Box mb="10">
-        <Text>Send</Text>
+    <VStack w="100%" spacing="10">
+      <VStack w="100%" spacing="4" alignItems="start">
+        <Heading as="h1" fontSize="2xl">
+          Convert {selectedInputToken?.symbol} to {selectedOutputToken?.name}
+        </Heading>
+        <Heading as="h2" fontSize="medium" fontWeight="normal" marginBottom="">
+          On the Polygon network
+        </Heading>
+      </VStack>
+
+      <Box w="100%">
+        <Text fontWeight="medium" color="gray.100">
+          Send
+        </Text>
         <HStack bg="formBackground" px="4" py="4" rounded="lg">
           <InputTokenSelect
             onChange={(value: string) => {
-              console.dir(value);
-              setInputToken(value);
+              console.dir(value)
+              setInputToken(value)
             }}
             value={inputToken}
+            selectedToken={selectedInputToken}
+            inputTokens={inputTokens}
           />
           <FormControl id="inputAmount">
             <NumberInput>
               <NumberInputField
-                fontSize="2xl"
                 textAlign="right"
                 name="amount"
-                placeholder="Amount to send"
+                border="none"
+                placeholder="Enter amount to send"
                 onChange={(evt) => setAmount(parseFloat(evt.target.value))}
                 value={amount}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
           </FormControl>
         </HStack>
       </Box>
-      <Box>
-        <Text>Receive</Text>
+      <Box w="100%">
+        <Text fontWeight="medium" color="gray.100">
+          Receive
+        </Text>
         <HStack bg="formBackground" px="4" py="4" rounded="lg">
           <OutputTokenSelect
             onChange={(address: string) => {
-              console.log("output: ", address);
-              setOutputToken(address);
+              console.log("output: ", address)
+              setOutputToken(address)
             }}
             value={outputToken}
+            selectedToken={selectedOutputToken}
+            supportedTokens={supportedTokens}
           />
           <OutputAmount
             input={inputTokensBySymbol[inputToken].renAddress}
@@ -117,13 +141,14 @@ const Swap: React.FC = () => {
         </HStack>
       </Box>
       <SwapFees
-        my="10"
         inputName={inputToken as KnownInputChains}
         amount={parseValueToHex(amount)}
       />
-      <Button w="100%" onClick={onSubmit}>Swap</Button>
-    </Box>
-  );
-};
+      <Button w="100%" padding="6" onClick={onSubmit}>
+        Swap
+      </Button>
+    </VStack>
+  )
+}
 
-export default Swap;
+export default Swap

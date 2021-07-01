@@ -1,20 +1,33 @@
-import React from "react";
-import { inputTokens } from "../../models/tokenList";
-import { HStack, Text, FormControl, PropsOf, Menu, MenuButton, MenuList, MenuItem, Image } from "@chakra-ui/react";
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import React from "react"
+import { InputToken } from "../../models/tokenList"
+import {
+  HStack,
+  Text,
+  FormControl,
+  PropsOf,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Image,
+} from "@chakra-ui/react"
+import { ChevronDownIcon } from "@chakra-ui/icons"
 
 interface InputTokenSelectProps {
-  onChange: (val:string) => void
+  onChange: (val: string) => void
   value: string
+  selectedToken?: InputToken
+  inputTokens: InputToken[]
 }
 
-const InputTokenSelect: React.FC<Partial<PropsOf<typeof Menu>> & InputTokenSelectProps> = (userProps) => {
-  const { onChange, value, ...menuProps } = userProps
+const InputTokenSelect: React.FC<
+  Partial<PropsOf<typeof Menu>> & InputTokenSelectProps
+> = (userProps) => {
+  const { onChange, value, selectedToken, inputTokens, ...menuProps } =
+    userProps
 
-  const selected = inputTokens.find((t) => t.symbol === value )
-
-  if (!selected) {
-    throw new Error('value set to unknown token')
+  if (!selectedToken) {
+    throw new Error("value set to unknown token")
   }
 
   return (
@@ -22,15 +35,18 @@ const InputTokenSelect: React.FC<Partial<PropsOf<typeof Menu>> & InputTokenSelec
       <Menu {...menuProps}>
         <MenuButton>
           <HStack>
-            <Image w="40px" src={selected.logoURI} />
-            <Text fontSize="lg">{selected.name}</Text>
+            <Image w="40px" src={selectedToken.logoURI} />
+            <Text fontSize="lg">{selectedToken.name}</Text>
             <ChevronDownIcon />
           </HStack>
         </MenuButton>
         <MenuList>
           {inputTokens.map((token) => {
             return (
-              <MenuItem key={`input-token-${token.name}`} onClick={() => onChange(token.symbol)}>
+              <MenuItem
+                key={`input-token-${token.name}`}
+                onClick={() => onChange(token.symbol)}
+              >
                 <HStack>
                   <Image w="20px" src={token.logoURI} />
                   <Text fontSize="lg">{token.name}</Text>
@@ -41,7 +57,7 @@ const InputTokenSelect: React.FC<Partial<PropsOf<typeof Menu>> & InputTokenSelec
         </MenuList>
       </Menu>
     </FormControl>
-  );
-};
+  )
+}
 
-export default InputTokenSelect;
+export default InputTokenSelect

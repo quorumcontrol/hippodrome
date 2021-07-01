@@ -9,7 +9,7 @@ const Card:React.FC<BoxProps> = (props) => {
   const { children, ...boxProps } = props
   return (
     <Flex alignItems="center" justify="center">
-      <Box p="10" borderWidth="1px" rounded="2xl" bg="cardBackground" border="cardBorder" w="xl" {...boxProps}>
+      <Box p="48px" borderWidth="" rounded="2xl" bg="cardBackground" border="" w="xl" {...boxProps}>
         { children }
       </Box>
     </Flex>
