@@ -27,6 +27,7 @@ const CurrentUser: React.FC = () => {
         cursor="copy"
         role="button"
         onClick={ClipURLcopyHandler}
+        title={address}
       >
         <Box h={12} w={12}>
           <Jazzicon address={address!} />

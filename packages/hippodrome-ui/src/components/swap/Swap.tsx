@@ -82,64 +82,85 @@ const Swap: React.FC = () => {
 
   return (
     <VStack w="100%" spacing="10">
-      <VStack w="100%" spacing="4" alignItems="start">
+      <VStack w="100%" spacing="3" alignItems="start">
         <Heading as="h1" fontSize="2xl">
           Convert {selectedInputToken?.symbol} to {selectedOutputToken?.name}
         </Heading>
-        <Heading as="h2" fontSize="medium" fontWeight="normal" marginBottom="">
-          On the Polygon network
+        <Heading
+          as="h2"
+          fontSize="medium"
+          color="gray.300"
+          fontWeight="normal"
+          marginBottom=""
+        >
+          👉🏽 On the Polygon network 👈
         </Heading>
       </VStack>
 
-      <Box w="100%">
-        <Text fontWeight="medium" color="gray.100">
-          Send
-        </Text>
-        <HStack bg="formBackground" px="4" py="4" rounded="lg">
-          <InputTokenSelect
-            onChange={(value: string) => {
-              console.dir(value)
-              setInputToken(value)
-            }}
-            value={inputToken}
-            selectedToken={selectedInputToken}
-            inputTokens={inputTokens}
-          />
-          <FormControl id="inputAmount">
-            <NumberInput>
-              <NumberInputField
-                textAlign="right"
-                name="amount"
-                border="none"
-                placeholder="Enter amount to send"
-                onChange={(evt) => setAmount(parseFloat(evt.target.value))}
-                value={amount}
-              />
-            </NumberInput>
-          </FormControl>
-        </HStack>
-      </Box>
-      <Box w="100%">
-        <Text fontWeight="medium" color="gray.100">
-          Receive
-        </Text>
-        <HStack bg="formBackground" px="4" py="4" rounded="lg">
-          <OutputTokenSelect
-            onChange={(address: string) => {
-              console.log("output: ", address)
-              setOutputToken(address)
-            }}
-            value={outputToken}
-            selectedToken={selectedOutputToken}
-            supportedTokens={supportedTokens}
-          />
-          <OutputAmount
-            input={inputTokensBySymbol[inputToken].renAddress}
-            output={outputToken}
-            amount={parseValueToHex(amount)} // TODO: subtract fees
-          />
-        </HStack>
-      </Box>
+      <VStack spacing="4" width="100%">
+        <Box w="100%">
+          <Text fontWeight="medium" marginBottom="3" color="gray.100">
+            Send
+          </Text>
+          <HStack
+            bg="formBackground"
+            alignItems="center"
+            px="3"
+            py="3"
+            rounded="lg"
+          >
+            <InputTokenSelect
+              onChange={(value: string) => {
+                console.dir(value)
+                setInputToken(value)
+              }}
+              value={inputToken}
+              selectedToken={selectedInputToken}
+              inputTokens={inputTokens}
+            />
+            <FormControl id="inputAmount">
+              <NumberInput>
+                <NumberInputField
+                  textAlign="right"
+                  name="amount"
+                  border="none"
+                  placeholder="Enter amount to send"
+                  onChange={(evt) => setAmount(parseFloat(evt.target.value))}
+                  value={amount}
+                />
+              </NumberInput>
+            </FormControl>
+          </HStack>
+        </Box>
+        <Box w="100%">
+          <Text fontWeight="medium" marginBottom="3" color="gray.100">
+            Receive
+          </Text>
+          <HStack
+            bg="formBackground"
+            alignItems="center"
+            px="3"
+            py="3"
+            rounded="lg"
+          >
+            <OutputTokenSelect
+              onChange={(address: string) => {
+                console.log("output: ", address)
+                setOutputToken(address)
+              }}
+              value={outputToken}
+              selectedToken={selectedOutputToken}
+              supportedTokens={supportedTokens}
+            />
+            <OutputAmount
+              input={inputTokensBySymbol[inputToken].renAddress}
+              output={outputToken}
+              amount={parseValueToHex(amount)} // TODO: subtract fees
+            />
+          </HStack>
+        </Box>
+      </VStack>
+
       <SwapFees
         inputName={inputToken as KnownInputChains}
         amount={parseValueToHex(amount)}
