@@ -35,11 +35,16 @@ const Layout: React.FC = ({ children }) => {
             return (
               <Link
                 as={RouterLink}
-                fontWeight="semibold"
-                color={
-                  navlink.link === location.pathname ? "brandOrange.500" : "gray.200"
-                }
                 to={navlink.link}
+                fontWeight="bold"
+                textTransform="uppercase"
+                fontSize="13"
+                letterSpacing="wider"
+                color={
+                  navlink.link === location.pathname
+                    ? "brandOrange.500"
+                    : "gray.300"
+                }
               >
                 {navlink.title}
               </Link>

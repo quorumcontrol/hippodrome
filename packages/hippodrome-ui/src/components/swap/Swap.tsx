@@ -9,10 +9,10 @@ import {
   Button,
   Spinner,
   Heading,
-  Text,
 } from "@chakra-ui/react"
 import OutputTokenSelect from "./OutputTokenSelect"
 import InputTokenSelect from "./InputTokenSelect"
+import SmallText from "../SmallText"
 import {
   getLockAndMint,
   getNextNonce,
@@ -83,31 +83,24 @@ const Swap: React.FC = () => {
   return (
     <VStack w="100%" spacing="10">
       <VStack w="100%" spacing="3" alignItems="start">
-        <Heading as="h1" fontSize="2xl">
+        <Heading as="h1" fontWeight="" fontSize="2xl">
           Convert {selectedInputToken?.symbol} to {selectedOutputToken?.name}
         </Heading>
-        <Heading
-          as="h2"
-          fontSize="medium"
-          color="gray.300"
-          fontWeight="normal"
-          marginBottom=""
-        >
-          👉🏽 On the Polygon network 👈
-        </Heading>
+        <SmallText fontSize="10" color="gray.400">
+          Converted coins are on Polygon Network
+        </SmallText>
       </VStack>
 
       <VStack spacing="4" width="100%">
         <Box w="100%">
-          <Text fontWeight="medium" marginBottom="3" color="gray.100">
-            Send
-          </Text>
+          <SmallText>Send</SmallText>
           <HStack
             bg="formBackground"
             alignItems="center"
             px="3"
             py="3"
             rounded="lg"
+            marginTop="3"
           >
             <InputTokenSelect
               onChange={(value: string) => {
@@ -133,14 +126,13 @@ const Swap: React.FC = () => {
           </HStack>
         </Box>
         <Box w="100%">
-          <Text fontWeight="medium" marginBottom="3" color="gray.100">
-            Receive
-          </Text>
+          <SmallText>Receive</SmallText>
           <HStack
             bg="formBackground"
             alignItems="center"
             px="3"
             py="3"
+            marginTop="3"
             rounded="lg"
           >
             <OutputTokenSelect
@@ -165,7 +157,15 @@ const Swap: React.FC = () => {
         inputName={inputToken as KnownInputChains}
         amount={parseValueToHex(amount)}
       />
-      <Button w="100%" padding="6" onClick={onSubmit}>
+      <Button
+        w="100%"
+        // fontSize="14"
+        letterSpacing="wider"
+        textTransform="uppercase"
+        fontWeight="bold"
+        padding="6"
+        onClick={onSubmit}
+      >
         Swap
       </Button>
     </VStack>
