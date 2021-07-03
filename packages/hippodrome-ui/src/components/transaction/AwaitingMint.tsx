@@ -13,6 +13,8 @@ import {
   CircularProgressLabel,
   useToast,
 } from "@chakra-ui/react"
+import { Jazzicon } from "@ukstv/jazzicon-react"
+import SmallText from "../SmallText"
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint"
 import { motion } from "framer-motion"
 import { BigNumber, utils } from "ethers"
@@ -26,6 +28,7 @@ import { useMemo } from "react"
 import { useTokenQuote } from "../../hooks/useTokenQuote"
 import { parseValueToHex } from "../../utils/parse"
 import humanBigNumber, { formatCurrency } from "../../utils/humanNumbers"
+import { centeredTruncateText } from "../../utils/truncateText"
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -114,29 +117,24 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
         flexDirection="column"
         alignItems="center"
       >
-        <CircularProgress
-          value={progressPercentage}
-          size="100px"
-          color="rgba(4, 189, 34, 1)"
-          thickness="10px"
-        >
-          <CircularProgressLabel fontSize="sm">
-            {confirmations?.target} / {confirmations?.target}
-          </CircularProgressLabel>
-        </CircularProgress>
-
-        <VStack spacing="8" width="100%">
-          <Heading marginTop="30px" fontSize="3xl" textAlign="center">
-            {depositAmount} {deposit.lockAndMint.params.lockNetwork} recieved
-          </Heading>
+        <VStack spacing="10" width="100%">
+          <VStack w="100%" spacing="3" alignItems="start">
+            <Heading as="h1" fontWeight="" fontSize="2xl">
+              {depositAmount} {deposit.lockAndMint.params.lockNetwork} recieved
+            </Heading>
+            <SmallText fontSize="10" color="gray.400">
+              {confirmations?.current} / {confirmations?.target} confirmations
+            </SmallText>
+          </VStack>
 
           <Box width="100%">
-            <Text color="gray.300">Received</Text>
+            <SmallText>Received</SmallText>
             <HStack
               justifyContent="space-between"
               width="100%"
               paddingX="6"
               rounded="2xl"
+              marginY="2"
               background="gray.900"
               paddingY="5"
             >
@@ -154,29 +152,47 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
               )}
             </HStack>
             {!tokenQuoteLoading && (
-              <Text color="white">
+              <SmallText>
                 Price: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
                 {`${conversionRate} ${outputToken?.name}`}
-              </Text>
+              </SmallText>
             )}
           </Box>
 
           <Box width="100%" marginTop="">
-            <Text color="gray.300">Reciepient address</Text>
-            <Text color="gray.100" fontWeight="medium">
-              {deposit.lockAndMint.params.to}
-            </Text>
+            <SmallText>Reciepient address</SmallText>
+
+            <HStack
+              alignItems="center"
+              marginTop="3"
+              title={deposit.lockAndMint.params.to}
+            >
+              <Box h={8} w={8}>
+                <Jazzicon address={deposit.lockAndMint.params.to} />
+              </Box>
+              <Text fontWeight="semibold">
+                {centeredTruncateText(deposit.lockAndMint.params.to!, 15)}
+              </Text>
+            </HStack>
           </Box>
 
           <HStack width="100%" justifyContent="space-between">
-            <Text>FEE</Text>
+            <SmallText>FEE</SmallText>
             <Text>
               {fee}(0.15%) {deposit.lockAndMint.params.lockNetwork}
             </Text>
           </HStack>
 
           {!loading && (
-            <Button width="100%" onClick={onMint}>
+            <Button
+              w="100%"
+              fontSize="14"
+              letterSpacing="wider"
+              textTransform="uppercase"
+              fontWeight="bold"
+              padding="6"
+              onClick={onMint}
+            >
               Confirm swap
             </Button>
           )}
