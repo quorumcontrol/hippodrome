@@ -95,7 +95,7 @@ const Swap: React.FC = () => {
         <Box w="100%">
           <SmallText>Send</SmallText>
           <HStack
-            bg="formBackground"
+            background="gray.900"
             alignItems="center"
             px="3"
             py="3"
@@ -128,7 +128,7 @@ const Swap: React.FC = () => {
         <Box w="100%">
           <SmallText>Receive</SmallText>
           <HStack
-            bg="formBackground"
+            background="gray.900"
             alignItems="center"
             px="3"
             py="3"
