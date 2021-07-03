@@ -59,7 +59,6 @@ const StakePage: React.FC = () => {
                   </HStack>
                 </Td>
                 <Td>
-                  {" "}
                   <Box>
                     <Text
                       marginBottom="4px"
