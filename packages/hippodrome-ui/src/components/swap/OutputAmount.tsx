@@ -3,6 +3,7 @@ import { utils } from 'ethers'
 import { useTokenQuote } from '../../hooks/useTokenQuote'
 import { Spinner, Box, Text } from '@chakra-ui/react'
 import { isTestnet } from '../../models/ren'
+import humanBigNumber from '../../utils/humanNumbers'
 
 export interface OutputAmountProps {
   input:string
@@ -24,7 +25,7 @@ const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => 
 
   return (
     <Box>
-      <Text fontSize="2xl">{utils.formatEther(amountOut || 0)}</Text>
+      <Text fontSize="2xl">{humanBigNumber(amountOut || 0)}</Text>
     </Box>
   )
   

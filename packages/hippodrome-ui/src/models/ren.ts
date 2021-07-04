@@ -13,6 +13,8 @@ export const isTestnet = (new URLSearchParams(window.location.search).get(
   'testnet'
 ))
 
+console.log('is testnet: ', isTestnet)
+
 export interface LockAndMintParams {
   lockNetwork: KnownInputChains;
   to: string;
