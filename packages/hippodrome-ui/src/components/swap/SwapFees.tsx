@@ -15,6 +15,7 @@ export interface SwapFeesProps extends BoxProps {
 const SwapFees: React.FC<SwapFeesProps> = (props) => {
   const { inputName, amount: amountString, ...boxProps } = props
   const { fees } = useRenFees(inputName)
+  console.log('fees: ', fees)
   const { rate } = usePrice(inputName)
 
   const loading = !(fees && rate)

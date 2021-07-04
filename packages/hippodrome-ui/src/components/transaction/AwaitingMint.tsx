@@ -29,6 +29,7 @@ import { useTokenQuote } from "../../hooks/useTokenQuote"
 import { parseValueToHex } from "../../utils/parse"
 import humanBigNumber, { formatCurrency } from "../../utils/humanNumbers"
 import { centeredTruncateText } from "../../utils/truncateText"
+import { useChainContext } from "../../hooks/useChainContext"
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -38,6 +39,7 @@ export interface AwaitingMintProps {
 const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   deposit: propDeposit,
 }) => {
+  const { address } = useChainContext()
   const { deposit, confirmed, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
@@ -128,7 +130,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
           </VStack>
 
           <Box width="100%">
-            <SmallText>Received</SmallText>
+            <SmallText>Convert to</SmallText>
             <HStack
               justifyContent="space-between"
               width="100%"
@@ -160,7 +162,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
           </Box>
 
           <Box width="100%" marginTop="">
-            <SmallText>Reciepient address</SmallText>
+            <SmallText>Recipient address</SmallText>
 
             <HStack
               alignItems="center"
@@ -168,10 +170,10 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
               title={deposit.lockAndMint.params.to}
             >
               <Box h={8} w={8}>
-                <Jazzicon address={deposit.lockAndMint.params.to} />
+                <Jazzicon address={address!} />
               </Box>
               <Text fontWeight="semibold">
-                {centeredTruncateText(deposit.lockAndMint.params.to!, 15)}
+                {centeredTruncateText(address!, 15)}
               </Text>
             </HStack>
           </Box>

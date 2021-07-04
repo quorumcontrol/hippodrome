@@ -37,8 +37,8 @@ const Swap: React.FC = () => {
   const [inputToken, setInputToken] = useState("DOGE")
   const history = useHistory()
   const [outputToken, setOutputToken] = useState(
-    "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
-  ) // dai - todo: wptg
+    "0xc0f14c88250e680ecd70224b7fba82b7c6560d12"
+  )
   const [submitting, setSubmitting] = useState(false)
 
   const selectedInputToken = useMemo(

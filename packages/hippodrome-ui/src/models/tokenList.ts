@@ -44,7 +44,41 @@ export const inputTokensBySymbol = inputTokens.reduce(
   {}
 );
 
-export const supportedTokens: TokenListToken[] = quickSwapTokenList.tokens;
+export const supportedTokens: TokenListToken[] = [
+  {
+    "name": "Dai Stablecoin",
+    "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+    "symbol": "DAI",
+    "decimals": 18,
+    "chainId": 137,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+  },
+  {
+    "name": "Ether",
+    "address": "0x714550C2C1Ea08688607D86ed8EeF4f5E4F22323",
+    "symbol": "ETH",
+    "decimals": 18,
+    "chainId": 80001,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+  },
+  {
+    "name": "Wrapped Matic",
+    "address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+    "symbol": "WMATIC",
+    "decimals": 18,
+    "chainId": 137,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png"
+  },
+  {
+    "name": "Wrapped PTG",
+    "address": "0xc0f14c88250e680ecd70224b7fba82b7c6560d12",
+    "symbol": "wPTG",
+    "decimals": 18,
+    "chainId": 137,
+    "logoURI": "https://arena.cryptocolosseum.com/images/icons/prestige.svg"
+  },
+  
+]
 
 export const tokenListTokensByAddress = supportedTokens.reduce((mem:Record<string,TokenListToken>, token) => {
   return {...mem, [token.address]:token}

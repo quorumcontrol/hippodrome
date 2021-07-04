@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers"
 import { sushiRouter } from "./contracts"
 
-export const addLiquidity = async (
+export const addLiquidityTx = async (
   to: string, // where to send the LP tokens
   tokenA: string,
   tokenB: string,
@@ -12,7 +12,7 @@ export const addLiquidity = async (
 ) => {
   const router = sushiRouter()
   const deadline = userDeadline || new Date().getTime() / 1000 + (10 * 60) // 10 minutes TODO: check math
-  return router.addLiquidity(
+  return router.populateTransaction.addLiquidity(
     tokenA,
     tokenB,
     amountADesired,
