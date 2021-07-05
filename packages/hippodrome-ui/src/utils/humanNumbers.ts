@@ -10,9 +10,9 @@ const currencyformatter = new Intl.NumberFormat(undefined, {
   minimumFractionDigits: 2
 })
 
-const humanBigNumber = (num: BigNumber | BigNumberish) => {
-  const formatted = utils.formatEther(num)
-  const number = parseFloat(formatted)
+const humanBigNumber = (num: BigNumber | BigNumberish, decimals:number = 18) => {
+  const decimalDivisor = BigNumber.from((10 ** decimals).toString())
+  const number = BigNumber.from(num.toString()).div(decimalDivisor).toNumber()
   return formatter.format(number)
 }
 

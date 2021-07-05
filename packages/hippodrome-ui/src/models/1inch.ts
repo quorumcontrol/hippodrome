@@ -37,7 +37,7 @@ export const fetchSwap = async (
     amount: amount.toString(),
     fromAddress: seller,
     destReceiver: seller,
-    slippage: 10, // 10% - TODO: this isn't production ready, but for local testing makes sense
+    slippage: 5, // 5% - TODO: this isn't production ready, but for local testing makes sense
   }
   const resp = await fetchWithBackOff("/swap", params);
   return {

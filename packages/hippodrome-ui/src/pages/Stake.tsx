@@ -303,7 +303,7 @@ const StakePage: React.FC = () => {
                   />
                   <OutputAmount
                     input={inputTokensBySymbol["DOGE"].renAddress}
-                    output={outputToken}
+                    output={selectedOutputToken!}
                     amount={parseValueToHex("0")} // TODO: subtract fees
                   />
                 </HStack>
