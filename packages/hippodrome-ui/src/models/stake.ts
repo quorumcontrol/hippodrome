@@ -60,8 +60,7 @@ export const doAddLiquidity = async (
   
   const shiftTx = await shifter.populateTransaction.shift([input, wbtcAddress, ibBTCAddress, ibBTCWBTCPairAddress], safeAddress, address)
 
-  // TODO: hard coding fee right now, should figure out the fee from the renFees call
-  const swapAmount = amount.mul(10000 - 15).div(10000)
+  const swapAmount = amount
   const halfSwap = swapAmount.div(2)
 
   const [renApprove, swapWbtc, swapIbBTc, quoteWbtc, quoteIbBTc] = await Promise.all([
@@ -76,11 +75,6 @@ export const doAddLiquidity = async (
   const wbtcApprove = await tokenContractFromAddress(wbtcAddress).populateTransaction.approve(SUSHI_ROUTER_ADDRESS, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
-
-  // const [approve, swap] = await Promise.all([
-  //   fetchApprove(input),
-  //   fetchSwap(input, output, swapAmount, safeAddress), 
-  // ]);
 
   const tx = await relayer.multisend([
     mintTx,

@@ -1,4 +1,3 @@
-import quickSwapTokenList from "./quickswapTokenList.json";
 import dogeLogo from "../assets/doge-icon.svg";
 import bitcoinLogo from "../assets/btc-icon.svg";
 import { isTestnet } from './ren'
@@ -62,6 +61,14 @@ export const supportedTokens: TokenListToken[] = [
     "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
   },
   {
+    "name": "Wrapped BTC",
+    "address": "0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6",
+    "symbol": "WBTC",
+    "decimals": 8,
+    "chainId": 137,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599/logo.png"
+  },
+  {
     "name": "Wrapped Matic",
     "address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
     "symbol": "WMATIC",
@@ -77,7 +84,6 @@ export const supportedTokens: TokenListToken[] = [
     "chainId": 137,
     "logoURI": "https://arena.cryptocolosseum.com/images/icons/prestige.svg"
   },
-  
 ]
 
 export const tokenListTokensByAddress = supportedTokens.reduce((mem:Record<string,TokenListToken>, token) => {

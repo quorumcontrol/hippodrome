@@ -51,8 +51,7 @@ export const doSwap = async (
   
   const shiftTx = await shifter.populateTransaction.shift([input,output], safeAddress, address)
 
-  // TODO: hard coding fee right now, should figure out the fee from the renFees call
-  const swapAmount = amount.mul(10000 - 15).div(10000)
+  const swapAmount = amount
   console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
 
   const [approve, swap] = await Promise.all([
