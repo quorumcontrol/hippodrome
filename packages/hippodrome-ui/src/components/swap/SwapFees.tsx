@@ -3,7 +3,7 @@ import { Box, BoxProps, Spinner, Text, HStack } from "@chakra-ui/react"
 import { useRenFees } from "../../hooks/useRen"
 import { KnownInputChains } from "../../models/ren"
 import { usePrice } from "../../hooks/usePrice"
-import { BigNumber } from "ethers"
+import { BigNumber, utils } from "ethers"
 import { formatCurrency } from "../../utils/humanNumbers"
 import SmallText from "../SmallText"
 
@@ -15,7 +15,7 @@ export interface SwapFeesProps extends BoxProps {
 const SwapFees: React.FC<SwapFeesProps> = (props) => {
   const { inputName, amount: amountString, ...boxProps } = props
   const { fees } = useRenFees(inputName)
-  console.log('fees: ', fees)
+  console.log("fees: ", fees)
   const { rate } = usePrice(inputName)
 
   const loading = !(fees && rate)
@@ -43,6 +43,9 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
   const renFeeInUSD = rate * renFeeInUnderlying
   const minerFeeInUSD = rate * minerFee
 
+  const hippodromeFee =
+    (Number(utils.formatEther(amountString || 0)) * 0.3) / 100
+
   return (
     <Box {...boxProps} w="100%">
       <HStack alignItems="center">
@@ -57,6 +60,13 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
         <SmallText>Miner fee:</SmallText>
         <Text>
           {minerFee} ${inputName} (${formatCurrency(minerFeeInUSD)})
+        </Text>
+      </HStack>
+
+      <HStack alignItems="center">
+        <SmallText>Hippodrome fee:</SmallText>
+        <Text>
+          0.3% ({hippodromeFee} {inputName})
         </Text>
       </HStack>
     </Box>
