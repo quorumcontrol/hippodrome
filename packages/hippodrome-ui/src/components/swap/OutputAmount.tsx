@@ -1,5 +1,4 @@
 import React from 'react'
-import { utils } from 'ethers'
 import { useTokenQuote } from '../../hooks/useTokenQuote'
 import { Spinner, Box, Text } from '@chakra-ui/react'
 import { isTestnet } from '../../models/ren'
