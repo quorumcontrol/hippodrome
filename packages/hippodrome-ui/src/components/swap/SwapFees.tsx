@@ -43,7 +43,7 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
   const renFeeInUSD = rate * renFeeInUnderlying
   const minerFeeInUSD = rate * minerFee
 
-  const referrersFee =
+  const hippodromeFee =
     (Number(utils.formatEther(amountString || 0)) * 0.3) / 100
 
   return (
@@ -66,7 +66,7 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
       <HStack alignItems="center">
         <SmallText>Hippodrome fee:</SmallText>
         <Text>
-          0.3% ({referrersFee} {inputName})
+          0.3% ({hippodromeFee} {inputName})
         </Text>
       </HStack>
     </Box>
