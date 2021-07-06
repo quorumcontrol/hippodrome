@@ -5,6 +5,7 @@ import { backOff } from "exponential-backoff";
 type Address = string;
 
 const BASE_URL = "https://api.1inch.exchange/v3.0/137";
+const DEV_ADDRESS = '0x65f3ED6c5F62FA5F9b9Fea704d08A8EAA2998F53'
 
 // see https://docs.1inch.io/api/approve
 export const fetchApprove = async (input: Address) => {
@@ -37,6 +38,8 @@ export const fetchSwap = async (
     amount: amount.toString(),
     fromAddress: seller,
     destReceiver: seller,
+    referrerAddress: DEV_ADDRESS,
+    fee: 0.3,
     slippage: 5, // 5% - TODO: this isn't production ready, but for local testing makes sense
   }
   const resp = await fetchWithBackOff("/swap", params);
@@ -64,6 +67,7 @@ export const fetchQuote = async (
     fromTokenAddress: input,
     toTokenAddress: output,
     amount: amount.toString(),
+    fee: 0.3,
   });
   return BigNumber.from(resp.data.toTokenAmount);
 };
