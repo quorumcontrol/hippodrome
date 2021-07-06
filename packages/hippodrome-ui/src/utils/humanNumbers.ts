@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish, utils } from 'ethers'
+import { BigNumber, BigNumberish } from 'ethers'
 
 const formatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 3,

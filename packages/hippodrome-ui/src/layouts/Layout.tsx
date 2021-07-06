@@ -1,8 +1,17 @@
-import { Text, Box, Heading, VStack, HStack, Link } from "@chakra-ui/react"
+import {
+  Text,
+  Box,
+  Image,
+  VStack,
+  HStack,
+  Link,
+  Heading,
+} from "@chakra-ui/react"
 import React from "react"
 import { useLocation, Link as RouterLink } from "react-router-dom"
 import CurrentUser from "../components/CurrentUser"
 import { useChainContext } from "../hooks/useChainContext"
+import logoURl from "../assets/logo.png"
 
 interface NavLink {
   title: string
@@ -27,9 +36,20 @@ const Layout: React.FC = ({ children }) => {
   return (
     <Box paddingX="20">
       <HStack justifyContent="space-between" w="100%" p={10} mb={4}>
-        <Heading size="lg" fontWeight="medium">
-          hippodrome
-        </Heading>
+        <HStack  alignItems="flex-end">
+          <Image src={logoURl} width="60px" fontWeight="medium" />
+          <Heading
+            fontSize="xl"
+            as="h1"
+            fontFamily="monospace"
+            fontWeight="medium"
+          >
+            hippodrome
+          </Heading>
+          <Text fontSize="10" color="gray.200" marginTop="-20px">
+            Beta
+          </Text>
+        </HStack>
         <HStack spacing="8">
           {navLinks.map((navlink) => {
             return (
