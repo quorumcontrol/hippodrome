@@ -18,19 +18,19 @@ let networks:{[key:string]:NetworkUserConfig} = {}
 
 networks['hardhat'] = {
   forking: {
-    url: `https://polygon-mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd`,
+    url: `https://polygon-mainnet.g.alchemy.com/v2/zApEggK_mSyvPkOreEJQTEWShlbw9vOU`,
   },
   allowUnlimitedContractSize: true,
   blockGasLimit: 20000000, // necessary to deploy the gateway for ren mock in test
 }
 
 networks['mumbai'] = {
-  url: 'https://polygon-mumbai.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
+  url: 'https://polygon-mumbai.g.alchemy.com/v2/i7KnZM82imJcGeg87EiCWE_5DCRuBVxZ',
   chainId: 80001
 }
 
 networks['matic'] = {
-  url: 'https://polygon-mainnet.infura.io/v3/419395b72785472bb0ee52583b7b4abd',
+  url: 'https://polygon-mainnet.g.alchemy.com/v2/hIxdOaBwG94gu6FlhQpCP5lWuzBOLvmt',
   chainId: 137
 }
 
