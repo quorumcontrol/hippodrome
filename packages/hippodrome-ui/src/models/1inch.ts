@@ -55,7 +55,6 @@ export const fetchQuote = async (
   input: Address,
   output: Address,
   amount: BigNumber,
-  fees: number,
 ) => {
   if (amount.eq(0)) {
     return constants.Zero;
@@ -68,7 +67,6 @@ export const fetchQuote = async (
     fromTokenAddress: input,
     toTokenAddress: output,
     amount: amount.toString(),
-    fee: fees,
   });
   return BigNumber.from(resp.data.toTokenAmount);
 };

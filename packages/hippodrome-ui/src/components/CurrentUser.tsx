@@ -17,6 +17,7 @@ const CurrentUser: React.FC = () => {
       duration: 4000,
       status: "success",
       position: "bottom-right",
+      isClosable: true,
     })
   }
 

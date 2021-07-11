@@ -4,10 +4,13 @@ import {
   LockAndMint,
   LockAndMintDeposit,
 } from "@renproject/ren/build/main/lockAndMint";
-import { providers, utils } from "ethers";
+import { BigNumber, providers, utils } from "ethers";
 import EventEmitter from "events";
+import ThenArg from "../utils/ThenArg";
 import { IChain } from "./chain";
 import { MINTER_ADDRESS } from "./contracts";
+
+export const HIPPODROME_FEE = 0.003 * 10000 // turn 0.3% into an integer the same as the mint fee
 
 class FakeWeb3Provider {
   provider: providers.JsonRpcProvider;
@@ -141,6 +144,12 @@ function paramsToRegistryKey({ lockNetwork, to, nonce }: LockAndMintParams) {
   return `${lockNetwork}-${to}-${nonce}`;
 }
 
+export function amountAfterFees(fees:ThenArg<ReturnType<typeof fetchFees>>, amount:BigNumber) {
+  const minerFee = fees.lock!.toString()
+  console.log('miner fee: ', minerFee, ' amount: ', amount.toString())
+  return amount.mul(10000 - fees.mint).div(10000).sub(minerFee).mul(10000 - HIPPODROME_FEE).div(10000)
+}
+
 export const getLockAndMint = (
   chainInstance: IChain,
   params: LockAndMintParams
@@ -170,6 +179,11 @@ export class WrappedLockAndMintDeposit extends EventEmitter {
     this.lockAndMint = lockAndMint;
     this.deposit = deposit;
     this.setupListeners();
+  }
+
+  async amountAfterFees() {
+    const fees = await fetchFees(this.lockAndMint.chainInstance, this.lockAndMint.params.lockNetwork)
+    return amountAfterFees(fees, BigNumber.from(this.deposit.depositDetails.amount))
   }
 
   private async setupListeners() {
@@ -214,6 +228,7 @@ export class LockAndMintWrapper extends EventEmitter {
   deposits: WrappedLockAndMintDeposit[];
   lockAndMint?: LockAndMint;
   params: LockAndMintParams;
+  chainInstance: IChain
 
   constructor(params: LockAndMintWrapperConstructorArgs) {
     super();
@@ -222,6 +237,7 @@ export class LockAndMintWrapper extends EventEmitter {
     this.ready.then((lockAndMint) => {
       this.lockAndMint = lockAndMint;
     });
+    this.chainInstance = params.chainInstance
     this.deposits = [];
     this.setupListener();
   }

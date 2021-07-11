@@ -54,6 +54,7 @@ const Layout: React.FC = ({ children }) => {
           {navLinks.map((navlink) => {
             return (
               <Link
+                key={`navlink-${navlink.link}`}
                 as={RouterLink}
                 to={navlink.link}
                 fontWeight="bold"

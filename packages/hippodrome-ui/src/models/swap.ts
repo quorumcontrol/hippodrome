@@ -34,6 +34,7 @@ export const doSwap = async (
   if (!renTx.out || (renTx.out && renTx.out.revert)) {
       throw new Error('missing out tx')
   }
+  console.log('ren tx: ', renTx)
   const minter = getMinter(chainInstance)
   const shifter = getBalanceShifter(chainInstance)
   const amount = BigNumber.from(renTx.out.amount.toString())

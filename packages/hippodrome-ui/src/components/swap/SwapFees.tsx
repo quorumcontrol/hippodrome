@@ -1,9 +1,9 @@
 import React, { useMemo } from "react"
 import { Box, BoxProps, Spinner, Text, HStack } from "@chakra-ui/react"
 import { useRenFees } from "../../hooks/useRen"
-import { KnownInputChains } from "../../models/ren"
+import { HIPPODROME_FEE, KnownInputChains } from "../../models/ren"
 import { usePrice } from "../../hooks/usePrice"
-import { BigNumber, utils } from "ethers"
+import { BigNumber } from "ethers"
 import { formatCurrency } from "../../utils/humanNumbers"
 import SmallText from "../SmallText"
 
@@ -38,13 +38,12 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
   }
 
   const renFeeInUnderlying =
-    amount.mul(fees.mint).div((1e10).toString()).toNumber() / 1e12 // TODO: not all inputs are 1e8
+    amount.mul(fees.mint).div(10000).toNumber() / 1e8
   const minerFee = fees.lock!.toNumber() / 1e8
   const renFeeInUSD = rate * renFeeInUnderlying
   const minerFeeInUSD = rate * minerFee
 
-  const hippodromeFee =
-    (Number(utils.formatEther(amountString || 0)) * 0.3) / 100
+  const hippodromeFee = amount.mul(HIPPODROME_FEE).div(10000).toNumber() / 1e8
 
   return (
     <Box {...boxProps} w="100%">

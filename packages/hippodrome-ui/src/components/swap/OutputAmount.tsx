@@ -9,11 +9,10 @@ export interface OutputAmountProps {
   input:string
   output:TokenListToken
   amount:string, // bignumber hex (18 decimals)
-  inputFees: number // as a decimal percentage eg 0.03 = 3%
 }
 
-const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount, inputFees }) => {
-  const { amountOut, loading } = useTokenQuote(input, output.address, amount, inputFees)
+const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => {
+  const { amountOut, loading } = useTokenQuote(input, output.address, amount)
 
   if (loading) {
     return (

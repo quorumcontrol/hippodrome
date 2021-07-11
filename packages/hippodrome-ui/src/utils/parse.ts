@@ -1,5 +1,8 @@
-import { utils } from "ethers"
+import { BigNumber, constants } from "ethers"
 
-export const parseValueToHex = (val?:string|number) => {
-  return utils.parseEther((val || 0).toString()).toHexString()
+export const parseValueToHex = (val:string|number|undefined, decimals:number) => {
+  if (!val) {
+    return constants.Zero.toHexString()
+  }
+  return BigNumber.from(val).mul((10 ** decimals).toString()).toHexString()
 }
