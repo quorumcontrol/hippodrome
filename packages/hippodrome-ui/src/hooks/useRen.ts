@@ -3,8 +3,10 @@ import useSWR from "swr";
 import { fetchFees, KnownInputChains, getLockAndMint, LockAndMintParams, WrappedLockAndMintDeposit } from "../models/ren";
 import { useState, useEffect, useMemo } from "react";
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
+import { useChainContext } from "./useChainContext";
 
 export const useRenFees = (networkName: KnownInputChains) => {
+  const { chain } = useChainContext()
   const {
     data: fees,
     isValidating,
@@ -13,7 +15,7 @@ export const useRenFees = (networkName: KnownInputChains) => {
     fetcher: async (_, networkName) => {
       try {
         console.log("fetching");
-        const fees = await fetchFees(networkName);
+        const fees = await fetchFees(chain, networkName);
         console.log("fees: ", fees);
         return fees;
       } catch (err) {

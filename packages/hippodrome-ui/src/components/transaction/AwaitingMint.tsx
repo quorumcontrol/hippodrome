@@ -21,6 +21,7 @@ import { BigNumber, utils } from "ethers"
 import { useHistory } from "react-router-dom"
 import { useDeposit } from "../../hooks/useRen"
 import { WrappedLockAndMintDeposit } from "../../models/ren"
+import chainInstance from '../../models/chain'
 import Card from "../Card"
 import { inputTokensBySymbol, supportedTokens } from "../../models/tokenList"
 import { doSwap } from "../../models/swap"
@@ -87,7 +88,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       setLoading(true)
       console.log("swapping: ", deposit)
 
-      await doSwap(deposit, deposit.lockAndMint.params)
+      await doSwap(deposit, deposit.lockAndMint.params, chainInstance)
 
       history.push("/")
 

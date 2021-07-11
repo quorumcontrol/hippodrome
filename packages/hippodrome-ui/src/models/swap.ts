@@ -1,5 +1,5 @@
 import { BigNumber, constants, utils, VoidSigner } from "ethers";
-import chainInstance from "./chain";
+import { IChain } from "./chain";
 import { fetchApprove, fetchSwap } from "./1inch";
 import { WrappedLockAndMintDeposit } from "./ren";
 import { minter as getMinter, balanceShifter as getBalanceShifter } from "./contracts";
@@ -17,6 +17,7 @@ function tokenContractFromAddress(address:string) {
 export const doSwap = async (
   deposit: WrappedLockAndMintDeposit,
   lockAndMintParams: LockAndMintParams,
+  chainInstance: IChain
 ) => {
   const { relayer, safeAddress, address, signer } = chainInstance;
   if (!relayer || !safeAddress || !address || !signer) {
@@ -33,8 +34,8 @@ export const doSwap = async (
   if (!renTx.out || (renTx.out && renTx.out.revert)) {
       throw new Error('missing out tx')
   }
-  const minter = getMinter()
-  const shifter = getBalanceShifter()
+  const minter = getMinter(chainInstance)
+  const shifter = getBalanceShifter(chainInstance)
   const amount = BigNumber.from(renTx.out.amount.toString())
 
   const mintTx = await minter.populateTransaction.temporaryMint(
