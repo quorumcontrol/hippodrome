@@ -67,12 +67,13 @@ export const useDeposit = (deposit: WrappedLockAndMintDeposit) => {
 };
 
 export const useLockAndMint = (params:LockAndMintParams) => {
+  const { chain } = useChainContext()
   const [deposits, setDeposits] = useState<WrappedLockAndMintDeposit[]>([]);
   const [lockAndMint, setLockAndMint] = useState<LockAndMint>()
 
   const lockAndMintWrapper = useMemo(() => {
-    return getLockAndMint(params);
-  }, [params])
+    return getLockAndMint(chain, params);
+  }, [params, chain])
 
   useEffect(() => {
     setDeposits([...lockAndMintWrapper.deposits]);

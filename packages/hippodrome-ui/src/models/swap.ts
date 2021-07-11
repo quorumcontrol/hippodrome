@@ -53,7 +53,7 @@ export const doSwap = async (
   const shiftTx = await shifter.populateTransaction.shift([input,output], safeAddress, address)
 
   const swapAmount = amount
-  console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
+  console.log('amount to swap: ', renTx.out.amount.toString())
 
   const [approve, swap] = await Promise.all([
     fetchApprove(input),

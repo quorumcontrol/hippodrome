@@ -32,7 +32,7 @@ import { useMemo } from "react"
 import { useChainContext } from "../../hooks/useChainContext"
 
 const Swap: React.FC = () => {
-  const { safeAddress } = useChainContext()
+  const { safeAddress, chain } = useChainContext()
   const [amount, setAmount] = useState(0)
   const [inputToken, setInputToken] = useState("DOGE")
   const history = useHistory()
@@ -57,7 +57,7 @@ const Swap: React.FC = () => {
   const onSubmit = async () => {
     setSubmitting(true)
     try {
-      getLockAndMint({
+      getLockAndMint(chain, {
         lockNetwork: inputToken as KnownInputChains,
         to: safeAddress!,
         nonce,
@@ -148,6 +148,7 @@ const Swap: React.FC = () => {
               input={inputTokensBySymbol[inputToken].renAddress}
               output={selectedOutputToken!}
               amount={parseValueToHex(amount)} // TODO: subtract fees
+              inputFees={0.0045} // TODO: use actual ren fees here - this number is hippodrome + ren fee (0.003 + 0.0015)
             />
           </HStack>
         </Box>

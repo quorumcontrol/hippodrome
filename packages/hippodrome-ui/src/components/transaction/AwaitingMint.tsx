@@ -48,14 +48,15 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
 
   const depositAmount = useMemo(() => {
     return BigNumber.from(deposit.deposit.depositDetails.amount)
-      .div(10000 * 10000)
+      .div(1e8)
       .toString()
   }, [deposit])
 
   const { amountOut, loading: tokenQuoteLoading } = useTokenQuote(
     inputTokensBySymbol[deposit.lockAndMint.params.lockNetwork].renAddress,
     deposit.lockAndMint.params.outputToken,
-    parseValueToHex(depositAmount)
+    parseValueToHex(depositAmount),
+    0.0045 // TODO: use actual ren fees + hippodrome fees
   )
 
   const progressPercentage = Math.max(
@@ -66,7 +67,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   const fee = useMemo(() => {
     const nDepositAmount = Number(depositAmount || "0") || 1
 
-    return (nDepositAmount * 0.15) / 100
+    return (nDepositAmount * 0.0045) // TODO: use ren fee and hippodrome fee
   }, [depositAmount])
 
   const conversionRate = useMemo(() => {
@@ -182,7 +183,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
           <HStack width="100%" justifyContent="space-between">
             <SmallText>FEE</SmallText>
             <Text>
-              {fee}(0.15%) {deposit.lockAndMint.params.lockNetwork}
+              {fee} (0.45%) {deposit.lockAndMint.params.lockNetwork}
             </Text>
           </HStack>
 
