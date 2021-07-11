@@ -30,15 +30,20 @@ import { useHistory } from "react-router-dom"
 import { mintUrl } from "../../utils/urls"
 import { useMemo } from "react"
 import { useChainContext } from "../../hooks/useChainContext"
+import { useRenOutput } from "../../hooks/useRen"
+import { constants } from "ethers"
 
 const Swap: React.FC = () => {
-  const { safeAddress } = useChainContext()
+  const { safeAddress, chain } = useChainContext()
   const [amount, setAmount] = useState(0)
   const [inputToken, setInputToken] = useState("DOGE")
   const history = useHistory()
   const [outputToken, setOutputToken] = useState(
-    "0xc0f14c88250e680ecd70224b7fba82b7c6560d12"
+    "0xc0f14c88250e680ecd70224b7fba82b7c6560d12" // wPTG
   )
+  console.log('val: ', parseValueToHex(amount, 8), ' amount: ', amount)
+  const { output:renOutput } = useRenOutput(inputToken as KnownInputChains, parseValueToHex(amount, 8))
+  console.log('renOutput: ', renOutput?.toString())
   const [submitting, setSubmitting] = useState(false)
 
   const selectedInputToken = useMemo(
@@ -57,7 +62,7 @@ const Swap: React.FC = () => {
   const onSubmit = async () => {
     setSubmitting(true)
     try {
-      getLockAndMint({
+      getLockAndMint(chain, {
         lockNetwork: inputToken as KnownInputChains,
         to: safeAddress!,
         nonce,
@@ -147,7 +152,7 @@ const Swap: React.FC = () => {
             <OutputAmount
               input={inputTokensBySymbol[inputToken].renAddress}
               output={selectedOutputToken!}
-              amount={parseValueToHex(amount)} // TODO: subtract fees
+              amount={(renOutput || constants.Zero).toHexString()} // TODO: subtract fees
             />
           </HStack>
         </Box>
@@ -155,7 +160,7 @@ const Swap: React.FC = () => {
 
       <SwapFees
         inputName={inputToken as KnownInputChains}
-        amount={parseValueToHex(amount)}
+        amount={parseValueToHex(amount, 8)}
       />
       <Button
         w="100%"

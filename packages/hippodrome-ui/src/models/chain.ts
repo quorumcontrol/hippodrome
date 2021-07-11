@@ -39,7 +39,15 @@ const web3Modal = new Web3Modal({
   providerOptions // required
 })
 
-export class Chain extends EventEmitter {
+export interface IChain extends EventEmitter {
+  relayer?: Relayer
+  safeAddress?: string
+  address?: string
+  signer?: providers.JsonRpcSigner
+  provider?: providers.JsonRpcProvider | providers.Web3Provider
+}
+
+export class Chain extends EventEmitter implements IChain {
   provider?: providers.Web3Provider
 
   signer?: providers.JsonRpcSigner

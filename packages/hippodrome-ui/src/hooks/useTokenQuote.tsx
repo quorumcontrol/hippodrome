@@ -7,20 +7,23 @@ import { fetchQuote } from "../models/1inch";
 export const useTokenQuote = (
   input: string,
   output: string,
-  amount: string // 10**18 big number hex encoded
+  amount: string, // 10**18 big number hex encoded
 ) => {
-  console.log("fetching amount for: ", amount);
+  console.log("fetching amount for: ", BigNumber.from(amount).div((1e10.toString())).div(1e8).toString());
   const { data, isValidating, revalidate } = useSWR(
     [
       "/1inch-quote",
       input,
       output,
-      BigNumber.from(amount).div((1e10).toString()).toHexString(),
+      BigNumber.from(amount).toHexString(),
     ],
     {
       fetcher: async (_, input, output, amtString) => {
         try {
           const amount = BigNumber.from(amtString);
+          if (amount.lte(0)) {
+            return BigNumber.from(0)
+          }
           return fetchQuote(input, output, amount);
         } catch (err) {
           console.error("error fetching 1inch quote: ", err);

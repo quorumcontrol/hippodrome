@@ -8,11 +8,11 @@ import { TokenListToken } from '../../models/tokenList'
 export interface OutputAmountProps {
   input:string
   output:TokenListToken
-  amount:string // bignumber hex
+  amount:string, // bignumber hex (18 decimals)
 }
 
 const OutputAmount:React.FC<OutputAmountProps> = ({ input, output, amount }) => {
-  const { amountOut, loading } = useTokenQuote(input, output.address, amount) // TODO: are all ren tokens 8 decimals?
+  const { amountOut, loading } = useTokenQuote(input, output.address, amount)
 
   if (loading) {
     return (

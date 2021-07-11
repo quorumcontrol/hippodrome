@@ -17,19 +17,20 @@ import { Jazzicon } from "@ukstv/jazzicon-react"
 import SmallText from "../SmallText"
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint"
 import { motion } from "framer-motion"
-import { BigNumber, utils } from "ethers"
+import { BigNumber, constants, utils } from "ethers"
 import { useHistory } from "react-router-dom"
-import { useDeposit } from "../../hooks/useRen"
+import { useDeposit, useRenOutput } from "../../hooks/useRen"
 import { WrappedLockAndMintDeposit } from "../../models/ren"
+import chainInstance from '../../models/chain'
 import Card from "../Card"
 import { inputTokensBySymbol, supportedTokens } from "../../models/tokenList"
 import { doSwap } from "../../models/swap"
 import { useMemo } from "react"
 import { useTokenQuote } from "../../hooks/useTokenQuote"
-import { parseValueToHex } from "../../utils/parse"
 import humanBigNumber, { formatCurrency } from "../../utils/humanNumbers"
 import { centeredTruncateText } from "../../utils/truncateText"
 import { useChainContext } from "../../hooks/useChainContext"
+import SwapFees from "../swap/SwapFees"
 
 export interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -45,16 +46,21 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   const toast = useToast()
   const history = useHistory()
 
-  const depositAmount = useMemo(() => {
-    return BigNumber.from(deposit.deposit.depositDetails.amount)
-      .div(10000 * 10000)
+  const networkName = deposit.lockAndMint.params.lockNetwork
+  const depositAmount = deposit.deposit.depositDetails.amount
+
+  const humanDepositAmount = useMemo(() => {
+    return BigNumber.from(depositAmount)
+      .div(1e8)
       .toString()
-  }, [deposit])
+  }, [depositAmount])
+
+  const { output:renOutput } = useRenOutput(deposit.lockAndMint.params.lockNetwork, depositAmount)
 
   const { amountOut, loading: tokenQuoteLoading } = useTokenQuote(
-    inputTokensBySymbol[deposit.lockAndMint.params.lockNetwork].renAddress,
+    inputTokensBySymbol[networkName].renAddress,
     deposit.lockAndMint.params.outputToken,
-    parseValueToHex(depositAmount)
+    (renOutput || constants.Zero).toHexString(), // TODO: do not hard code hex value
   )
 
   const progressPercentage = Math.max(
@@ -62,17 +68,11 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
     ((confirmations?.current || 0) / (confirmations?.target || 1)) * 100
   )
 
-  const fee = useMemo(() => {
-    const nDepositAmount = Number(depositAmount || "0") || 1
-
-    return (nDepositAmount * 0.15) / 100
-  }, [depositAmount])
-
   const conversionRate = useMemo(() => {
     const nOutPutAmount = Number(utils.formatEther(amountOut || 0))
-    const nDepositAmount = Number(depositAmount || "0") || 1
+    const nDepositAmount = Number(humanDepositAmount || "0") || 1
     return formatCurrency(nOutPutAmount / nDepositAmount)
-  }, [amountOut, depositAmount])
+  }, [amountOut, humanDepositAmount])
 
   const outputToken = useMemo(
     () =>
@@ -87,7 +87,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       setLoading(true)
       console.log("swapping: ", deposit)
 
-      await doSwap(deposit, deposit.lockAndMint.params)
+      await doSwap(deposit, deposit.lockAndMint.params, chainInstance)
 
       history.push("/")
 
@@ -96,6 +96,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
         description: "Check wallet to confirm swap amount",
         duration: 9000,
         status: "success",
+        isClosable: true,
       })
     } catch (err) {
       console.error("erorr minting: ", err)
@@ -104,6 +105,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
         description: "Error swapping, token please try again",
         duration: 9000,
         status: "error",
+        isClosable: true,
       })
     } finally {
       setLoading(false)
@@ -122,7 +124,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
         <VStack spacing="10" width="100%">
           <VStack w="100%" spacing="3" alignItems="start">
             <Heading as="h1" fontWeight="" fontSize="2xl">
-              {depositAmount} {deposit.lockAndMint.params.lockNetwork} recieved
+              {humanDepositAmount} {deposit.lockAndMint.params.lockNetwork} recieved
             </Heading>
             <SmallText fontSize="10" color="gray.400">
               {confirmations?.current} / {confirmations?.target} confirmations
@@ -155,7 +157,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
             </HStack>
             {!tokenQuoteLoading && (
               <SmallText>
-                Price: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
+                Price incl fees: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
                 {`${conversionRate} ${outputToken?.name}`}
               </SmallText>
             )}
@@ -178,13 +180,10 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
             </HStack>
           </Box>
 
-          <HStack width="100%" justifyContent="space-between">
-            <SmallText>FEE</SmallText>
-            <Text>
-              {fee}(0.15%) {deposit.lockAndMint.params.lockNetwork}
-            </Text>
-          </HStack>
-
+          <SwapFees inputName={networkName} amount={depositAmount} />
+          <Box w="100%">
+          <Text>Number is approximate. 1% slippage is allowed.</Text>
+          </Box>
           {!loading && (
             <Button
               w="100%"

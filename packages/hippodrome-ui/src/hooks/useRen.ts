@@ -1,10 +1,12 @@
-import { BigNumber } from "ethers";
+import { BigNumber, BigNumberish } from "ethers";
 import useSWR from "swr";
-import { fetchFees, KnownInputChains, getLockAndMint, LockAndMintParams, WrappedLockAndMintDeposit } from "../models/ren";
+import { fetchFees, KnownInputChains, getLockAndMint, LockAndMintParams, WrappedLockAndMintDeposit, amountAfterFees } from "../models/ren";
 import { useState, useEffect, useMemo } from "react";
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint";
+import { useChainContext } from "./useChainContext";
 
 export const useRenFees = (networkName: KnownInputChains) => {
+  const { chain } = useChainContext()
   const {
     data: fees,
     isValidating,
@@ -13,7 +15,7 @@ export const useRenFees = (networkName: KnownInputChains) => {
     fetcher: async (_, networkName) => {
       try {
         console.log("fetching");
-        const fees = await fetchFees(networkName);
+        const fees = await fetchFees(chain, networkName);
         console.log("fees: ", fees);
         return fees;
       } catch (err) {
@@ -65,12 +67,13 @@ export const useDeposit = (deposit: WrappedLockAndMintDeposit) => {
 };
 
 export const useLockAndMint = (params:LockAndMintParams) => {
+  const { chain } = useChainContext()
   const [deposits, setDeposits] = useState<WrappedLockAndMintDeposit[]>([]);
   const [lockAndMint, setLockAndMint] = useState<LockAndMint>()
 
   const lockAndMintWrapper = useMemo(() => {
-    return getLockAndMint(params);
-  }, [params])
+    return getLockAndMint(chain, params);
+  }, [params, chain])
 
   useEffect(() => {
     setDeposits([...lockAndMintWrapper.deposits]);
@@ -94,21 +97,18 @@ export const useLockAndMint = (params:LockAndMintParams) => {
   };
 };
 
-export const useRenOutput = (networkName: KnownInputChains) => {
+export const useRenOutput = (networkName: KnownInputChains, amount:BigNumberish) => {
   const { fees } = useRenFees(networkName);
 
-  const getOutput = (amount: BigNumber) => {
+  const getOutput = () => {
     if (!fees || !fees.lock) {
-      throw new Error("fees have not loaded yet");
+      return undefined
     }
-    return (
-      ((amount.toNumber() - fees.lock.toNumber() / 1e8) * (10000 - fees.mint)) /
-      10000
-    );
+    return amountAfterFees(fees, BigNumber.from(amount))
   };
 
   return {
-    getOutput,
+    output: getOutput(),
     loading: !fees,
   };
 };

@@ -13,7 +13,7 @@ export const fetchApprove = async (input: Address) => {
     tokenAddress: input,
     infinity: true,
   });
-  console.log("approve: ", resp.data)
+  console.log("approved")
   return {
     to: resp.data.to,
     calldata: resp.data.data,
@@ -40,7 +40,7 @@ export const fetchSwap = async (
     destReceiver: seller,
     referrerAddress: DEV_ADDRESS,
     fee: 0.3,
-    slippage: 5, // 5% - TODO: this isn't production ready, but for local testing makes sense
+    slippage: 1, // 1% slippage
   }
   const resp = await fetchWithBackOff("/swap", params);
   return {
@@ -54,7 +54,7 @@ export const fetchSwap = async (
 export const fetchQuote = async (
   input: Address,
   output: Address,
-  amount: BigNumber
+  amount: BigNumber,
 ) => {
   if (amount.eq(0)) {
     return constants.Zero;
@@ -67,7 +67,6 @@ export const fetchQuote = async (
     fromTokenAddress: input,
     toTokenAddress: output,
     amount: amount.toString(),
-    fee: 0.3,
   });
   return BigNumber.from(resp.data.toTokenAmount);
 };
