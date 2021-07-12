@@ -17,7 +17,7 @@ import { Jazzicon } from "@ukstv/jazzicon-react"
 import SmallText from "../SmallText"
 import { LockAndMint } from "@renproject/ren/build/main/lockAndMint"
 import { motion } from "framer-motion"
-import { BigNumber, constants, utils } from "ethers"
+import { BigNumber, constants } from "ethers"
 import { useHistory } from "react-router-dom"
 import { useDeposit, useRenOutput } from "../../hooks/useRen"
 import { WrappedLockAndMintDeposit } from "../../models/ren"
@@ -83,7 +83,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
     const decimalDifference = (outputToken.decimals - 8)
     const paddedInput = BigNumber.from(depositAmount).mul((10 ** decimalDifference))
     return formatCurrency(paddedInput.div(amountOut).toNumber())
-  }, [amountOut, humanDepositAmount])
+  }, [depositAmount, amountOut, outputToken])
 
   const onMint = async () => {
     try {
