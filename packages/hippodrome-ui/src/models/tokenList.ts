@@ -54,11 +54,27 @@ export const supportedTokens: TokenListToken[] = [
   },
   {
     "name": "Ether",
-    "address": "0x714550C2C1Ea08688607D86ed8EeF4f5E4F22323",
+    "address": "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
     "symbol": "ETH",
     "decimals": 18,
-    "chainId": 80001,
+    "chainId": 137,
     "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png"
+  },
+  {
+    "name": "Ren BTC",
+    "address": "0xDBf31dF14B66535aF65AaC99C32e9eA844e14501",
+    "symbol": "renBTC",
+    "decimals": 8,
+    "chainId": 137,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599/logo.png" // wrapped BTC logo as a placeholder
+  },
+  {
+    "name": "Ren Dogecoin",
+    "address": "0xcE829A89d4A55a63418bcC43F00145adef0eDB8E",
+    "symbol": "renDOGE",
+    "decimals": 8,
+    "chainId": 137,
+    "logoURI": dogeLogo
   },
   {
     "name": "Wrapped BTC",

@@ -68,12 +68,6 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
     ((confirmations?.current || 0) / (confirmations?.target || 1)) * 100
   )
 
-  const conversionRate = useMemo(() => {
-    const nOutPutAmount = Number(utils.formatEther(amountOut || 0))
-    const nDepositAmount = Number(humanDepositAmount || "0") || 1
-    return formatCurrency(nOutPutAmount / nDepositAmount)
-  }, [amountOut, humanDepositAmount])
-
   const outputToken = useMemo(
     () =>
       supportedTokens.find(
@@ -81,6 +75,15 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
       ),
     [deposit.lockAndMint.params.outputToken]
   )
+
+  const conversionRate = useMemo(() => {
+    if (!outputToken || !amountOut) {
+      return '0'
+    }
+    const decimalDifference = (outputToken.decimals - 8)
+    const paddedInput = BigNumber.from(depositAmount).mul((10 ** decimalDifference))
+    return formatCurrency(paddedInput.div(amountOut).toNumber())
+  }, [amountOut, humanDepositAmount])
 
   const onMint = async () => {
     try {
@@ -151,13 +154,13 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
                 <Spinner />
               ) : (
                 <Text fontSize="lg" fontWeight="medium">
-                  {humanBigNumber(amountOut || "0")}
+                  {humanBigNumber(amountOut || "0", outputToken?.decimals)}
                 </Text>
               )}
             </HStack>
             {!tokenQuoteLoading && (
               <SmallText>
-                Price incl fees: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
+                Price before fees: 1 {deposit.lockAndMint.params.lockNetwork} ={" "}
                 {`${conversionRate} ${outputToken?.name}`}
               </SmallText>
             )}
