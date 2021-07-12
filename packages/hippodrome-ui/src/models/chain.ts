@@ -8,6 +8,7 @@ import {
   Relayer,
 } from 'kasumah-relay-wrapper/dist/src/relayers'
 import { createRelayer, createSafe } from './safe'
+import { theme } from '@chakra-ui/react'
 
 export type KnownNetworkNames = 'mumbai' | 'matic'
 
@@ -34,9 +35,10 @@ const providerOptions = {
 }
 
 const web3Modal = new Web3Modal({
-  network: networkName, // optional
-  cacheProvider: true, // optional
-  providerOptions // required
+  network: networkName,
+  cacheProvider: true,
+  providerOptions,
+  theme: 'dark',
 })
 
 export interface IChain extends EventEmitter {
@@ -56,6 +58,8 @@ export class Chain extends EventEmitter implements IChain {
 
   walletMaker?: WalletMaker
 
+  connecting = false
+
   connected = false
 
   address?: string
@@ -74,6 +78,7 @@ export class Chain extends EventEmitter implements IChain {
   }
 
   async connect() {
+    this.connecting = true
     const web3Provider = await web3Modal.connect()
     web3Provider.on('networkChanged', async () => {
       console.log('web3 provider network change')
@@ -96,9 +101,9 @@ export class Chain extends EventEmitter implements IChain {
     this.relayer = createRelayer(this.signer, this.provider, this.chainId)
 
     this.setupSafe() // TODO: no need to do this right on connect, wait until they've sent a deposit
-
+    
+    this.connecting = false
     this.connected = true
-
     this.emit('connected')
   }
 
@@ -126,4 +131,9 @@ export class Chain extends EventEmitter implements IChain {
   }
 }
 
-export default new Chain(networkName)
+const chainInstance = new Chain(networkName)
+if (web3Modal.cachedProvider) {
+  chainInstance.connect()
+}
+
+export default chainInstance
