@@ -2,16 +2,19 @@ import { BigNumber, constants, utils, VoidSigner } from "ethers";
 import { IChain } from "./chain";
 import { fetchApprove, fetchSwap } from "./1inch";
 import { WrappedLockAndMintDeposit } from "./ren";
-import { minter as getMinter, balanceShifter as getBalanceShifter } from "./contracts";
+import {
+  minter as getMinter,
+  balanceShifter as getBalanceShifter,
+} from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
 
-const voidSigner = new VoidSigner(constants.AddressZero)
+const voidSigner = new VoidSigner(constants.AddressZero);
 
-function tokenContractFromAddress(address:string) {
+function tokenContractFromAddress(address: string) {
   // TODO: weird to use the ren one here, but it's already in our types
-  return RenERC20LogicV1__factory.connect(address, voidSigner)
+  return RenERC20LogicV1__factory.connect(address, voidSigner);
 }
 
 export const doSwap = async (
@@ -24,20 +27,22 @@ export const doSwap = async (
     throw new Error("must have a relayer and addresses");
   }
 
-  const input = inputTokens.find((t) => t.symbol === lockAndMintParams.lockNetwork)?.renAddress
-  const output = lockAndMintParams.outputToken
+  const input = inputTokens.find(
+    (t) => t.symbol === lockAndMintParams.lockNetwork
+  )?.renAddress;
+  const output = lockAndMintParams.outputToken;
   if (!input) {
-    throw new Error('no input token')
+    throw new Error("no input token");
   }
 
-  const renTx = await deposit.deposit.queryTx(); 
+  const renTx = await deposit.deposit.queryTx();
   if (!renTx.out || (renTx.out && renTx.out.revert)) {
-      throw new Error('missing out tx')
+    throw new Error("missing out tx");
   }
-  console.log('ren tx: ', renTx)
-  const minter = getMinter(chainInstance)
-  const shifter = getBalanceShifter(chainInstance)
-  const amount = BigNumber.from(renTx.out.amount.toString())
+  console.log("ren tx: ", renTx);
+  const minter = getMinter(chainInstance);
+  const shifter = getBalanceShifter(chainInstance);
+  const amount = BigNumber.from(renTx.out.amount.toString());
 
   const mintTx = await minter.populateTransaction.temporaryMint(
     safeAddress,
@@ -45,40 +50,48 @@ export const doSwap = async (
     lockAndMintParams.lockNetwork,
     amount,
     renTx.out.nhash,
-    renTx.out.signature!,
-  )
+    renTx.out.signature!
+  );
 
-  const shifterApproveInput = await tokenContractFromAddress(input).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveOutput = await tokenContractFromAddress(output).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  
-  const shiftTx = await shifter.populateTransaction.shift([input,output], safeAddress, address)
+  const shifterApproveInput = await tokenContractFromAddress(
+    input
+  ).populateTransaction.approve(shifter.address, constants.MaxUint256);
+  const shifterApproveOutput = await tokenContractFromAddress(
+    output
+  ).populateTransaction.approve(shifter.address, constants.MaxUint256);
 
-  const swapAmount = amount
-  console.log('amount to swap: ', renTx.out.amount.toString())
+  const shiftTx = await shifter.populateTransaction.shift(
+    [input, output],
+    safeAddress,
+    address
+  );
+
+  const swapAmount = amount;
+  console.log("amount to swap: ", renTx.out.amount.toString());
+
+  let txs = [mintTx];
 
   const [approve, swap] = await Promise.all([
     fetchApprove(input),
-    fetchSwap(input, output, swapAmount, safeAddress), 
+    fetchSwap(input, output, swapAmount, safeAddress),
   ]);
 
-  if (!swap) {
-    throw new Error('no swap')
+  // if we're only bridging, then don't do the swap
+  if (swap) {
+    txs = txs.concat([
+      {
+        to: approve.to,
+        data: approve.calldata,
+      },
+      {
+        to: swap.to,
+        data: swap.calldata,
+      },
+    ]);
   }
+  txs = txs.concat([shifterApproveInput, shifterApproveOutput, shiftTx]);
 
-  const tx = await relayer.multisend([
-    mintTx,
-    {
-      to: approve.to,
-      data: approve.calldata,
-    },
-    {
-      to: swap.to,
-      data: swap.calldata,
-    },
-    shifterApproveInput,
-    shifterApproveOutput,
-    shiftTx
-  ]);
+  const tx = await relayer.multisend(txs);
   await tx.wait();
 
   console.log("finished");
