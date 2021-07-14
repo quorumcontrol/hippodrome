@@ -6,7 +6,7 @@ import { minter as getMinter, balanceShifter as getBalanceShifter, SUSHI_ROUTER_
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
-import { addLiquidityTx } from "./sushi";
+import { addLiquidityTx } from "./liquidityPool";
 
 const voidSigner = new VoidSigner(constants.AddressZero)
 
@@ -40,8 +40,8 @@ export const doAddLiquidity = async (
   if (!renTx.out || (renTx.out && renTx.out.revert)) {
       throw new Error('missing out tx')
   }
-  const minter = getMinter()
-  const shifter = getBalanceShifter()
+  const minter = getMinter(chainInstance)
+  const shifter = getBalanceShifter(chainInstance)
   const amount = BigNumber.from(renTx.out.amount.toString())
 
   const mintTx = await minter.populateTransaction.temporaryMint(
@@ -99,6 +99,7 @@ export const doAddLiquidity = async (
       quoteIbBTc,
       quoteWbtc,
       1,
+      SUSHI_ROUTER_ADDRESS,
       new Date().getTime() / 1000 + (60 * 10) // 10 minutes
     ),
     shifterApproveInput,
