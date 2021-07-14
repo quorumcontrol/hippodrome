@@ -5,5 +5,5 @@ export const mintUrl = (
   outputToken: string,
   swap?: boolean
 ) => {
-  return `/transaction/mint/${asset}/${to}/${nonce}/${outputToken}/swap=${swap}`
+  return `/transaction/mint/${asset}/${to}/${nonce}/${outputToken}?swap=${swap}`
 }
