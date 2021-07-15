@@ -68,7 +68,7 @@ const Swap: React.FC = () => {
         nonce,
         outputToken,
       })
-      history.push(mintUrl(inputToken, safeAddress!, nonce, outputToken))
+      history.push(mintUrl(inputToken, safeAddress!, nonce, outputToken, true))
     } catch (err) {
       console.error("error: ", err)
       alert("something went wrong")
