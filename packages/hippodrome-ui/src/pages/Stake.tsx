@@ -26,10 +26,8 @@ import {
   NumberInput,
   FormControl,
   NumberInputField,
-  Spinner,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import dogeLogo from "../assets/doge-icon.svg"
 import {
   inputTokens,
   inputTokensBySymbol,
@@ -42,82 +40,18 @@ import OutputAmount from "../components/swap/OutputAmount"
 import { useMemo } from "react"
 import { parseValueToHex } from "../utils/parse"
 import InputTokenSelect from "../components/swap/InputTokenSelect"
-import { useTokenQuote } from "../hooks/useTokenQuote"
-import humanBigNumber from "../utils/humanNumbers"
 import { useRenOutput } from "../hooks/useRen"
-import { getLockAndMint, getNextNonce, isTestnet, KnownInputChains } from "../models/ren"
+import {
+  getLockAndMint,
+  getNextNonce,
+  KnownInputChains,
+} from "../models/ren"
 import { constants } from "ethers"
 import SwapFees from "../components/swap/SwapFees"
 import { useHistory } from "react-router-dom"
 import { mintUrl } from "../utils/urls"
 import { useChainContext } from "../hooks/useChainContext"
-
-export interface OutputAmountProps {
-  input: string
-  amount: string // bignumber hex (18 decimals)
-}
-
-const OutputTokenAmounts: React.FC<OutputAmountProps> = ({ input, amount }) => {
-  const { amountOut: wPTGamount, loading: wPTgLoading } = useTokenQuote(
-    input,
-    "0xc0f14c88250e680ecd70224b7fba82b7c6560d12",
-    amount
-  )
-  const { amountOut: renDogeAmount, loading: renDogeLoading } = useTokenQuote(
-    input,
-    "0xcE829A89d4A55a63418bcC43F00145adef0eDB8E",
-    amount
-  )
-
-  console.log(renDogeAmount, "ells", humanBigNumber(renDogeAmount || 0, 18))
-
-  if (wPTgLoading || renDogeLoading) {
-    return (
-      <Box>
-        {isTestnet && <Text>(testnet does not complete)</Text>}
-        <Spinner />
-      </Box>
-    )
-  }
-
-  return (
-    <HStack
-      justifyContent="space-between"
-      width="100%"
-      paddingX="6"
-      rounded="2xl"
-      marginY="2"
-      background="gray.900"
-      paddingY="5"
-    >
-      <HStack>
-        <HStack>
-          <Image
-            w="30px"
-            src="https://arena.cryptocolosseum.com/images/icons/prestige.svg"
-          />
-          <Text fontSize="sm">wPTG</Text>
-        </HStack>
-
-        <Text fontSize="md" fontWeight="medium">
-          {humanBigNumber(wPTGamount || 0, 18)}
-        </Text>
-      </HStack>
-      <HStack>
-        <HStack>
-          <Image w="30px" src={dogeLogo} />
-          <Text fontSize="sm" fontWeight="">
-            renDoge
-          </Text>
-        </HStack>
-
-        <Text fontSize="md" fontWeight="medium">
-          {humanBigNumber(renDogeAmount || 0, 8)}
-        </Text>
-      </HStack>
-    </HStack>
-  )
-}
+import StakeOutputTokenAmount from "../components/stake/StakeOutputTokensAmount"
 
 const StakePage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -310,7 +244,7 @@ const StakePage: React.FC = () => {
 
               <Box width="100%">
                 <SmallText>Token received</SmallText>
-                <OutputTokenAmounts
+                <StakeOutputTokenAmount
                   input={inputTokensBySymbol[inputToken].renAddress}
                   amount={(renOutput || constants.Zero).toHexString()}
                 />

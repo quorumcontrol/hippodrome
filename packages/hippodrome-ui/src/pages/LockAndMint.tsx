@@ -5,7 +5,6 @@ import { useLockAndMint } from "../hooks/useRen"
 import { KnownInputChains } from "../models/ren"
 import AwaitingDeposit from "../components/transaction/AwaitingDeposit"
 import AwaitingMint from "../components/transaction/AwaitingMint"
-import { useQuery } from "../hooks/useQuery"
 
 const Transaction: React.FC = () => {
   const { asset, to, nonce, outputToken } = useParams<{
@@ -14,9 +13,6 @@ const Transaction: React.FC = () => {
     nonce: string
     outputToken: string
   }>()
-  const query = useQuery()
-
-  const value = query.get("swap")
 
   const { lockAndMint, deposits, loading } = useLockAndMint({
     lockNetwork: asset,
@@ -24,8 +20,6 @@ const Transaction: React.FC = () => {
     nonce: parseInt(nonce),
     outputToken,
   })
-
-  console.log(value)
 
   if (loading) {
     return (
