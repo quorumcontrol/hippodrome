@@ -4,6 +4,7 @@ import dogeLogo from "../../assets/doge-icon.svg"
 import { useTokenQuote } from "../../hooks/useTokenQuote"
 import humanBigNumber from "../../utils/humanNumbers"
 import { isTestnet } from "../../models/ren"
+import { RENDOGE_ADDRESS, WPTG_ADDRESS } from "../../models/contracts"
 
 interface OutputAmountProps {
   input: string
@@ -16,12 +17,12 @@ const StakeOutputTokenAmount: React.FC<OutputAmountProps> = ({
 }) => {
   const { amountOut: wPTGamount, loading: wPTgLoading } = useTokenQuote(
     input,
-    "0xc0f14c88250e680ecd70224b7fba82b7c6560d12",
+    WPTG_ADDRESS,
     amount
   )
   const { amountOut: renDogeAmount, loading: renDogeLoading } = useTokenQuote(
     input,
-    "0xcE829A89d4A55a63418bcC43F00145adef0eDB8E",
+    RENDOGE_ADDRESS,
     amount
   )
 

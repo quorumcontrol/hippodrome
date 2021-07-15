@@ -2,7 +2,7 @@ import { BigNumber, constants, utils, VoidSigner } from "ethers";
 import chainInstance from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
 import { WrappedLockAndMintDeposit } from "./ren";
-import { minter as getMinter, balanceShifter as getBalanceShifter, SUSHI_ROUTER_ADDRESS, COMETH_ROUTER_ADDRESS } from "./contracts";
+import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS, WPTG_ADDRESS, RENDOGE_ADDRESS } from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
@@ -15,9 +15,7 @@ function tokenContractFromAddress(address:string) {
   return RenERC20LogicV1__factory.connect(address, voidSigner)
 }
 
-// see https://analytics-polygon.sushi.com/pairs/0x8f8e95ff4b4c5e354ccb005c6b0278492d7b5907
-const ibBTCAddress = '0x4eac4c4e9050464067d673102f8e24b2fcceb350'
-const wbtcAddress = '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6'
+// TODO: change to wPTG/rendoge pair
 const ibBTCWBTCPairAddress = '0x8f8e95ff4b4c5e354ccb005c6b0278492d7b5907'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
@@ -53,25 +51,25 @@ export const doAddLiquidity = async (
   )
 
   const shifterApproveInput = await tokenContractFromAddress(input).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveWbtC = await tokenContractFromAddress(wbtcAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveibBTC = await tokenContractFromAddress(ibBTCAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveWbtC = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveibBTC = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveLPToken = await tokenContractFromAddress(ibBTCWBTCPairAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
-  const shiftTx = await shifter.populateTransaction.shift([input, wbtcAddress, ibBTCAddress, ibBTCWBTCPairAddress], safeAddress, address)
+  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, ibBTCWBTCPairAddress], safeAddress, address)
 
   const swapAmount = amount
   const halfSwap = swapAmount.div(2)
 
   const [renApprove, swapWbtc, swapIbBTc, quoteWbtc, quoteIbBTc] = await Promise.all([
     fetchApprove(input),
-    fetchSwap(input, wbtcAddress, halfSwap, safeAddress),
-    fetchSwap(input, ibBTCAddress, halfSwap, safeAddress),
-    fetchQuote(input, wbtcAddress, halfSwap),
-    fetchQuote(input, ibBTCAddress, halfSwap)
+    fetchSwap(input, RENDOGE_ADDRESS, halfSwap, safeAddress),
+    fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
+    fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
+    fetchQuote(input, WPTG_ADDRESS, halfSwap)
   ])
 
-  const ibbtcApprove = await tokenContractFromAddress(ibBTCAddress).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  const wbtcApprove = await tokenContractFromAddress(wbtcAddress).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const ibbtcApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const wbtcApprove = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
 
@@ -93,20 +91,20 @@ export const doAddLiquidity = async (
     wbtcApprove,
     await addLiquidityTx(
       safeAddress,
-      ibBTCAddress,
-      wbtcAddress,
+      WPTG_ADDRESS,
+      RENDOGE_ADDRESS,
       quoteIbBTc,
       quoteWbtc,
       1,
-      SUSHI_ROUTER_ADDRESS,
-      new Date().getTime() / 1000 + (60 * 10) // 10 minutes
+      COMETH_ROUTER_ADDRESS,
+      new Date().getTime() / 1000 + 60 * 10 // 10 minutes
     ),
     shifterApproveInput,
     shifterApproveWbtC,
     shifterApproveibBTC,
     shifterApproveLPToken,
-    shiftTx
-  ]);
+    shiftTx,
+  ])
   await tx.wait();
 
   console.log("finished");
