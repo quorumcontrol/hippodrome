@@ -8,7 +8,6 @@ import {
   Relayer,
 } from 'kasumah-relay-wrapper/dist/src/relayers'
 import { createRelayer, createSafe } from './safe'
-import { theme } from '@chakra-ui/react'
 
 export type KnownNetworkNames = 'mumbai' | 'matic'
 
