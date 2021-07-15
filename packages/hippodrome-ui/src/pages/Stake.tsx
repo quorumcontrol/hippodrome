@@ -132,7 +132,7 @@ const StakePage: React.FC = () => {
                           fontSize="18px"
                           fontWeight="semibold"
                         >
-                          iBTC/WBTC
+                          wPTG/renDOGE
                         </Text>
                         <Text
                           color="gray.400"
@@ -151,7 +151,7 @@ const StakePage: React.FC = () => {
                         fontSize="14px"
                         fontWeight="semibold"
                       >
-                        0.0050.49 iBTC/ 0.334WBTC
+                        0.0050.49 wPTG/ 0.334 RenDOGE
                       </Text>
                       <Text
                         color="gray.400"
@@ -175,7 +175,7 @@ const StakePage: React.FC = () => {
                         size="md"
                         onClick={onOpen}
                       >
-                        Stake more
+                        Stake
                       </Button>
                       <Button
                         w="100%"

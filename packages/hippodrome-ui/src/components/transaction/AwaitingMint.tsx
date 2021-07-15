@@ -33,6 +33,7 @@ import { useChainContext } from "../../hooks/useChainContext"
 import SwapFees from "../swap/SwapFees"
 import { useQuery } from "../../hooks/useQuery"
 import StakeOutputTokenAmount from "../stake/StakeOutputTokensAmount"
+import { doAddLiquidity } from "../../models/stake"
 
 interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -232,14 +233,11 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
     try {
       setLoading(true)
       console.log("swapping: ", deposit)
-
-      await doSwap(deposit, deposit.lockAndMint.params, chainInstance)
-
+      await doAddLiquidity(deposit, deposit.lockAndMint.params)
       history.push("/")
-
       toast({
-        title: "Swap completed",
-        description: "Check wallet to confirm swap amount",
+        title: "Stake completed",
+        description: "Your stake will appear in next screen",
         duration: 9000,
         status: "success",
         isClosable: true,

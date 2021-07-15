@@ -2,7 +2,7 @@ import { BigNumber, constants, utils, VoidSigner } from "ethers";
 import chainInstance from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
 import { WrappedLockAndMintDeposit } from "./ren";
-import { minter as getMinter, balanceShifter as getBalanceShifter, SUSHI_ROUTER_ADDRESS } from "./contracts";
+import { minter as getMinter, balanceShifter as getBalanceShifter, SUSHI_ROUTER_ADDRESS, COMETH_ROUTER_ADDRESS } from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
@@ -31,7 +31,6 @@ export const doAddLiquidity = async (
   }
 
   const input = inputTokens.find((t) => t.symbol === lockAndMintParams.lockNetwork)?.renAddress
-  const output = lockAndMintParams.outputToken
   if (!input) {
     throw new Error('no input token')
   }
@@ -71,8 +70,8 @@ export const doAddLiquidity = async (
     fetchQuote(input, ibBTCAddress, halfSwap)
   ])
 
-  const ibbtcApprove = await tokenContractFromAddress(ibBTCAddress).populateTransaction.approve(SUSHI_ROUTER_ADDRESS, constants.MaxUint256)
-  const wbtcApprove = await tokenContractFromAddress(wbtcAddress).populateTransaction.approve(SUSHI_ROUTER_ADDRESS, constants.MaxUint256)
+  const ibbtcApprove = await tokenContractFromAddress(ibBTCAddress).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const wbtcApprove = await tokenContractFromAddress(wbtcAddress).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
 
