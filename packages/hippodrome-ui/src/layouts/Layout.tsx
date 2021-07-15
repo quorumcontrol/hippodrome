@@ -24,7 +24,7 @@ const navLinks: NavLink[] = [
     link: "/",
   },
   {
-    title: "Stake & earn",
+    title: "earn",
     link: "/stake",
   },
 ]

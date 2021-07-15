@@ -213,6 +213,7 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
 const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
   propDeposit,
 }) => {
+  const { chain } = useChainContext()
   const { deposit, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
@@ -233,17 +234,16 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
     try {
       setLoading(true)
       console.log("swapping: ", deposit)
-      await doAddLiquidity(deposit, deposit.lockAndMint.params)
+      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params)
       history.push("/")
       toast({
-        title: "Stake completed",
-        description: "Your stake will appear in next screen",
-        duration: 9000,
+        title: "Success!",
+        description: <p>Visit <a href="https://swap.cometh.io/#/stake">https://swap.cometh.io/#/stake</a> to manage your liquidity.</p>,
         status: "success",
         isClosable: true,
       })
     } catch (err) {
-      console.error("erorr minting: ", err)
+      console.error("erorr adding liquidity: ", err)
       toast({
         title: "Swap unable to complete",
         description: "Error swapping, token please try again",
@@ -276,18 +276,18 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
         </VStack>
 
         <Box width="100%">
-          <SmallText>Token to be staked</SmallText>
+          <SmallText>Liquidity to supply</SmallText>
 
           <StakeOutputTokenAmount
             input={inputTokensBySymbol[networkName].renAddress}
-            amount={(renOutput || constants.Zero).toHexString()}
+            amount={(renOutput || constants.Zero)}
           />
         </Box>
 
         <SwapFees inputName={networkName} amount={depositAmount} />
         <Box w="100%">
           <Text>
-            You are about to provide liquidity into the wPTG/renDOGE pool
+            You are about to provide liquidity into the wPTG/renDOGE pool on Cometh
           </Text>
         </Box>
         {!loading && (

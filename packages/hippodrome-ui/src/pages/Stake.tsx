@@ -13,7 +13,6 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -44,11 +43,6 @@ import StakeOutputTokenAmount from "../components/stake/StakeOutputTokensAmount"
 
 const StakePage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {
-    isOpen: isWithdrawModalOpen,
-    onOpen: onWithModalOpen,
-    onClose: onCloseWithdrawModal,
-  } = useDisclosure()
   const { safeAddress } = useChainContext()
   const history = useHistory()
   const [amount, setAmount] = useState(0)
@@ -59,7 +53,7 @@ const StakePage: React.FC = () => {
   )
   const { output: renOutput } = useRenOutput(
     inputToken as KnownInputChains,
-    parseValueToHex(amount / 2, 8)
+    parseValueToHex(amount, 8)
   )
   const [submitting, setSubmitting] = useState(false)
 
@@ -84,16 +78,15 @@ const StakePage: React.FC = () => {
       <VStack w="100%">
         <Box w="70%" spacing="10" alignItems="start">
           <Heading as="h1" textAlign="center" w="100%">
-            Stake Your tokens and Earn
+            Add liquidity and earn yield
           </Heading>
 
           <Box w="100%" marginTop="70">
             <Table variant="simple" w="100%">
-              <TableCaption>Available pools</TableCaption>
               <Thead>
                 <Tr>
                   <Th>Pools</Th>
-                  <Th>Value</Th>
+                  <Th>APY/TVL</Th>
                   <Th>action</Th>
                 </Tr>
               </Thead>
@@ -115,7 +108,7 @@ const StakePage: React.FC = () => {
                           fontWeight="medium"
                           fontSize="14px"
                         >
-                          SushiSWAP
+                          Cometh Swap
                         </Text>
                       </Box>
                     </HStack>
@@ -127,14 +120,14 @@ const StakePage: React.FC = () => {
                         fontSize="14px"
                         fontWeight="semibold"
                       >
-                        0.0050.49 wPTG/ 0.334 RenDOGE
+                        100% APY
                       </Text>
                       <Text
                         color="gray.400"
                         fontWeight="medium"
                         fontSize="14px"
                       >
-                        $116.39
+                        $116.39 TVL
                       </Text>
                     </Box>
                   </Td>
@@ -151,20 +144,7 @@ const StakePage: React.FC = () => {
                         size="md"
                         onClick={onOpen}
                       >
-                        Stake
-                      </Button>
-                      <Button
-                        w="100%"
-                        // fontSize="14"
-                        fontWeight="semibold"
-                        padding="6"
-                        background="transparent"
-                        border="1px"
-                        borderColor="gray.600"
-                        size="md"
-                        onClick={onWithModalOpen}
-                      >
-                        Withdraw
+                        Add Liquidity
                       </Button>
                     </HStack>
                   </Td>
@@ -178,7 +158,7 @@ const StakePage: React.FC = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent background="cardBackground">
-          <ModalHeader>Stake and Earn</ModalHeader>
+          <ModalHeader>Add Liquidity</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing="4" width="100%">
@@ -219,13 +199,13 @@ const StakePage: React.FC = () => {
               </Box>
 
               <Box width="100%">
-                <SmallText>Token received</SmallText>
+                <SmallText>Liquidity Supplied</SmallText>
                 <StakeOutputTokenAmount
                   input={inputTokensBySymbol[inputToken].renAddress}
-                  amount={(renOutput || constants.Zero).toHexString()}
+                  amount={(renOutput || constants.Zero)}
                 />
                 <SmallText color="gray.100" fontSize="10px">
-                  NOTE: 2 tokens are required to provide liquidity
+                  NOTE: numbers are approximate. 1% slippage is allowed.
                 </SmallText>
               </Box>
 
@@ -248,31 +228,6 @@ const StakePage: React.FC = () => {
               isLoading={submitting}
             >
               Continue
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <Modal
-        size="lg"
-        isOpen={isWithdrawModalOpen}
-        onClose={onCloseWithdrawModal}
-      >
-        <ModalOverlay />
-        <ModalContent size background="cardBackground">
-          <ModalHeader>Withdraw from pool</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody />
-          <ModalFooter>
-            <Button
-              w="100%"
-              fontSize="14"
-              letterSpacing="wider"
-              textTransform="uppercase"
-              fontWeight="bold"
-              padding="6"
-            >
-              Withdraw
             </Button>
           </ModalFooter>
         </ModalContent>
