@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers"
-import { sushiRouter } from "./contracts"
+import { poolRouter } from "./contracts"
 
 export const addLiquidityTx = async (
   to: string, // where to send the LP tokens
@@ -8,10 +8,11 @@ export const addLiquidityTx = async (
   amountADesired: BigNumber,
   amountBDesired: BigNumber,
   slippage: number, // as a percentage
-  userDeadline?: number
+  routerAddress: string, //sushi,
+  userDeadline?: number,
 ) => {
-  const router = sushiRouter()
-  const deadline = userDeadline || new Date().getTime() / 1000 + (10 * 60) // 10 minutes TODO: check math
+  const router = poolRouter(routerAddress)
+  const deadline = userDeadline || new Date().getTime() / 1000 + 10 * 60 // 10 minutes TODO: check math
   return router.populateTransaction.addLiquidity(
     tokenA,
     tokenB,
@@ -20,6 +21,6 @@ export const addLiquidityTx = async (
     amountADesired.mul(100 - slippage).div(100), // TODO: not sure if this is the best way to calculate minimums
     amountBDesired.mul(100 - slippage).div(100),
     to,
-    deadline,
-  ) 
+    deadline
+  )
 }

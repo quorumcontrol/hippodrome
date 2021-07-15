@@ -17,7 +17,6 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  Image,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -28,13 +27,20 @@ import {
   NumberInputField,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { inputTokensBySymbol, supportedTokens } from "../models/tokenList"
+import { inputTokens, inputTokensBySymbol } from "../models/tokenList"
 import bitcoinLogo from "../assets/btc-icon.svg"
 import SmallText from "../components/SmallText"
-import OutputTokenSelect from "../components/swap/OutputTokenSelect"
-import OutputAmount from "../components/swap/OutputAmount"
 import { useMemo } from "react"
 import { parseValueToHex } from "../utils/parse"
+import InputTokenSelect from "../components/swap/InputTokenSelect"
+import { useRenOutput } from "../hooks/useRen"
+import { getNextNonce, KnownInputChains } from "../models/ren"
+import { constants } from "ethers"
+import SwapFees from "../components/swap/SwapFees"
+import { useHistory } from "react-router-dom"
+import { mintUrl } from "../utils/urls"
+import { useChainContext } from "../hooks/useChainContext"
+import StakeOutputTokenAmount from "../components/stake/StakeOutputTokensAmount"
 
 const StakePage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -43,15 +49,35 @@ const StakePage: React.FC = () => {
     onOpen: onWithModalOpen,
     onClose: onCloseWithdrawModal,
   } = useDisclosure()
-
-  const [outputToken, setOutputToken] = useState(
-    "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
+  const { safeAddress } = useChainContext()
+  const history = useHistory()
+  const [amount, setAmount] = useState(0)
+  const [inputToken, setInputToken] = useState("DOGE")
+  const selectedInputToken = useMemo(
+    () => inputTokens.find((t) => t.symbol === inputToken),
+    [inputToken]
   )
-
-  const selectedOutputToken = useMemo(
-    () => supportedTokens.find((t) => t.address === outputToken),
-    [outputToken]
+  const { output: renOutput } = useRenOutput(
+    inputToken as KnownInputChains,
+    parseValueToHex(amount / 2, 8)
   )
+  const [submitting, setSubmitting] = useState(false)
+
+  const nonce = useMemo(() => {
+    return getNextNonce()
+  }, [])
+
+  const onSubmit = async () => {
+    setSubmitting(true)
+    try {
+      history.push(mintUrl(inputToken, safeAddress!, nonce, "", false))
+    } catch (err) {
+      console.error("error: ", err)
+      alert("something went wrong")
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   return (
     <>
@@ -82,7 +108,7 @@ const StakePage: React.FC = () => {
                           fontSize="18px"
                           fontWeight="semibold"
                         >
-                          iBTC/WBTC
+                          wPTG/renDOGE
                         </Text>
                         <Text
                           color="gray.400"
@@ -101,7 +127,7 @@ const StakePage: React.FC = () => {
                         fontSize="14px"
                         fontWeight="semibold"
                       >
-                        0.0050.49 iBTC/ 0.334WBTC
+                        0.0050.49 wPTG/ 0.334 RenDOGE
                       </Text>
                       <Text
                         color="gray.400"
@@ -125,7 +151,7 @@ const StakePage: React.FC = () => {
                         size="md"
                         onClick={onOpen}
                       >
-                        Stake more
+                        Stake
                       </Button>
                       <Button
                         w="100%"
@@ -157,73 +183,56 @@ const StakePage: React.FC = () => {
           <ModalBody>
             <VStack spacing="4" width="100%">
               <Box width="100%">
-                <SmallText>Received</SmallText>
+                <SmallText>Send</SmallText>
                 <HStack
-                  justifyContent="space-between"
-                  width="100%"
-                  paddingX="6"
-                  rounded="2xl"
-                  marginY="2"
                   background="gray.900"
-                  paddingY="5"
+                  alignItems="center"
+                  px="3"
+                  py="3"
+                  rounded="lg"
+                  marginTop="3"
                 >
-                  <HStack>
-                    <Image
-                      w="40px"
-                      src="https://raw.githubusercontent.com/sameepsi/quickswap-default-token-list/master/assets/dg.jpg"
-                    />
-                    <Text fontSize="lg">Doge</Text>
-                  </HStack>
-
-                  <Text fontSize="lg" fontWeight="medium">
-                    1345
-                  </Text>
+                  <InputTokenSelect
+                    onChange={(value: string) => {
+                      console.dir(value)
+                      setInputToken(value)
+                    }}
+                    value={inputToken}
+                    selectedToken={selectedInputToken}
+                    inputTokens={inputTokens}
+                  />
+                  <FormControl id="inputAmount">
+                    <NumberInput>
+                      <NumberInputField
+                        textAlign="right"
+                        name="amount"
+                        border="none"
+                        placeholder="Enter amount to send"
+                        onChange={(evt) =>
+                          setAmount(parseFloat(evt.target.value))
+                        }
+                        value={amount}
+                      />
+                    </NumberInput>
+                  </FormControl>
                 </HStack>
               </Box>
 
               <Box width="100%">
-                <SmallText>Received</SmallText>
-                <HStack
-                  justifyContent="space-between"
-                  width="100%"
-                  paddingX="6"
-                  rounded="2xl"
-                  marginY="2"
-                  background="gray.900"
-                  paddingY="5"
-                >
-                  <HStack>
-                    <Image
-                      w="40px"
-                      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599/logo.png"
-                    />
-                    <Text fontSize="lg">Doge</Text>
-                  </HStack>
-
-                  <Text fontSize="lg" fontWeight="medium">
-                    2330.34
-                  </Text>
-                </HStack>
+                <SmallText>Token received</SmallText>
+                <StakeOutputTokenAmount
+                  input={inputTokensBySymbol[inputToken].renAddress}
+                  amount={(renOutput || constants.Zero).toHexString()}
+                />
+                <SmallText color="gray.100" fontSize="10px">
+                  NOTE: 2 tokens are required to provide liquidity
+                </SmallText>
               </Box>
 
-              <VStack w="100%">
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Rate</SmallText>
-                  <Text>1 DOGE = 2031 ibBTC/wBTC</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Slippage tolerance</SmallText>
-                  <Text>1%</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>MIN. to be received</SmallText>
-                  <Text>2330.34 iBTC/WBTC</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Network fee</SmallText>
-                  <Text>$8</Text>
-                </HStack>
-              </VStack>
+              <SwapFees
+                inputName={inputToken as KnownInputChains}
+                amount={parseValueToHex(amount, 8)}
+              />
             </VStack>
           </ModalBody>
 
@@ -235,101 +244,25 @@ const StakePage: React.FC = () => {
               textTransform="uppercase"
               fontWeight="bold"
               padding="6"
+              onClick={onSubmit}
+              isLoading={submitting}
             >
-              Stake
+              Continue
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <Modal size="lg" isOpen={isWithdrawModalOpen} onClose={onCloseWithdrawModal}>
+      <Modal
+        size="lg"
+        isOpen={isWithdrawModalOpen}
+        onClose={onCloseWithdrawModal}
+      >
         <ModalOverlay />
         <ModalContent size background="cardBackground">
           <ModalHeader>Withdraw from pool</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <VStack spacing="4" width="100%">
-              <Box width="100%">
-                <SmallText>Received</SmallText>
-                <HStack
-                  justifyContent="space-between"
-                  width="100%"
-                  paddingX="6"
-                  rounded="2xl"
-                  marginY="2"
-                  background="gray.900"
-                  paddingY="4"
-                >
-                  <HStack>
-                    <Image
-                      w="40px"
-                      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xB6eD7644C69416d67B522e20bC294A9a9B405B31/logo.png"
-                    />
-                    <Text fontSize="lg">ibBTC/wBTC</Text>
-                  </HStack>
-
-                  <FormControl id="inputAmount" w="50%">
-                    <NumberInput>
-                      <NumberInputField
-                        textAlign="right"
-                        name="amount"
-                        border="none"
-                        placeholder="Enter amount"
-                      />
-                    </NumberInput>
-                  </FormControl>
-                </HStack>
-              </Box>
-
-              <Box width="100%">
-                <SmallText>Received</SmallText>
-                <HStack
-                  bg="formBackground"
-                  alignItems="center"
-                  px="6"
-                  paddingY="3"
-                  marginTop="3"
-                  rounded="lg"
-                  background="gray.900"
-                >
-                  <OutputTokenSelect
-                    onChange={(address: string) => {
-                      console.log("output: ", address)
-                      setOutputToken(address)
-                    }}
-                    value={outputToken}
-                    selectedToken={selectedOutputToken}
-                    supportedTokens={supportedTokens}
-                  />
-                  <OutputAmount
-                    input={inputTokensBySymbol["DOGE"].renAddress}
-                    output={selectedOutputToken!}
-                    amount={parseValueToHex("0")} // TODO: subtract fees
-                  />
-                </HStack>
-              </Box>
-
-              <VStack w="100%">
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Rate</SmallText>
-                  <Text>1 DOGE = 2031 ibBTC/wBTC</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Slippage tolerance</SmallText>
-                  <Text>1%</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>MIN. to be received</SmallText>
-                  <Text>2330.34 iBTC/WBTC</Text>
-                </HStack>
-                <HStack width="100%" justifyContent="space-between">
-                  <SmallText>Network fee</SmallText>
-                  <Text>$8</Text>
-                </HStack>
-              </VStack>
-            </VStack>
-          </ModalBody>
-
+          <ModalBody />
           <ModalFooter>
             <Button
               w="100%"
