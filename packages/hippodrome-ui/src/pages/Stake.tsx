@@ -59,7 +59,7 @@ const StakePage: React.FC = () => {
   )
   const { output: renOutput } = useRenOutput(
     inputToken as KnownInputChains,
-    parseValueToHex(amount, 8)
+    parseValueToHex(amount / 2, 8)
   )
   const [submitting, setSubmitting] = useState(false)
 
