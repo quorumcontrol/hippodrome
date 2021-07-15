@@ -21,6 +21,12 @@ export const App = () => (
             >
               <LockAndMint />
             </Route>
+            <Route
+              path="/transaction/mint/:asset/:to/:nonce"
+              exact
+            >
+              <LockAndMint />
+            </Route>
             <Route path="/stake">
               <Stake />
             </Route>
