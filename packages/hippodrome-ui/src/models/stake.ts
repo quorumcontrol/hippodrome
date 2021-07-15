@@ -51,8 +51,10 @@ export const doAddLiquidity = async (
   )
 
   const shifterApproveInput = await tokenContractFromAddress(input).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveWbtC = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveibBTC = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveWPTG = await tokenContractFromAddress(
+    WPTG_ADDRESS
+  ).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveRENDOGE = await tokenContractFromAddress( RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveLPToken = await tokenContractFromAddress(ibBTCWBTCPairAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
   const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, ibBTCWBTCPairAddress], safeAddress, address)
@@ -60,16 +62,17 @@ export const doAddLiquidity = async (
   const swapAmount = amount
   const halfSwap = swapAmount.div(2)
 
-  const [renApprove, swapWbtc, swapIbBTc, quoteWbtc, quoteIbBTc] = await Promise.all([
-    fetchApprove(input),
-    fetchSwap(input, RENDOGE_ADDRESS, halfSwap, safeAddress),
-    fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
-    fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
-    fetchQuote(input, WPTG_ADDRESS, halfSwap)
-  ])
+  const [renApprove, swapWPTG, swapRENDOGE, quoteWRENDOGE, quoteWPTG] =
+    await Promise.all([
+      fetchApprove(input),
+      fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
+      fetchSwap(input, RENDOGE_ADDRESS, halfSwap, safeAddress),
+      fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
+      fetchQuote(input, WPTG_ADDRESS, halfSwap),
+    ])
 
-  const ibbtcApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  const wbtcApprove = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const wPTGApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const renDOGEApprove = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
 
@@ -80,28 +83,28 @@ export const doAddLiquidity = async (
       data: renApprove.calldata,
     },
     {
-      to: swapIbBTc!.to,
-      data: swapIbBTc!.calldata,
+      to: swapRENDOGE!.to,
+      data: swapRENDOGE!.calldata,
     },
     {
-      to: swapWbtc!.to,
-      data: swapWbtc!.calldata,
+      to: swapWPTG!.to,
+      data: swapWPTG!.calldata,
     },
-    ibbtcApprove,
-    wbtcApprove,
+    wPTGApprove,
+    renDOGEApprove,
     await addLiquidityTx(
       safeAddress,
       WPTG_ADDRESS,
       RENDOGE_ADDRESS,
-      quoteIbBTc,
-      quoteWbtc,
+      quoteWPTG,
+      quoteWRENDOGE,
       1,
       COMETH_ROUTER_ADDRESS,
       new Date().getTime() / 1000 + 60 * 10 // 10 minutes
     ),
     shifterApproveInput,
-    shifterApproveWbtC,
-    shifterApproveibBTC,
+    shifterApproveWPTG,
+    shifterApproveRENDOGE,
     shifterApproveLPToken,
     shiftTx,
   ])
