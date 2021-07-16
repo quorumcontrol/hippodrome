@@ -15,8 +15,8 @@ function tokenContractFromAddress(address:string) {
   return RenERC20LogicV1__factory.connect(address, voidSigner)
 }
 
-// https://charts.cometh.io/pair/0x09239e14375a1eb8c36f86b6ad829b290c884e44
-const wPTGRenDogeComethPair = '0x09239e14375a1eb8c36f86b6ad829b290c884e44'
+// https://charts.cometh.io/pair/0x476278f883003862b374f22a7604e60f5643d647
+export const wPTGRenDogeComethPairAddr = '0x476278f883003862b374f22a7604e60f5643d647'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
@@ -58,9 +58,9 @@ export const doAddLiquidity = async (
     WPTG_ADDRESS
   ).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveRENDOGE = await tokenContractFromAddress( RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveLPToken = await tokenContractFromAddress(wPTGRenDogeComethPair).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveLPToken = await tokenContractFromAddress(wPTGRenDogeComethPairAddr).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
-  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPair], safeAddress, address)
+  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPairAddr], safeAddress, address)
 
   const swapAmount = amountAfterFees(fees, amount)
   console.log('swap amount: ', swapAmount)
