@@ -26,7 +26,7 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
         </Heading>
       ),
       description:
-        "iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperia",
+        "Send BTC or DOGE and receive any token on Polygon.",
     },
     {
       icon: coinsImage,
