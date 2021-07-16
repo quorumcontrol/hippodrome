@@ -32,8 +32,6 @@ const StakeOutputTokenAmount: React.FC<OutputAmountProps> = ({
     half.toHexString()
   )
 
-  console.log(renDogeAmount, "ells", humanBigNumber(renDogeAmount || 0, 18))
-
   if (wPTgLoading || renDogeLoading) {
     return (
       <Box>
