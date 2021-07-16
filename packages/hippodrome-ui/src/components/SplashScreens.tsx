@@ -50,7 +50,7 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
           </Box>
         </Heading>
       ),
-      description: "You’ll be required to send token to a given address ",
+      description: "Go directly from BTC or DOGE into interest earning DeFi.",
     },
   ]
 
