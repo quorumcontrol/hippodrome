@@ -42,7 +42,7 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
           </Box>{" "}
           from{" "}
           <Box as="span" color="brandOrange.500">
-            BTC/DOGE
+            BTC or DOGE
           </Box>{" "}
           directly into selected liquidity pools and{" "}
           <Box as="span" color="brandOrange.500">
