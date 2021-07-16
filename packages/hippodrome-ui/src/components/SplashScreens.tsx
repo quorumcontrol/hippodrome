@@ -1,7 +1,6 @@
 import { Heading, Text, VStack, Box, Grid, Image } from "@chakra-ui/react"
 import React from "react"
 import "@fontsource/zen-dots"
-import lightRectImage from "../assets/light-rect.svg"
 import coinsImage from "../assets/coins.svg"
 import ConnectButton from "./ConnectButton"
 
@@ -10,7 +9,7 @@ interface SplashScreenProps {}
 const SplashScreen: React.FC<SplashScreenProps> = () => {
   const features = [
     {
-      icon: lightRectImage,
+      icon: coinsImage,
       title: (
         <Heading
           as="h3"
@@ -25,8 +24,7 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
           for any token on Polygon
         </Heading>
       ),
-      description:
-        "Send BTC or DOGE and receive any token on Polygon.",
+      description: "Send BTC or DOGE and receive any token on Polygon.",
     },
     {
       icon: coinsImage,
@@ -78,9 +76,8 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
           Network
         </Heading>
         <Text fontSize="18px" color="gray.200" align="center">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-          ab illo inv
+          The cheapest and easiest way to participate in decentralized finance
+          on the Polygon network.
         </Text>
         <ConnectButton text="Swap token now" />
       </VStack>
