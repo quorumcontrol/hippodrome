@@ -3,6 +3,7 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom"
+import './testHelpers'
 global.TextDecoder = require('text-encoding').TextDecoder;
 global.TextEncoder = require('text-encoding').TextEncoder;
-jest.setTimeout(60000)
+jest.setTimeout(120000)

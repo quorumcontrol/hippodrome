@@ -1,4 +1,4 @@
-import { providers } from 'ethers'
+import { providers, Signer } from 'ethers'
 import EventEmitter from 'events'
 import Web3Modal from 'web3modal'
 import Torus from '@toruslabs/torus-embed'
@@ -44,14 +44,14 @@ export interface IChain extends EventEmitter {
   relayer?: Relayer
   safeAddress?: string
   address?: string
-  signer?: providers.JsonRpcSigner
+  signer?: Signer
   provider?: providers.JsonRpcProvider | providers.Web3Provider
 }
 
 export class Chain extends EventEmitter implements IChain {
   provider?: providers.Web3Provider
 
-  signer?: providers.JsonRpcSigner
+  signer?: Signer
 
   relayer?: Relayer
 

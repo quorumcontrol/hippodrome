@@ -1,6 +1,6 @@
-import chainInstance, { IChain } from './chain'
+import { IChain } from './chain'
 import { wrapContract } from 'kasumah-relay-wrapper/dist/src'
-import { UnderwriteableMinter, UnderwriteableMinter__factory, UniswapV2Router02__factory } from '../types/ethers-contracts'
+import { UnderwriteableMinter, UnderwriteableMinter__factory, UniswapV2Router02__factory, UniswapV2Router02 } from '../types/ethers-contracts'
 import { BalanceShifter__factory } from '../types/ethers-contracts/factories/BalanceShifter__factory'
 import { BalanceShifter } from '../types/ethers-contracts/BalanceShifter'
 
@@ -33,10 +33,11 @@ export const balanceShifter = (chain:IChain) => {
   return wrapContract<BalanceShifter>(shifter, relayer)
 }
 
-export const poolRouter = (routerAddress: string) => {
-  if (!chainInstance.signer) {
+export const poolRouter = (chainInstance: IChain, routerAddress: string) => {
+  const { signer, relayer } = chainInstance
+  if (!signer || !relayer) {
     throw new Error('missing chain info')
   }
 
-  return UniswapV2Router02__factory.connect(routerAddress, chainInstance.signer)
+  return wrapContract<UniswapV2Router02>(UniswapV2Router02__factory.connect(routerAddress, signer), relayer)
 }
