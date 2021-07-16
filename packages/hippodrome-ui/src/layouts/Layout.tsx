@@ -2,7 +2,6 @@ import {
   Text,
   Box,
   Image,
-  VStack,
   HStack,
   Link,
   Heading,
@@ -12,6 +11,9 @@ import { useLocation, Link as RouterLink } from "react-router-dom"
 import CurrentUser from "../components/CurrentUser"
 import { useChainContext } from "../hooks/useChainContext"
 import logoURl from "../assets/logo.png"
+import backgroundURL from "../assets/app-bg.png"
+import SplashScreen from "../components/SplashScreens"
+
 
 interface NavLink {
   title: string
@@ -34,9 +36,9 @@ const Layout: React.FC = ({ children }) => {
   const location = useLocation()
 
   return (
-    <Box paddingX="20">
+    <Box paddingX="20" backgroundImage={backgroundURL} backgroundRepeat="no-repeat" backgroundPosition="bottom" backgroundSize="cover" minHeight="100vh">
       <HStack justifyContent="space-between" w="100%" p={10} mb={4}>
-        <HStack  alignItems="flex-end">
+        <HStack alignItems="flex-end">
           <Image src={logoURl} width="60px" fontWeight="medium" />
           <Heading
             fontSize="xl"
@@ -75,11 +77,7 @@ const Layout: React.FC = ({ children }) => {
         <CurrentUser />
       </HStack>
 
-      {!address && (
-        <VStack>
-          <Text>Please connect your wallet</Text>
-        </VStack>
-      )}
+      {!address && <SplashScreen />}
       {address && children}
     </Box>
   )
