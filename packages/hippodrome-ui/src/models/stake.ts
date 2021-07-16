@@ -1,5 +1,5 @@
 import { BigNumber, constants, utils, VoidSigner } from "ethers";
-import { Chain } from "./chain";
+import { IChain } from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
 import { amountAfterFees, fetchFees, WrappedLockAndMintDeposit } from "./ren";
 import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS, WPTG_ADDRESS, RENDOGE_ADDRESS } from "./contracts";
@@ -20,7 +20,7 @@ const wPTGRenDogeComethPair = '0x09239e14375a1eb8c36f86b6ad829b290c884e44'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
-  chainInstance: Chain,
+  chainInstance: IChain,
   deposit: WrappedLockAndMintDeposit,
   lockAndMintParams: LockAndMintParams,
 ) => {
@@ -63,14 +63,15 @@ export const doAddLiquidity = async (
   const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPair], safeAddress, address)
 
   const swapAmount = amountAfterFees(fees, amount)
+  console.log('swap amount: ', swapAmount)
   const halfSwap = swapAmount.div(2)
 
-  const [renApprove, swapWPTG, quoteWRENDOGE, quoteWPTG] =
+  const [renApprove, quoteWPTG, swapWPTG, quoteWRENDOGE, ] =
     await Promise.all([
       fetchApprove(input),
+      fetchQuote(input, WPTG_ADDRESS, halfSwap),
       fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
       fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
-      fetchQuote(input, WPTG_ADDRESS, halfSwap),
     ])
 
   const wPTGApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
@@ -91,10 +92,11 @@ export const doAddLiquidity = async (
     wPTGApprove,
     renDOGEApprove,
     await addLiquidityTx(
+      chainInstance,
       safeAddress,
       WPTG_ADDRESS,
       RENDOGE_ADDRESS,
-      quoteWPTG,
+      quoteWPTG.mul(99).div(100), // to account for the 1% slippage
       quoteWRENDOGE,
       1,
       COMETH_ROUTER_ADDRESS,

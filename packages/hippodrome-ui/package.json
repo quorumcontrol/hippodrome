@@ -40,7 +40,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "./scripts/build.sh",
-    "test": "react-scripts test",
+    "test": "react-scripts test --runInBand",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
