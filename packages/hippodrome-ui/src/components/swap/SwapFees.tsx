@@ -68,12 +68,6 @@ const SwapFees: React.FC<SwapFeesProps> = (props) => {
           0.3% ({hippodromeFee} {inputName})
         </Text>
       </HStack>
-      <HStack alignItems="center">
-        <SmallText>Slippage:</SmallText>
-        <Text>
-          1%
-        </Text>
-      </HStack>
     </Box>
   )
 }

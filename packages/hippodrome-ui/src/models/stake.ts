@@ -1,7 +1,7 @@
 import { BigNumber, constants, utils, VoidSigner } from "ethers";
-import chainInstance from "./chain";
+import { Chain } from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
-import { WrappedLockAndMintDeposit } from "./ren";
+import { amountAfterFees, fetchFees, WrappedLockAndMintDeposit } from "./ren";
 import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS, WPTG_ADDRESS, RENDOGE_ADDRESS } from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
@@ -11,15 +11,16 @@ import { addLiquidityTx } from "./liquidityPool";
 const voidSigner = new VoidSigner(constants.AddressZero)
 
 function tokenContractFromAddress(address:string) {
-  // TODO: weird to use the ren erc20 here, but it's already in our types, so mind as well reuse
+  // TODO: weird to use the ren erc20 here just for a normal erc20 contract, but it's already in our types, so mind as well reuse
   return RenERC20LogicV1__factory.connect(address, voidSigner)
 }
 
-// TODO: change to wPTG/rendoge pair
-const ibBTCWBTCPairAddress = '0x8f8e95ff4b4c5e354ccb005c6b0278492d7b5907'
+// https://charts.cometh.io/pair/0x09239e14375a1eb8c36f86b6ad829b290c884e44
+const wPTGRenDogeComethPair = '0x09239e14375a1eb8c36f86b6ad829b290c884e44'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
+  chainInstance: Chain,
   deposit: WrappedLockAndMintDeposit,
   lockAndMintParams: LockAndMintParams,
 ) => {
@@ -27,6 +28,8 @@ export const doAddLiquidity = async (
   if (!relayer || !safeAddress || !address || !signer) {
     throw new Error("must have a relayer and addresses");
   }
+
+  const fees = await fetchFees(chainInstance, lockAndMintParams.lockNetwork)
 
   const input = inputTokens.find((t) => t.symbol === lockAndMintParams.lockNetwork)?.renAddress
   if (!input) {
@@ -55,18 +58,17 @@ export const doAddLiquidity = async (
     WPTG_ADDRESS
   ).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveRENDOGE = await tokenContractFromAddress( RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveLPToken = await tokenContractFromAddress(ibBTCWBTCPairAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveLPToken = await tokenContractFromAddress(wPTGRenDogeComethPair).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
-  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, ibBTCWBTCPairAddress], safeAddress, address)
+  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPair], safeAddress, address)
 
-  const swapAmount = amount
+  const swapAmount = amountAfterFees(fees, amount)
   const halfSwap = swapAmount.div(2)
 
-  const [renApprove, swapWPTG, swapRENDOGE, quoteWRENDOGE, quoteWPTG] =
+  const [renApprove, swapWPTG, quoteWRENDOGE, quoteWPTG] =
     await Promise.all([
       fetchApprove(input),
       fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
-      fetchSwap(input, RENDOGE_ADDRESS, halfSwap, safeAddress),
       fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
       fetchQuote(input, WPTG_ADDRESS, halfSwap),
     ])
@@ -74,17 +76,13 @@ export const doAddLiquidity = async (
   const wPTGApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
   const renDOGEApprove = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
 
-  console.log('ren amount: ', renTx.out.amount.toString(), 'swap amount', swapAmount.toString())
+  console.log('ren amount: ', renTx.out.amount.toString(), 'half amount', halfSwap.toString())
 
   const tx = await relayer.multisend([
     mintTx,
     {
       to: renApprove.to,
       data: renApprove.calldata,
-    },
-    {
-      to: swapRENDOGE!.to,
-      data: swapRENDOGE!.calldata,
     },
     {
       to: swapWPTG!.to,
@@ -100,7 +98,7 @@ export const doAddLiquidity = async (
       quoteWRENDOGE,
       1,
       COMETH_ROUTER_ADDRESS,
-      new Date().getTime() / 1000 + 60 * 10 // 10 minutes
+      Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
     ),
     shifterApproveInput,
     shifterApproveWPTG,

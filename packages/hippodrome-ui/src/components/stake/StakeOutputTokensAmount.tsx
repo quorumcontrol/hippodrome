@@ -5,28 +5,32 @@ import { useTokenQuote } from "../../hooks/useTokenQuote"
 import humanBigNumber from "../../utils/humanNumbers"
 import { isTestnet } from "../../models/ren"
 import { RENDOGE_ADDRESS, WPTG_ADDRESS } from "../../models/contracts"
+import { BigNumber } from "ethers"
+import { useMemo } from "react"
 
 interface OutputAmountProps {
   input: string
-  amount: string // bignumber hex (18 decimals)
+  amount: BigNumber
 }
 
 const StakeOutputTokenAmount: React.FC<OutputAmountProps> = ({
   input,
   amount,
 }) => {
+  const half = useMemo(() => {
+    return BigNumber.from(amount).div(2)
+  }, [amount])
+
   const { amountOut: wPTGamount, loading: wPTgLoading } = useTokenQuote(
     input,
     WPTG_ADDRESS,
-    amount
+    half.toHexString()
   )
   const { amountOut: renDogeAmount, loading: renDogeLoading } = useTokenQuote(
     input,
     RENDOGE_ADDRESS,
-    amount
+    half.toHexString()
   )
-
-  console.log(renDogeAmount, "ells", humanBigNumber(renDogeAmount || 0, 18))
 
   if (wPTgLoading || renDogeLoading) {
     return (

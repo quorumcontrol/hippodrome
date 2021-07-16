@@ -12,6 +12,8 @@ import { MINTER_ADDRESS } from "./contracts";
 
 export const HIPPODROME_FEE = 0.003 * 10000 // turn 0.3% into an integer the same as the mint fee
 
+export type RenFeeTuple = ThenArg<ReturnType<typeof fetchFees>>
+
 class FakeWeb3Provider {
   provider: providers.JsonRpcProvider;
   constructor(ethersProvider: providers.JsonRpcProvider) {
@@ -144,7 +146,7 @@ function paramsToRegistryKey({ lockNetwork, to, nonce }: LockAndMintParams) {
   return `${lockNetwork}-${to}-${nonce}`;
 }
 
-export function amountAfterFees(fees:ThenArg<ReturnType<typeof fetchFees>>, amount:BigNumber) {
+export function amountAfterFees(fees:RenFeeTuple, amount:BigNumber) {
   const minerFee = fees.lock!.toString()
   console.log('miner fee: ', minerFee, ' amount: ', amount.toString())
   return amount.mul(10000 - fees.mint).div(10000).sub(minerFee).mul(10000 - HIPPODROME_FEE).div(10000)

@@ -12,7 +12,7 @@ export const addLiquidityTx = async (
   userDeadline?: number,
 ) => {
   const router = poolRouter(routerAddress)
-  const deadline = userDeadline || new Date().getTime() / 1000 + 10 * 60 // 10 minutes TODO: check math
+  const deadline = userDeadline || Math.floor((new Date().getTime() / 1000) + (10 * 60)) // 10 minutes
   return router.populateTransaction.addLiquidity(
     tokenA,
     tokenB,
