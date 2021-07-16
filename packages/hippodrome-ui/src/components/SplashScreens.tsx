@@ -20,7 +20,7 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
         >
           Swap{" "}
           <Box as="span" color="brandOrange.500">
-            BTC/DOGE
+            Bitcoin or Dogecoin
           </Box>{" "}
           for any token on Polygon
         </Heading>
