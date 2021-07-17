@@ -41,7 +41,7 @@ import { mintUrl } from "../utils/urls"
 import { useChainContext } from "../hooks/useChainContext"
 import StakeOutputTokenAmount from "../components/stake/StakeOutputTokensAmount"
 import { useUniswapPool } from "../hooks/useUniswapPool"
-import { wPTGRenDogeComethPairAddr } from "../models/stake"
+import { wPTGRenDogeComethPair } from "../models/stake"
 import { RENDOGE_ADDRESS, WPTG_ADDRESS } from "../models/contracts"
 import humanBigNumber from "../utils/humanNumbers"
 
@@ -65,7 +65,7 @@ const StakePage: React.FC = () => {
     return getNextNonce()
   }, [])
 
-  const { reserves, apy } = useUniswapPool(wPTGRenDogeComethPairAddr)
+  const { reserves, apy } = useUniswapPool(wPTGRenDogeComethPair)
 
   const onSubmit = async () => {
     setSubmitting(true)
