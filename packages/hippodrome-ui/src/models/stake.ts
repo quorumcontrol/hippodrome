@@ -16,7 +16,7 @@ function tokenContractFromAddress(address:string) {
 }
 
 // https://charts.cometh.io/pair/0x476278f883003862b374f22a7604e60f5643d647
-export const wPTGRenDogeComethPair = '0x476278f883003862b374f22a7604e60f5643d647'
+const wPTGRenDogeComethPair = '0x476278f883003862b374f22a7604e60f5643d647'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
@@ -128,7 +128,7 @@ export const doAddLiquidity = async (
   //   COMETH_ROUTER_ADDRESS,
   //   Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
   // )).wait()
-
+  
   console.log("finished");
   return true;
 };
