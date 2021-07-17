@@ -34,16 +34,12 @@ import { parseValueToHex } from "../utils/parse"
 import InputTokenSelect from "../components/swap/InputTokenSelect"
 import { useRenOutput } from "../hooks/useRen"
 import { getNextNonce, KnownInputChains } from "../models/ren"
-import { constants, utils } from "ethers"
+import { constants } from "ethers"
 import SwapFees from "../components/swap/SwapFees"
 import { useHistory } from "react-router-dom"
 import { mintUrl } from "../utils/urls"
 import { useChainContext } from "../hooks/useChainContext"
 import StakeOutputTokenAmount from "../components/stake/StakeOutputTokensAmount"
-import { useUniswapPool } from "../hooks/useUniswapPool"
-import { wPTGRenDogeComethPairAddr } from "../models/stake"
-import { RENDOGE_ADDRESS, WPTG_ADDRESS } from "../models/contracts"
-import humanBigNumber from "../utils/humanNumbers"
 
 const StakePage: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -64,8 +60,6 @@ const StakePage: React.FC = () => {
   const nonce = useMemo(() => {
     return getNextNonce()
   }, [])
-
-  const { reserves, apy } = useUniswapPool(wPTGRenDogeComethPairAddr)
 
   const onSubmit = async () => {
     setSubmitting(true)
@@ -126,15 +120,14 @@ const StakePage: React.FC = () => {
                         fontSize="14px"
                         fontWeight="semibold"
                       >
-                        {apy?.toString()}% APY
+                        100% APY
                       </Text>
                       <Text
                         color="gray.400"
                         fontWeight="medium"
                         fontSize="14px"
                       >
-                        {reserves && humanBigNumber(reserves[WPTG_ADDRESS], 18)} wPTG /{' '}
-                        {reserves && humanBigNumber(reserves[RENDOGE_ADDRESS], 8)} renDOGE
+                        $116.39 TVL
                       </Text>
                     </Box>
                   </Td>
