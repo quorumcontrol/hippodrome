@@ -8,6 +8,7 @@
     "@chakra-ui/react": "^1.0.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "@fontsource/zen-dots": "4.5.0",
     "@renproject/chains": "2.4.4",
     "@renproject/ren": "2.4.4",
     "@testing-library/jest-dom": "^5.9.0",

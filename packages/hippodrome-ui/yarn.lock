@@ -2327,6 +2327,11 @@
     "@ethersproject/properties" "^5.3.0"
     "@ethersproject/strings" "^5.3.0"
 
+"@fontsource/zen-dots@4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/zen-dots/-/zen-dots-4.5.0.tgz#96fcfde6867bdba341ddbe80c1e39986f411833a"
+  integrity sha512-5i+JNsU1EgjalRDtu28UU/3WcFALZ/PPbWDWkGQqOrfEvozPWzweMdVvfTP9VPh88b1PQlZBhk9TCjahbBRjkw==
+
 "@glif/filecoin-address@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@glif/filecoin-address/-/filecoin-address-1.1.0.tgz"
@@ -15452,4 +15457,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-  
