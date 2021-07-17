@@ -80,7 +80,7 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
   )
 
   const conversionRate = useMemo(() => {
-    if (!outputToken || !amountOut) {
+    if (!outputToken || !amountOut || amountOut.eq(0)) {
       return "0"
     }
     const decimalDifference = outputToken.decimals - 8
