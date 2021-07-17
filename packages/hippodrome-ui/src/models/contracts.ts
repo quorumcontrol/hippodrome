@@ -1,6 +1,6 @@
 import { IChain } from './chain'
 import { wrapContract } from 'kasumah-relay-wrapper/dist/src'
-import { UnderwriteableMinter, UnderwriteableMinter__factory, UniswapV2Router02__factory, UniswapV2Router02 } from '../types/ethers-contracts'
+import { UnderwriteableMinter, UnderwriteableMinter__factory, UniswapV2Router02__factory } from '../types/ethers-contracts'
 import { BalanceShifter__factory } from '../types/ethers-contracts/factories/BalanceShifter__factory'
 import { BalanceShifter } from '../types/ethers-contracts/BalanceShifter'
 
