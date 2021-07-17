@@ -1,5 +1,5 @@
 {
-  "id": "9a5c38a8c02ec851fe697417155c5a58",
+  "id": "199783c7c2126d7f16158b6d8ee6ea57",
   "_format": "hh-sol-build-info-1",
   "solcVersion": "0.8.5",
   "solcLongVersion": "0.8.5+commit.a4f2e591",
@@ -7,7 +7,7 @@
     "language": "Solidity",
     "sources": {
       "contracts/UniswapImportForTest.sol": {
-        "content": "pragma solidity >=0.8.0;\n\nimport \"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\";\n"
+        "content": "//SPDX-License-Identifier: MIT  \npragma solidity >=0.8.0;\n\n// this file is only used so that typechain compiles types for us and we can use them in tests\n\nimport \"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\";\n"
       },
       "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol": {
         "content": "pragma solidity >=0.6.2;\n\nimport './IUniswapV2Router01.sol';\n\ninterface IUniswapV2Router02 is IUniswapV2Router01 {\n    function removeLiquidityETHSupportingFeeOnTransferTokens(\n        address token,\n        uint liquidity,\n        uint amountTokenMin,\n        uint amountETHMin,\n        address to,\n        uint deadline\n    ) external returns (uint amountETH);\n    function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(\n        address token,\n        uint liquidity,\n        uint amountTokenMin,\n        uint amountETHMin,\n        address to,\n        uint deadline,\n        bool approveMax, uint8 v, bytes32 r, bytes32 s\n    ) external returns (uint amountETH);\n\n    function swapExactTokensForTokensSupportingFeeOnTransferTokens(\n        uint amountIn,\n        uint amountOutMin,\n        address[] calldata path,\n        address to,\n        uint deadline\n    ) external;\n    function swapExactETHForTokensSupportingFeeOnTransferTokens(\n        uint amountOutMin,\n        address[] calldata path,\n        address to,\n        uint deadline\n    ) external payable;\n    function swapExactTokensForETHSupportingFeeOnTransferTokens(\n        uint amountIn,\n        uint amountOutMin,\n        address[] calldata path,\n        address to,\n        uint deadline\n    ) external;\n}\n"
@@ -1899,19 +1899,6 @@
         "sourceLocation": {
           "end": -1,
           "file": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
-          "start": -1
-        },
-        "type": "Warning"
-      },
-      {
-        "component": "general",
-        "errorCode": "1878",
-        "formattedMessage": "Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing \"SPDX-License-Identifier: <SPDX-License>\" to each source file. Use \"SPDX-License-Identifier: UNLICENSED\" for non-open-source code. Please see https://spdx.org for more information.\n--> contracts/UniswapImportForTest.sol\n\n",
-        "message": "SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing \"SPDX-License-Identifier: <SPDX-License>\" to each source file. Use \"SPDX-License-Identifier: UNLICENSED\" for non-open-source code. Please see https://spdx.org for more information.",
-        "severity": "warning",
-        "sourceLocation": {
-          "end": -1,
-          "file": "contracts/UniswapImportForTest.sol",
           "start": -1
         },
         "type": "Warning"
@@ -6950,6 +6937,7 @@
             ]
           },
           "id": 399,
+          "license": "MIT",
           "nodeType": "SourceUnit",
           "nodes": [
             {
@@ -6961,7 +6949,7 @@
                 ".0"
               ],
               "nodeType": "PragmaDirective",
-              "src": "0:24:2"
+              "src": "33:24:2"
             },
             {
               "absolutePath": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
@@ -6971,12 +6959,12 @@
               "nodeType": "ImportDirective",
               "scope": 399,
               "sourceUnit": 396,
-              "src": "26:75:2",
+              "src": "155:75:2",
               "symbolAliases": [],
               "unitAlias": ""
             }
           ],
-          "src": "0:102:2"
+          "src": "33:198:2"
         },
         "id": 2
       }
