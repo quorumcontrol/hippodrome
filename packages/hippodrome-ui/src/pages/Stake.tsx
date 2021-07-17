@@ -90,14 +90,14 @@ const StakePage: React.FC = () => {
           <Box w="100%" marginTop="70">
             <Table variant="simple" w="100%">
               <Thead>
-                <Tr>
+                <Tr bg="black">
                   <Th>Pools</Th>
                   <Th>APY/TVL</Th>
                   <Th>action</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
+                <Tr bg="black">
                   <Td>
                     <HStack spacing="4">
                       <Avatar background="white" src={bitcoinLogo} />
