@@ -5,6 +5,7 @@ import {
   HStack,
   Link,
   Heading,
+  VStack,
 } from "@chakra-ui/react"
 import React from "react"
 import { useLocation, Link as RouterLink } from "react-router-dom"
@@ -13,7 +14,12 @@ import { useChainContext } from "../hooks/useChainContext"
 import logoURl from "../assets/logo.png"
 import backgroundURL from "../assets/app-bg.png"
 import SplashScreen from "../components/SplashScreens"
-
+import renVm from '../assets/poweredByLogos/poweredByRenVM.svg'
+import polygon from '../assets/poweredByLogos/polygon_logo.png'
+import biconomy from '../assets/poweredByLogos/biconomy-white.svg'
+import oneInch from '../assets/poweredByLogos/1inch_color_white.svg'
+import gnosis from '../assets/poweredByLogos/gnosis-logo.svg'
+import cryptoColosseum from '../assets/poweredByLogos/cryptocolosseum-logo.svg'
 
 interface NavLink {
   title: string
@@ -79,6 +85,20 @@ const Layout: React.FC = ({ children }) => {
 
       {!address && <SplashScreen />}
       {address && children}
+
+      <VStack mt="10" spacing="8">
+        <Heading size="sm">Powered by</Heading>
+        <HStack spacing="8">
+          <a href="https://arena.cryptocolosseum.com" target="_blank">
+            <Image src={cryptoColosseum} h="48px" />
+          </a>
+          <Image src={renVm} h="32px"/>
+          <Image src={polygon} h="32px" />
+          <Image src={biconomy} h="32px" />
+          <Image src={oneInch} h="32px" />
+          <Image src={gnosis} h="32px" />
+        </HStack>
+      </VStack>
     </Box>
   )
 }
