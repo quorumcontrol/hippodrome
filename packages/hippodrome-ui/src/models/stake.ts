@@ -15,8 +15,8 @@ function tokenContractFromAddress(address:string) {
   return RenERC20LogicV1__factory.connect(address, voidSigner)
 }
 
-// https://charts.cometh.io/pair/0x09239e14375a1eb8c36f86b6ad829b290c884e44
-const wPTGRenDogeComethPair = '0x09239e14375a1eb8c36f86b6ad829b290c884e44'
+// https://charts.cometh.io/pair/0x476278f883003862b374f22a7604e60f5643d647
+const wPTGRenDogeComethPair = '0x476278f883003862b374f22a7604e60f5643d647'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
@@ -57,7 +57,7 @@ export const doAddLiquidity = async (
   const shifterApproveWPTG = await tokenContractFromAddress(
     WPTG_ADDRESS
   ).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveRENDOGE = await tokenContractFromAddress( RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveRENDOGE = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveLPToken = await tokenContractFromAddress(wPTGRenDogeComethPair).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
   const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPair], safeAddress, address)
@@ -110,6 +110,25 @@ export const doAddLiquidity = async (
   ])
   await tx.wait();
 
+  // const renDoge = RenERC20LogicV1__factory.connect(RENDOGE_ADDRESS, signer)
+  // const wptg = RenERC20LogicV1__factory.connect(WPTG_ADDRESS, signer)
+  // await renDoge.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  // await wptg.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  // console.log('wptgBalance: ', (await wptg.balanceOf(address)).toString(), ' quote: ', quoteWPTG.mul(99).div(100).toString())
+  // console.log('renDogeBalance: ', (await renDoge.balanceOf(address)).toString(), ' quote: ', quoteWRENDOGE.toString())
+
+  // await (await addLiquidityTx(
+  //   chainInstance,
+  //   address,
+  //   WPTG_ADDRESS,
+  //   RENDOGE_ADDRESS,
+  //   quoteWPTG.mul(99).div(100), // to account for the 1% slippage
+  //   quoteWRENDOGE,
+  //   1,
+  //   COMETH_ROUTER_ADDRESS,
+  //   Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
+  // )).wait()
+  
   console.log("finished");
   return true;
 };

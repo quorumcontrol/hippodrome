@@ -39,5 +39,6 @@ export const poolRouter = (chainInstance: IChain, routerAddress: string) => {
     throw new Error('missing chain info')
   }
 
-  return wrapContract<UniswapV2Router02>(UniswapV2Router02__factory.connect(routerAddress, signer), relayer)
+  // return wrapContract<UniswapV2Router02>(UniswapV2Router02__factory.connect(routerAddress, signer), relayer)
+  return UniswapV2Router02__factory.connect(routerAddress, signer)
 }
