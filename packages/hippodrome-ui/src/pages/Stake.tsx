@@ -97,7 +97,7 @@ const StakePage: React.FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
+                <Tr bg="black">
                   <Td>
                     <HStack spacing="4">
                       <Avatar background="white" src={bitcoinLogo} />
