@@ -15,12 +15,14 @@ import { useChainContext } from "../hooks/useChainContext";
 import logoURl from "../assets/logo.png";
 import backgroundURL from "../assets/app-bg.png";
 import SplashScreen from "../components/SplashScreens";
+import WrongNetwork from "../components/WrongNetwork";
 import renVm from "../assets/poweredByLogos/poweredByRenVM.svg";
 import polygon from "../assets/poweredByLogos/polygon_logo.png";
 import biconomy from "../assets/poweredByLogos/biconomy-white.svg";
 import oneInch from "../assets/poweredByLogos/1inch_color_white.svg";
 import gnosis from "../assets/poweredByLogos/gnosis-logo.svg";
 import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg";
+import { supportedNetworks } from '../models/chain'
 
 interface NavLink {
   title: string;
@@ -39,7 +41,7 @@ const navLinks: NavLink[] = [
 ];
 
 const Layout: React.FC = ({ children }) => {
-  const { address } = useChainContext();
+  const { address, chain } = useChainContext();
   const location = useLocation();
 
   return (
@@ -95,6 +97,7 @@ const Layout: React.FC = ({ children }) => {
             color="gray.300"
             href="https://arena.cryptocolosseum.com"
             target="_blank"
+            rel="noreferrer"
           >
             Play
             <ExternalLinkIcon />
@@ -104,12 +107,13 @@ const Layout: React.FC = ({ children }) => {
       </HStack>
 
       {!address && <SplashScreen />}
-      {address && children}
+      {address && supportedNetworks.includes(chain.chainId!) && children}
+      {address && !supportedNetworks.includes(chain.chainId!) && <WrongNetwork />}
 
       <VStack mt="10" spacing="8">
         <Heading size="sm">Powered by</Heading>
         <HStack spacing="8">
-          <a href="https://arena.cryptocolosseum.com" target="_blank">
+          <a href="https://arena.cryptocolosseum.com" target="_blank" rel="noreferrer">
             <Image src={cryptoColosseum} h="48px" />
           </a>
           <Image src={renVm} h="32px" />

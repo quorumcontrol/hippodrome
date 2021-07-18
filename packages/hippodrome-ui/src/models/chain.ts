@@ -23,6 +23,8 @@ const chainIds: Record<string, number> = {
   localhost: 31337
 }
 
+export const supportedNetworks = Object.keys(networkNames).map((k) => parseInt(k))
+
 const networkName = (new URLSearchParams(window.location.search).get(
   'network'
 ) || 'matic') as KnownNetworkNames // TODO: default to mainnet
@@ -81,11 +83,11 @@ export class Chain extends EventEmitter implements IChain {
     const web3Provider = await web3Modal.connect()
     web3Provider.on('networkChanged', async () => {
       console.log('web3 provider network change')
-      // window.location.reload()
+      window.location.reload()
     })
     web3Provider.on('accountsChanged', async (info: any) => {
       console.log('web3 provider account change', info)
-      // window.location.reload()
+      window.location.reload()
     })
     this.provider = new providers.Web3Provider(web3Provider)
 
@@ -98,8 +100,9 @@ export class Chain extends EventEmitter implements IChain {
     this.walletMaker = new WalletMaker({ signer: this.signer, chainId: this.chainId })
     this.safeAddress = await this.walletMaker.walletAddressForUser(this.address)
     this.relayer = createRelayer(this.signer, this.provider, this.chainId)
-
-    this.setupSafe() // TODO: no need to do this right on connect, wait until they've sent a deposit
+    if (this.isSupportedNetwork()) {
+      this.setupSafe()
+    }
     
     this.connecting = false
     this.connected = true
@@ -108,6 +111,10 @@ export class Chain extends EventEmitter implements IChain {
 
   expectedChain() {
     return chainIds[this.networkName]
+  }
+
+  private isSupportedNetwork() {
+    return supportedNetworks.includes(this.chainId!)
   }
 
   private setupSafe() {
