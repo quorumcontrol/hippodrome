@@ -6,7 +6,7 @@
   "scripts": {
     "start": "hardhat node",
     "build": "hardhat compile && npm run typechain && rm -rf ../hippodrome-ui/src/types && cp -r types ../hippodrome-ui/src/",
-    "typechain": "typechain '{artifacts/!(build-info)/**/+([a-zA-Z0-9]).json,./node_modules/@uniswap/v2-periphery/build/{UniswapV2Router02,IUniswapV2Factory}.json,./node_modules/@uniswap/v2-core/build/IUniswapV2Pair.json}' --target ethers-v5",
+    "typechain": "typechain '{./abis/curve.json,artifacts/!(build-info)/**/+([a-zA-Z0-9]).json,./node_modules/@uniswap/v2-periphery/build/{UniswapV2Router02,IUniswapV2Factory}.json,./node_modules/@uniswap/v2-core/build/IUniswapV2Pair.json}' --target ethers-v5",
     "test": "hardhat test"
   },
   "dependencies": {
