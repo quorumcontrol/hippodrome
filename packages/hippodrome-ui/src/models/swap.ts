@@ -81,11 +81,11 @@ export const doSwap = async (
     txs = txs.concat([
       {
         to: approve.to,
-        data: approve.calldata,
+        data: approve.data,
       },
       {
         to: swap.to,
-        data: swap.calldata,
+        data: swap.data,
       },
     ]);
   }

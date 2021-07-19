@@ -2,6 +2,7 @@ import "jest";
 import { LockAndMintParams, LockAndMintWrapper, WrappedLockAndMintDeposit } from "./ren";
 import { doAddLiquidity } from "./stake";
 import { getTestChain } from "../testHelpers";
+import { pools } from "./poolList";
 
 // TODO: We have a pretty complicated thing to test here:
 // we need to have a ren mint and so we can't actually spend money, but we also need to
@@ -26,7 +27,7 @@ test("adds liquidity to wPTG/renDOGE pool", async () => {
     wrappedLockAndMint.once("deposit", resolve);
   });
 
-  await doAddLiquidity(testChain, deposit, params)
+  await doAddLiquidity(testChain, deposit, params, pools[0])
 
   expect(true).toBeTruthy();
   return

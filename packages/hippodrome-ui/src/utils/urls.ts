@@ -1,9 +1,14 @@
-export const mintUrl = (
-  asset: string,
-  to: string,
-  nonce: number,
-  outputToken: string,
-  swap?: boolean
-) => {
-  return `/transaction/mint/${asset}/${to}/${nonce}/${outputToken}?swap=${swap}`
+export interface MintUrlParams {
+  inputToken: string;
+  to: string;
+  nonce: number;
+  swap?: string;
+  pool?: string;
 }
+
+export const mintUrl = ({ inputToken, to, nonce, swap, pool }: MintUrlParams) => {
+  if (swap) {
+    return `/transaction/mint/${inputToken}/${to}/${nonce}?swap=${swap}`;
+  }
+  return `/transaction/mint/${inputToken}/${to}/${nonce}?pool=${pool}`;
+};

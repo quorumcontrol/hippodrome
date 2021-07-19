@@ -34,6 +34,7 @@ import SwapFees from "../swap/SwapFees"
 import { useQuery } from "../../hooks/useQuery"
 import StakeOutputTokenAmount from "../stake/StakeOutputTokensAmount"
 import { doAddLiquidity } from "../../models/stake"
+import { pools } from "../../models/poolList"
 
 interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -216,6 +217,13 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
   const { chain } = useChainContext()
   const { deposit, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
+  const query = useQuery()
+  const poolAddress = query.get("pool")
+  const pool = pools.find((p) => p.options.poolAddress === poolAddress)
+  if (!pool) {
+    throw new Error("unknown pool")
+  }
+
   const toast = useToast()
   const history = useHistory()
   const networkName = deposit.lockAndMint.params.lockNetwork
@@ -234,11 +242,12 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
     try {
       setLoading(true)
       console.log("swapping: ", deposit)
-      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params)
+      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params, pool)
       history.push("/")
       toast({
         title: "Success!",
-        description: <p>Visit <a href="https://swap.cometh.io/#/stake">https://swap.cometh.io/#/stake</a> to manage your liquidity.</p>,
+        duration: 60000,
+        description: <p>Visit <a href={pool.options.successUrl}>{pool.options.successUrl}</a> to manage your liquidity.</p>,
         status: "success",
         isClosable: true,
       })
@@ -287,7 +296,7 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
         <SwapFees inputName={networkName} amount={depositAmount} />
         <Box w="100%">
           <Text>
-            You are about to provide liquidity into the wPTG/renDOGE pool on Cometh
+            You are about to provide liquidity into the {pool.pairName()} pool on {pool.typeName()}
           </Text>
         </Box>
         {!loading && (
@@ -315,7 +324,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
 }) => {
   const { confirmed, confirmations } = useDeposit(propDeposit)
   const query = useQuery()
-  const isSwap = query.get("swap") === "true"
+  const isSwap = query.get("swap")
 
   const progressPercentage = Math.max(
     10,
