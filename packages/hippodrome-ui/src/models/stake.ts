@@ -2,7 +2,7 @@ import { BigNumber, constants, utils, VoidSigner } from "ethers";
 import { IChain } from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
 import { amountAfterFees, fetchFees, WrappedLockAndMintDeposit } from "./ren";
-import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS, WPTG_ADDRESS, RENDOGE_ADDRESS } from "./contracts";
+import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS } from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
@@ -17,7 +17,7 @@ function tokenContractFromAddress(address:string) {
 }
 
 // https://charts.cometh.io/pair/0x476278f883003862b374f22a7604e60f5643d647
-export const wPTGRenDogeComethPair = '0x476278f883003862b374f22a7604e60f5643d647'
+// export const wPTGRenDogeComethPair = '0x476278f883003862b374f22a7604e60f5643d647'
 
 // TODO: this is a hard coded liquidity add to the particular sushi pool on polygon
 export const doAddLiquidity = async (
@@ -30,6 +30,10 @@ export const doAddLiquidity = async (
   if (!relayer || !safeAddress || !address || !signer) {
     throw new Error("must have a relayer and addresses");
   }
+
+  const token0 = pool.token0()
+  const token1 = pool.token1()
+  const poolAddress = pool.options.poolAddress
 
   const fees = await fetchFees(chainInstance, lockAndMintParams.lockNetwork)
 
@@ -56,80 +60,64 @@ export const doAddLiquidity = async (
   )
 
   const shifterApproveInput = await tokenContractFromAddress(input).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveWPTG = await tokenContractFromAddress(
-    WPTG_ADDRESS
+  const shifterApproveToken0 = await tokenContractFromAddress(
+    token0.address
   ).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveRENDOGE = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveLPToken = await tokenContractFromAddress(wPTGRenDogeComethPair).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveToken1 = await tokenContractFromAddress(token1.address).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveLPToken = await tokenContractFromAddress(pool.options.poolAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
-  const shiftTx = await shifter.populateTransaction.shift([input, RENDOGE_ADDRESS, WPTG_ADDRESS, wPTGRenDogeComethPair], safeAddress, address)
+  const shiftTx = await shifter.populateTransaction.shift([input, token0.address, token1.address, poolAddress], safeAddress, address)
 
   const swapAmount = amountAfterFees(fees, amount)
   console.log('swap amount: ', swapAmount)
   const halfSwap = swapAmount.div(2)
 
-  const [renApprove, quoteWPTG, swapWPTG, quoteWRENDOGE, ] =
-    await Promise.all([
-      fetchApprove(input),
-      fetchQuote(input, WPTG_ADDRESS, halfSwap),
-      fetchSwap(input, WPTG_ADDRESS, halfSwap, safeAddress),
-      fetchQuote(input, RENDOGE_ADDRESS, halfSwap),
-    ])
+  const [token0Quote, token1Quote] = await Promise.all([
+    fetchQuote(input, token0.address, halfSwap),
+    fetchQuote(input, token1.address, halfSwap)
+  ])
 
-  const wPTGApprove = await tokenContractFromAddress(WPTG_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  const renDOGEApprove = await tokenContractFromAddress(RENDOGE_ADDRESS).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const swaps = (await Promise.all([
+    fetchSwap(input, token0.address, halfSwap, safeAddress),
+    fetchSwap(input, token1.address, halfSwap, safeAddress),
+  ])).filter(Boolean)
+
+  const approves = await Promise.all([
+    fetchApprove(token0.address),
+    fetchApprove(token1.address)
+  ])
+
+  const token0Approve = await tokenContractFromAddress(token0.address).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const token1Approve = await tokenContractFromAddress(token1.address).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'half amount', halfSwap.toString())
 
-  const tx = await relayer.multisend([
-    mintTx,
-    {
-      to: renApprove.to,
-      data: renApprove.calldata,
-    },
-    {
-      to: swapWPTG!.to,
-      data: swapWPTG!.calldata,
-    },
-    wPTGApprove,
-    renDOGEApprove,
-    await addLiquidityTx(
-      chainInstance,
-      safeAddress,
-      WPTG_ADDRESS,
-      RENDOGE_ADDRESS,
-      quoteWPTG.mul(99).div(100), // to account for the 1% slippage
-      quoteWRENDOGE,
-      1,
-      COMETH_ROUTER_ADDRESS,
-      Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
-    ),
-    shifterApproveInput,
-    shifterApproveWPTG,
-    shifterApproveRENDOGE,
-    shifterApproveLPToken,
-    shiftTx,
-  ])
+  const txs = [mintTx]
+    .concat(approves)
+    .concat(swaps)
+    .concat([
+      token0Approve,
+      token1Approve,
+      await addLiquidityTx(
+        chainInstance,
+        safeAddress,
+        token0.address,
+        token1.address,
+        token0Quote.mul(99).div(100), // to account for the 1% slippage
+        token1Quote.mul(99).div(100),
+        1,
+        COMETH_ROUTER_ADDRESS,
+        Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
+      ),
+      shifterApproveInput,
+      shifterApproveToken0,
+      shifterApproveToken1,
+      shifterApproveLPToken,
+      shiftTx,
+    ])
+  const tx = await relayer.multisend(txs)
+
   await tx.wait();
-
-  // const renDoge = RenERC20LogicV1__factory.connect(RENDOGE_ADDRESS, signer)
-  // const wptg = RenERC20LogicV1__factory.connect(WPTG_ADDRESS, signer)
-  // await renDoge.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  // await wptg.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  // console.log('wptgBalance: ', (await wptg.balanceOf(address)).toString(), ' quote: ', quoteWPTG.mul(99).div(100).toString())
-  // console.log('renDogeBalance: ', (await renDoge.balanceOf(address)).toString(), ' quote: ', quoteWRENDOGE.toString())
-
-  // await (await addLiquidityTx(
-  //   chainInstance,
-  //   address,
-  //   WPTG_ADDRESS,
-  //   RENDOGE_ADDRESS,
-  //   quoteWPTG.mul(99).div(100), // to account for the 1% slippage
-  //   quoteWRENDOGE,
-  //   1,
-  //   COMETH_ROUTER_ADDRESS,
-  //   Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
-  // )).wait()
   
   console.log("finished");
   return true;

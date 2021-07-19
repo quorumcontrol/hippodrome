@@ -16,7 +16,7 @@ export const fetchApprove = async (input: Address) => {
   console.log("approved")
   return {
     to: resp.data.to,
-    calldata: resp.data.data,
+    data: resp.data.data,
   };
 };
 
@@ -45,7 +45,7 @@ export const fetchSwap = async (
   const resp = await fetchWithBackOff("/swap", params);
   return {
     to: resp.data.tx.to,
-    calldata: resp.data.tx.data,
+    data: resp.data.tx.data,
     from: resp.data.tx.from,
   };
 };

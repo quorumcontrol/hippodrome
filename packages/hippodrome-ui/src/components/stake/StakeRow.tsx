@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Box, HStack, Text, Button, Tr, Td, useDisclosure } from "@chakra-ui/react";
 import { Pool } from "../../models/poolList";
 import { useUniswapPool } from "../../hooks/useUniswapPool";
