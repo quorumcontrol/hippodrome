@@ -16,12 +16,6 @@ export const App = () => (
         <Layout>
           <Switch>
             <Route
-              path="/transaction/mint/:asset/:to/:nonce/:outputToken"
-              exact
-            >
-              <LockAndMint />
-            </Route>
-            <Route
               path="/transaction/mint/:asset/:to/:nonce"
               exact
             >

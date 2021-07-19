@@ -103,5 +103,5 @@ export const supportedTokens: TokenListToken[] = [
 ]
 
 export const tokenListTokensByAddress = supportedTokens.reduce((mem:Record<string,TokenListToken>, token) => {
-  return {...mem, [token.address]:token}
+  return {...mem, [token.address.toLowerCase()]:token}
 }, {})

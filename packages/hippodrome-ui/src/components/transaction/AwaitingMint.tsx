@@ -34,6 +34,7 @@ import SwapFees from "../swap/SwapFees"
 import { useQuery } from "../../hooks/useQuery"
 import StakeOutputTokenAmount from "../stake/StakeOutputTokensAmount"
 import { doAddLiquidity } from "../../models/stake"
+import { pools } from "../../models/poolList"
 
 interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -216,6 +217,13 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
   const { chain } = useChainContext()
   const { deposit, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
+  const query = useQuery()
+  const poolAddress = query.get("pool")
+  const pool = pools.find((p) => p.options.poolAddress === poolAddress)
+  if (!pool) {
+    throw new Error("unknown pool")
+  }
+
   const toast = useToast()
   const history = useHistory()
   const networkName = deposit.lockAndMint.params.lockNetwork
@@ -234,7 +242,7 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
     try {
       setLoading(true)
       console.log("swapping: ", deposit)
-      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params)
+      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params, pool)
       history.push("/")
       toast({
         title: "Success!",
@@ -315,7 +323,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
 }) => {
   const { confirmed, confirmations } = useDeposit(propDeposit)
   const query = useQuery()
-  const isSwap = query.get("swap") === "true"
+  const isSwap = query.get("swap")
 
   const progressPercentage = Math.max(
     10,

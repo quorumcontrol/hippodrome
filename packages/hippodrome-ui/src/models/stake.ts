@@ -7,6 +7,7 @@ import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
 import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
 import { addLiquidityTx } from "./liquidityPool";
+import { Pool } from "./poolList";
 
 const voidSigner = new VoidSigner(constants.AddressZero)
 
@@ -23,6 +24,7 @@ export const doAddLiquidity = async (
   chainInstance: IChain,
   deposit: WrappedLockAndMintDeposit,
   lockAndMintParams: LockAndMintParams,
+  pool:Pool,
 ) => {
   const { relayer, safeAddress, address, signer } = chainInstance;
   if (!relayer || !safeAddress || !address || !signer) {
