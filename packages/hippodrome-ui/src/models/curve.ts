@@ -2,12 +2,30 @@ import { BigNumber, constants, utils, VoidSigner } from "ethers";
 import { IChain } from "./chain";
 import { fetchApprove, fetchQuote, fetchSwap } from "./1inch";
 import { amountAfterFees, fetchFees, WrappedLockAndMintDeposit } from "./ren";
-import { minter as getMinter, balanceShifter as getBalanceShifter, COMETH_ROUTER_ADDRESS } from "./contracts";
+import { minter as getMinter, balanceShifter as getBalanceShifter } from "./contracts";
 import { LockAndMintParams } from "./ren";
 import { inputTokens } from "./tokenList";
-import { RenERC20LogicV1__factory } from "../types/ethers-contracts";
-import { addLiquidityTx } from "./uniswapPool";
+import { Curve__factory, RenERC20LogicV1__factory } from "../types/ethers-contracts";
 import { Pool } from "./poolList";
+
+async function addLiquidityTx( 
+  chain:IChain,
+  token0Amt:BigNumber, // to account for the 1% slippage
+  token1Amt:BigNumber,
+  slippage:number,
+  poolAddress:string
+) {
+  if (!chain.signer) {
+    throw new Error('only supports signed in')
+  }
+  const curvePool = Curve__factory.connect(poolAddress, chain.signer)
+
+  if (token0Amt.lte(token1Amt)) {
+    return curvePool["add_liquidity(uint256[2],uint256,bool)"]([token0Amt, token0Amt], 0, true)
+  } else {
+    return curvePool["add_liquidity(uint256[2],uint256,bool)"]([token1Amt, token1Amt], 0, true)
+  }
+}
 
 const voidSigner = new VoidSigner(constants.AddressZero)
 
@@ -31,6 +49,10 @@ export const doAddLiquidity = async (
   const token0 = pool.token0()
   const token1 = pool.token1()
   const poolAddress = pool.options.poolAddress
+
+  const curvePool = Curve__factory.connect(poolAddress, signer)
+  const lpTokenAddress = await curvePool.lp_token()
+
 
   const fees = await fetchFees(chainInstance, lockAndMintParams.lockNetwork)
 
@@ -61,9 +83,9 @@ export const doAddLiquidity = async (
     token0.address
   ).populateTransaction.approve(shifter.address, constants.MaxUint256)
   const shifterApproveToken1 = await tokenContractFromAddress(token1.address).populateTransaction.approve(shifter.address, constants.MaxUint256)
-  const shifterApproveLPToken = await tokenContractFromAddress(pool.options.poolAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
+  const shifterApproveLPToken = await tokenContractFromAddress(lpTokenAddress).populateTransaction.approve(shifter.address, constants.MaxUint256)
   
-  const shiftTx = await shifter.populateTransaction.shift([input, token0.address, token1.address, poolAddress], safeAddress, address)
+  const shiftTx = await shifter.populateTransaction.shift([input, token0.address, token1.address, lpTokenAddress], safeAddress, address)
 
   const swapAmount = amountAfterFees(fees, amount)
   console.log('swap amount: ', swapAmount)
@@ -74,17 +96,21 @@ export const doAddLiquidity = async (
     fetchQuote(input, token1.address, halfSwap)
   ])
 
+  // const swaps = (await Promise.all([
+  //   fetchSwap(input, token0.address, halfSwap, safeAddress),
+  //   fetchSwap(input, token1.address, halfSwap, safeAddress),
+  // ])).filter(Boolean)
   const swaps = (await Promise.all([
-    fetchSwap(input, token0.address, halfSwap, safeAddress),
-    fetchSwap(input, token1.address, halfSwap, safeAddress),
+    fetchSwap(input, token0.address, halfSwap, address),
+    fetchSwap(input, token1.address, halfSwap, address),
   ])).filter(Boolean)
 
   const approves = await Promise.all([
     fetchApprove(input),
   ])
 
-  const token0Approve = await tokenContractFromAddress(token0.address).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
-  const token1Approve = await tokenContractFromAddress(token1.address).populateTransaction.approve(COMETH_ROUTER_ADDRESS, constants.MaxUint256)
+  const token0Approve = await tokenContractFromAddress(token0.address).populateTransaction.approve(poolAddress, constants.MaxUint256)
+  const token1Approve = await tokenContractFromAddress(token1.address).populateTransaction.approve(poolAddress, constants.MaxUint256)
 
   console.log('ren amount: ', renTx.out.amount.toString(), 'half amount', halfSwap.toString())
 
@@ -94,17 +120,6 @@ export const doAddLiquidity = async (
     .concat([
       token0Approve,
       token1Approve,
-      await addLiquidityTx(
-        chainInstance,
-        safeAddress,
-        token0.address,
-        token1.address,
-        token0Quote.mul(99).div(100), // to account for the 1% slippage
-        token1Quote.mul(99).div(100),
-        1,
-        COMETH_ROUTER_ADDRESS,
-        Math.floor(new Date().getTime() / 1000 + 60 * 10) // 10 minutes
-      ),
       shifterApproveInput,
       shifterApproveToken0,
       shifterApproveToken1,
@@ -112,6 +127,25 @@ export const doAddLiquidity = async (
       shiftTx,
     ])
   const tx = await relayer.multisend(txs)
+  await tx.wait()
+
+  await (await RenERC20LogicV1__factory.connect(token0.address, signer).approve(poolAddress, constants.MaxUint256)).wait()
+  await (await RenERC20LogicV1__factory.connect(token1.address, signer).approve(poolAddress, constants.MaxUint256)).wait()
+
+  console.log('0 bal: ', (await RenERC20LogicV1__factory.connect(token0.address, signer).balanceOf(address)).toString())
+  console.log('01 bal: ', (await RenERC20LogicV1__factory.connect(token1.address, signer).balanceOf(address)).toString())
+
+    console.log('adding liquidity')
+      await (await addLiquidityTx(
+        chainInstance,
+        token0Quote.mul(99).div(100), // to account for the 1% slippage
+        token1Quote.mul(99).div(100),
+        1,
+        pool.options.poolAddress,
+      )).wait()
+
+  // await (await signer.sendTransaction(approves[0])).wait()
+  // await (await signer.sendTransaction(swaps[0]!)).wait()
 
   await tx.wait();
   
