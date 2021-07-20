@@ -1,34 +1,35 @@
 import React from "react"
 import { Box, HStack, Text, Image, Spinner } from "@chakra-ui/react"
-import dogeLogo from "../../assets/doge-icon.svg"
 import { useTokenQuote } from "../../hooks/useTokenQuote"
 import humanBigNumber from "../../utils/humanNumbers"
 import { isTestnet } from "../../models/ren"
-import { RENDOGE_ADDRESS, WPTG_ADDRESS } from "../../models/contracts"
 import { BigNumber } from "ethers"
 import { useMemo } from "react"
+import { Pool } from "../../models/poolList"
 
 interface OutputAmountProps {
   input: string
   amount: BigNumber
+  pool: Pool
 }
 
 const StakeOutputTokenAmount: React.FC<OutputAmountProps> = ({
   input,
   amount,
+  pool
 }) => {
   const half = useMemo(() => {
     return BigNumber.from(amount).div(2)
   }, [amount])
 
-  const { amountOut: wPTGamount, loading: wPTgLoading } = useTokenQuote(
+  const { amountOut: token0Amt, loading: wPTgLoading } = useTokenQuote(
     input,
-    WPTG_ADDRESS,
+    pool.token0().address,
     half.toHexString()
   )
-  const { amountOut: renDogeAmount, loading: renDogeLoading } = useTokenQuote(
+  const { amountOut: token1Amt, loading: renDogeLoading } = useTokenQuote(
     input,
-    RENDOGE_ADDRESS,
+    pool.token1().address,
     half.toHexString()
   )
 
@@ -55,25 +56,25 @@ const StakeOutputTokenAmount: React.FC<OutputAmountProps> = ({
         <HStack>
           <Image
             w="30px"
-            src="https://arena.cryptocolosseum.com/images/icons/prestige.svg"
+            src={pool.token0().logoURI}
           />
-          <Text fontSize="sm">wPTG</Text>
+          <Text fontSize="sm">{pool.token0().symbol}</Text>
         </HStack>
 
         <Text fontSize="md" fontWeight="medium">
-          {humanBigNumber(wPTGamount || 0, 18)}
+          {humanBigNumber(token0Amt || 0, pool.token0().decimals)}
         </Text>
       </HStack>
       <HStack>
         <HStack>
-          <Image w="30px" src={dogeLogo} />
+          <Image w="30px" src={pool.token1().logoURI} />
           <Text fontSize="sm" fontWeight="">
-            renDoge
+            {pool.token1().symbol}
           </Text>
         </HStack>
 
         <Text fontSize="md" fontWeight="medium">
-          {humanBigNumber(renDogeAmount || 0, 8)}
+          {humanBigNumber(token1Amt || 0, pool.token1().decimals)}
         </Text>
       </HStack>
     </HStack>
