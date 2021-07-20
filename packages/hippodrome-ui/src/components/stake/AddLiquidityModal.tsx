@@ -122,6 +122,7 @@ const AddLiquidityModal: React.FC<AddLiquidityModalParams> = ({ pool, isOpen, on
             <Box width="100%">
               <SmallText>Liquidity Supplied</SmallText>
               <StakeOutputTokenAmount
+                pool={pool}
                 input={inputTokensBySymbol[inputToken].renAddress}
                 amount={renOutput || constants.Zero}
               />

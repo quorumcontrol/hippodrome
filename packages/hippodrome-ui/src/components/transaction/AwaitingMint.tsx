@@ -33,8 +33,9 @@ import { useChainContext } from "../../hooks/useChainContext"
 import SwapFees from "../swap/SwapFees"
 import { useQuery } from "../../hooks/useQuery"
 import StakeOutputTokenAmount from "../stake/StakeOutputTokensAmount"
-import { doAddLiquidity } from "../../models/stake"
-import { pools } from "../../models/poolList"
+import { doAddLiquidity as addComethLiquidity } from "../../models/stake"
+import { doAddLiquidity as addCurveLiquidity } from "../../models/curve"
+import { pools, PoolTypes } from "../../models/poolList"
 
 interface AwaitingMintProps {
   lockAndMint?: LockAndMint
@@ -242,7 +243,16 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
     try {
       setLoading(true)
       console.log("swapping: ", deposit)
-      await doAddLiquidity(chain, deposit, deposit.lockAndMint.params, pool)
+      switch (pool.options.type) {
+        case PoolTypes.cometh:
+          await addComethLiquidity(chain, deposit, deposit.lockAndMint.params, pool)
+          break;
+        case PoolTypes.curve:
+          await addCurveLiquidity(chain, deposit, deposit.lockAndMint.params, pool)
+          break;
+        default:
+          throw new Error('unsupported pool type: ' + pool.options.type)
+      }
       history.push("/")
       toast({
         title: "Success!",
@@ -290,6 +300,7 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
           <StakeOutputTokenAmount
             input={inputTokensBySymbol[networkName].renAddress}
             amount={(renOutput || constants.Zero)}
+            pool={pool}
           />
         </Box>
 

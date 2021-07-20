@@ -19,7 +19,8 @@ interface PoolOptions {
   token0: Address,
   token1: Address,
   rewardToken?: Address,
-  weeklyReward?: BigNumber
+  weeklyReward?: BigNumber,
+  rewardText?: string,
   successUrl: string
 }
 
@@ -29,7 +30,7 @@ const wptgRenDogePool: PoolOptions = {
   token0: '0xc0f14c88250e680ecd70224b7fba82b7c6560d12', // wPTG
   token1: '0xcE829A89d4A55a63418bcC43F00145adef0eDB8E', // renDOGE
   rewardToken: '0xc0f14c88250e680ecd70224b7fba82b7c6560d12',
-  weeklyReward: utils.parseEther('1000000'),
+  weeklyReward: utils.parseEther('500000'),
   successUrl: 'https://swap.cometh.io/#/stake',
 }
 
@@ -40,6 +41,7 @@ const curveRenBTCamWbtc: PoolOptions = {
   token1: '0xDBf31dF14B66535aF65AaC99C32e9eA844e14501', // renBTC
   // rewardToken: '0xc0f14c88250e680ecd70224b7fba82b7c6560d12',
   // weeklyReward: utils.parseEther('1000000'),
+  rewardText: "approx 6.5%",
   successUrl: 'https://polygon.curve.fi/ren',
 }
 
@@ -69,4 +71,5 @@ export class Pool {
 
 export const pools = [
   wptgRenDogePool,
+  curveRenBTCamWbtc
 ].map((opts) => new Pool(opts))

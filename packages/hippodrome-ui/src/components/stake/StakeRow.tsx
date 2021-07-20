@@ -11,7 +11,7 @@ interface StakeRowOpts {
 
 const StakeRow: React.FC<StakeRowOpts> = ({ pool }) => {
 
-  const { reserves, apy } = useUniswapPool(pool.options.poolAddress)
+  const { reserves, apy } = useUniswapPool(pool)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -31,7 +31,7 @@ const StakeRow: React.FC<StakeRowOpts> = ({ pool }) => {
       <Td>
         <Box>
           <Text marginBottom="4px" fontSize="14px" fontWeight="semibold">
-            {apy?.toString()}% APY
+            {pool.options.rewardText ? pool.options.rewardText :`${apy?.toString()}% APY`}
           </Text>
           <Text color="gray.400" fontWeight="medium" fontSize="14px">
             {reserves &&
