@@ -58,10 +58,6 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
   const networkName = deposit.lockAndMint.params.lockNetwork
   const depositAmount = deposit.deposit.depositDetails.amount
 
-  const humanDepositAmount = useMemo(() => {
-    return BigNumber.from(depositAmount).div(1e8).toString()
-  }, [depositAmount])
-
   const { output: renOutput } = useRenOutput(
     deposit.lockAndMint.params.lockNetwork,
     depositAmount
@@ -133,8 +129,8 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
       <VStack spacing="10" width="100%">
         <VStack w="100%" spacing="3" alignItems="start">
           <Heading as="h1" fontWeight="" fontSize="2xl">
-            {humanDepositAmount} {deposit.lockAndMint.params.lockNetwork}{" "}
-            recieved
+            {humanBigNumber(depositAmount, 8)} {deposit.lockAndMint.params.lockNetwork}{" "}
+            received
           </Heading>
           <SmallText fontSize="10" color="gray.400">
             {confirmations?.current} / {confirmations?.target} confirmations
@@ -230,10 +226,6 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
   const networkName = deposit.lockAndMint.params.lockNetwork
   const depositAmount = deposit.deposit.depositDetails.amount
 
-  const humanDepositAmount = useMemo(() => {
-    return BigNumber.from(depositAmount).div(1e8).toString()
-  }, [depositAmount])
-
   const { output: renOutput } = useRenOutput(
     deposit.lockAndMint.params.lockNetwork,
     depositAmount
@@ -286,8 +278,8 @@ const DepositStakeConfirmed: React.FC<DepositConfirmedProps> = ({
       <VStack spacing="10" width="100%">
         <VStack w="100%" spacing="3" alignItems="start">
           <Heading as="h1" fontWeight="" fontSize="2xl">
-            {humanDepositAmount} {deposit.lockAndMint.params.lockNetwork}{" "}
-            recieved
+            {humanBigNumber(depositAmount, 8)} {deposit.lockAndMint.params.lockNetwork}{" "}
+            received
           </Heading>
           <SmallText fontSize="10" color="gray.400">
             {confirmations?.current} / {confirmations?.target} confirmations
