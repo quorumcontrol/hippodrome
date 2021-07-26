@@ -9517,21 +9517,21 @@ jssha@2.3.1:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-kasumah-relay-wrapper@^0.0.37:
-  version "0.0.37"
-  resolved "https://registry.npmjs.org/kasumah-relay-wrapper/-/kasumah-relay-wrapper-0.0.37.tgz"
-  integrity sha512-CzkXC2Lv2ltMF1g4d8DHF4BjEefN/xuKbj4QBYqulV1fQ+q4zmwNLGUV+KdD63XP3I14P9DKhIC3he5JH08E7g==
+kasumah-relay-wrapper@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/kasumah-relay-wrapper/-/kasumah-relay-wrapper-0.0.39.tgz#0e48c9bc8b7303bad18d1e5eaf7a53be32d43ffe"
+  integrity sha512-0ziA/Nrr/5cGjXZwi7Rs8ta8ftIRvMTMeJIIXn1qPBpaFSldKQjmu0BiR4Tn+dPv60fnaMR3SKOaZLt3AQqatA==
   dependencies:
     axios "^0.21.1"
     debug "^4.3.1"
     ethers "^5.3.0"
     exponential-backoff "^3.1.0"
-    kasumah-wallet "^0.0.37"
+    kasumah-wallet "^0.0.39"
 
-kasumah-wallet@^0.0.37:
-  version "0.0.37"
-  resolved "https://registry.npmjs.org/kasumah-wallet/-/kasumah-wallet-0.0.37.tgz"
-  integrity sha512-F1co96vO5kcBCYyKyd62B73XSH8gT3IDGixPAWOpQVw0QahfV34qdogZmjuBn08GRwGvqFmkjr/Gc1A30KhkFA==
+kasumah-wallet@^0.0.39:
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/kasumah-wallet/-/kasumah-wallet-0.0.39.tgz#016fc6c1ae06260619be1883cb0f4f6b54716ac8"
+  integrity sha512-gab1yhoH0Gk6ZiYo9DW05myXWHZ4BM2wma7lDCYkhbBUBdg8iiXevwTyt79r1GDwrs7lJIz4eYag2G+EUDjWBQ==
   dependencies:
     debug "^4.3.1"
     ethers "^5.3.0"
