@@ -1,8 +1,6 @@
 import useSWR from "swr";
 import { getAPY, getPoolReserves } from "../models/uniswapPool";
 import { useChainContext } from "./useChainContext";
-import { WPTG_ADDRESS } from "../models/contracts"
-import { constants, utils } from "ethers";
 import { Pool, PoolTypes } from "../models/poolList";
 
 // TODO: hard coding rewards for now, calculate from some API
