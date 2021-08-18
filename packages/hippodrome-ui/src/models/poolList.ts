@@ -1,4 +1,4 @@
-import { BigNumber, utils } from "ethers"
+import { BigNumber } from "ethers"
 import { tokenListTokensByAddress } from "./tokenList"
 
 type Address = string
@@ -22,16 +22,6 @@ interface PoolOptions {
   weeklyReward?: BigNumber,
   rewardText?: string,
   successUrl: string
-}
-
-const wptgRenDogePool: PoolOptions = {
-  type: PoolTypes.cometh,
-  poolAddress: '0x476278f883003862b374f22a7604e60f5643d647', // https://charts.cometh.io/pair/0x476278f883003862b374f22a7604e60f5643d647
-  token0: '0xc0f14c88250e680ecd70224b7fba82b7c6560d12', // wPTG
-  token1: '0xcE829A89d4A55a63418bcC43F00145adef0eDB8E', // renDOGE
-  rewardToken: '0xc0f14c88250e680ecd70224b7fba82b7c6560d12',
-  weeklyReward: utils.parseEther('500000'),
-  successUrl: 'https://swap.cometh.io/#/stake',
 }
 
 const curveRenBTCamWbtc: PoolOptions = {
@@ -70,6 +60,5 @@ export class Pool {
 }
 
 export const pools = [
-  wptgRenDogePool,
   curveRenBTCamWbtc
 ].map((opts) => new Pool(opts))
