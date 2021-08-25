@@ -6,27 +6,27 @@ import {
   Link,
   Heading,
   VStack,
-} from "@chakra-ui/react";
-import { ExternalLinkIcon } from '@chakra-ui/icons'
-import React from "react";
-import { useLocation, Link as RouterLink } from "react-router-dom";
-import CurrentUser from "../components/CurrentUser";
-import { useChainContext } from "../hooks/useChainContext";
-import logoURl from "../assets/logo.png";
-import backgroundURL from "../assets/app-bg.png";
-import SplashScreen from "../components/SplashScreens";
-import WrongNetwork from "../components/WrongNetwork";
-import renVm from "../assets/poweredByLogos/poweredByRenVM.svg";
-import polygon from "../assets/poweredByLogos/polygon_logo.png";
-import biconomy from "../assets/poweredByLogos/biconomy-white.svg";
-import oneInch from "../assets/poweredByLogos/1inch_color_white.svg";
-import gnosis from "../assets/poweredByLogos/gnosis-logo.svg";
-import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg";
-import { supportedNetworks } from '../models/chain'
+} from "@chakra-ui/react"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
+import React from "react"
+import { useLocation, Link as RouterLink } from "react-router-dom"
+import CurrentUser from "../components/CurrentUser"
+import { useChainContext } from "../hooks/useChainContext"
+import logoURl from "../assets/logo.png"
+import backgroundURL from "../assets/app-bg.png"
+import SplashScreen from "../components/SplashScreens"
+import WrongNetwork from "../components/WrongNetwork"
+import renVm from "../assets/poweredByLogos/poweredByRenVM.svg"
+import polygon from "../assets/poweredByLogos/polygon_logo.png"
+import biconomy from "../assets/poweredByLogos/biconomy-white.svg"
+import oneInch from "../assets/poweredByLogos/1inch_color_white.svg"
+import gnosis from "../assets/poweredByLogos/gnosis-logo.svg"
+import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg"
+import { supportedNetworks } from "../models/chain"
 
 interface NavLink {
-  title: string;
-  link: "/stake" | "/";
+  title: string
+  link: "/stake" | "/"
 }
 
 const navLinks: NavLink[] = [
@@ -38,20 +38,18 @@ const navLinks: NavLink[] = [
     title: "earn",
     link: "/stake",
   },
-];
+]
 
 const Layout: React.FC = ({ children }) => {
-  const { address, chain } = useChainContext();
-  const location = useLocation();
+  const { address, chain } = useChainContext()
+  const location = useLocation()
 
   return (
-    <Box
+    <VStack
       paddingX="20"
-      backgroundImage={backgroundURL}
-      backgroundRepeat="no-repeat"
-      backgroundPosition="bottom"
-      backgroundSize="cover"
       minHeight="100vh"
+      justifyContent="space-between"
+      display="flex"
     >
       <HStack justifyContent="space-between" w="100%" p={10} mb={4}>
         <HStack alignItems="flex-end">
@@ -87,7 +85,7 @@ const Layout: React.FC = ({ children }) => {
               >
                 {navlink.title}
               </Link>
-            );
+            )
           })}
           <Link
             fontWeight="bold"
@@ -108,12 +106,18 @@ const Layout: React.FC = ({ children }) => {
 
       {!address && <SplashScreen />}
       {address && supportedNetworks.includes(chain.chainId!) && children}
-      {address && !supportedNetworks.includes(chain.chainId!) && <WrongNetwork />}
+      {address && !supportedNetworks.includes(chain.chainId!) && (
+        <WrongNetwork />
+      )}
 
-      <VStack mt="10" spacing="8">
+      <VStack mt="10" spacing="8" flexGrow={1} justifyContent="center">
         <Heading size="sm">Powered by</Heading>
         <HStack spacing="8">
-          <a href="https://arena.cryptocolosseum.com" target="_blank" rel="noreferrer">
+          <a
+            href="https://arena.cryptocolosseum.com"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Image src={cryptoColosseum} h="48px" />
           </a>
           <Image src={renVm} h="32px" />
@@ -123,8 +127,8 @@ const Layout: React.FC = ({ children }) => {
           <Image src={gnosis} h="32px" />
         </HStack>
       </VStack>
-    </Box>
-  );
-};
+    </VStack>
+  )
+}
 
-export default Layout;
+export default Layout
