@@ -14,6 +14,7 @@ import oneInch from "../assets/poweredByLogos/1inch_color_white.svg"
 import gnosis from "../assets/poweredByLogos/gnosis-logo.svg"
 import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg"
 import { supportedNetworks } from "../models/chain"
+import PTGSplashScreen from "../components/PTGSplashScreen"
 
 interface NavLink {
   title: string
@@ -95,7 +96,15 @@ const Layout: React.FC = ({ children }) => {
         <CurrentUser />
       </HStack>
 
-      {!address && <SplashScreen ptgSwap={location.pathname === "/ptg"} />}
+      {!address && (
+        <>
+          {location.pathname === "/ptg" ? (
+            <PTGSplashScreen />
+          ) : (
+            <SplashScreen />
+          )}
+        </>
+      )}
       {address && supportedNetworks.includes(chain.chainId!) && children}
       {address && !supportedNetworks.includes(chain.chainId!) && (
         <WrongNetwork />
