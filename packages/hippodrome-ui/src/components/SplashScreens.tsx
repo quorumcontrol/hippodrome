@@ -1,12 +1,14 @@
-import { Heading, Text, VStack, Box, Grid, Image } from "@chakra-ui/react"
+import { Heading, Text, VStack, Box, Grid, Image, Link } from "@chakra-ui/react"
 import React from "react"
 import "@fontsource/zen-dots"
 import coinsImage from "../assets/coins.svg"
 import ConnectButton from "./ConnectButton"
 
-interface SplashScreenProps {}
+interface SplashScreenProps {
+  ptgSwap: boolean
+}
 
-const SplashScreen: React.FC<SplashScreenProps> = () => {
+const SplashScreen: React.FC<SplashScreenProps> = ({ ptgSwap }) => {
   const features = [
     {
       icon: coinsImage,
@@ -51,6 +53,49 @@ const SplashScreen: React.FC<SplashScreenProps> = () => {
       description: "Go directly from BTC or DOGE into interest earning DeFi.",
     },
   ]
+
+  if (ptgSwap) {
+    return (
+      <VStack paddingX="200px" spacing="16">
+        <VStack paddingX="100px" spacing="20">
+          <VStack spacing="6">
+            <Heading as="h1" fontSize="18px" textTransform="uppercase">
+              welcome to hippodrome
+            </Heading>
+            <Heading
+              as="h2"
+              fontFamily="zed-dots"
+              fontSize="48px"
+              fontWeight="normal"
+              textAlign="center"
+            >
+              Swap{" "}
+              <Box as="span" color="brandOrange.500">
+                Token
+              </Box>{" "}
+              to get{" "}
+              <Box as="span" color="brandOrange.500">
+                PTG
+              </Box>
+            </Heading>
+            <Text fontSize="18px" color="gray.200" align="center">
+              The cheapest and easiest way to get PTG for gaming on{" "}
+              <Link
+                href="https://cryptocolosseum.com/"
+                target="_blank"
+                color="brandOrange.500"
+                textDecoration="underline"
+                fontWeight="500"
+              >
+                Crypto Collesuem
+              </Link>
+            </Text>
+          </VStack>
+          <ConnectButton text="Swap token now" />
+        </VStack>
+      </VStack>
+    )
+  }
 
   return (
     <VStack paddingX="200px" spacing="16">

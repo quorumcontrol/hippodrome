@@ -1,19 +1,10 @@
-import {
-  Text,
-  Box,
-  Image,
-  HStack,
-  Link,
-  Heading,
-  VStack,
-} from "@chakra-ui/react"
+import { Text, Image, HStack, Link, Heading, VStack } from "@chakra-ui/react"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import React from "react"
 import { useLocation, Link as RouterLink } from "react-router-dom"
 import CurrentUser from "../components/CurrentUser"
 import { useChainContext } from "../hooks/useChainContext"
 import logoURl from "../assets/logo.png"
-import backgroundURL from "../assets/app-bg.png"
 import SplashScreen from "../components/SplashScreens"
 import WrongNetwork from "../components/WrongNetwork"
 import renVm from "../assets/poweredByLogos/poweredByRenVM.svg"
@@ -104,7 +95,7 @@ const Layout: React.FC = ({ children }) => {
         <CurrentUser />
       </HStack>
 
-      {!address && <SplashScreen />}
+      {!address && <SplashScreen ptgSwap={location.pathname === "/ptg"} />}
       {address && supportedNetworks.includes(chain.chainId!) && children}
       {address && !supportedNetworks.includes(chain.chainId!) && (
         <WrongNetwork />
