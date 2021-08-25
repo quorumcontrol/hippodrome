@@ -4,9 +4,7 @@ import "@fontsource/zen-dots"
 import coinsImage from "../assets/coins.svg"
 import ConnectButton from "./ConnectButton"
 
-interface SplashScreenProps {}
-
-const SplashScreen: React.FC<SplashScreenProps> = () => {
+const SplashScreen = () => {
   const features = [
     {
       icon: coinsImage,
