@@ -10,10 +10,10 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "rgb(24, 26, 27)",
+        bg: "#0d1117",
       },
       html: {
-        bg: "rgb(24, 26, 27)",
+        bg: "#0d1117",
       },
     },
   },
