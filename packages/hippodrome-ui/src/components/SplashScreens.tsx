@@ -71,11 +71,11 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ ptgSwap }) => {
             >
               Swap{" "}
               <Box as="span" color="brandOrange.500">
-                BTC
+                Bitcoin
               </Box>{" "}
               or{" "}
               <Box as="span" color="brandOrange.500">
-                DOGE
+                Dogecoin
               </Box>{" "}
               to get{" "}
               <Box as="span" color="brandOrange.500">
@@ -91,7 +91,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ ptgSwap }) => {
                 textDecoration="underline"
                 fontWeight="500"
               >
-                Crypto Collesuem
+                Crypto Colossuem
               </Link>
             </Text>
           </VStack>
