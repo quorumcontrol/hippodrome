@@ -48,6 +48,7 @@ export interface LockAndMintParams {
   to: string;
   nonce: number;
   outputToken: string; // address of output token (only used by hippodrome and not ren)
+  forwardTo?: string;
 }
 
 export type KnownInputChains = "BTC" | "DOGE";

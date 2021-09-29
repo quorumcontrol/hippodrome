@@ -49,7 +49,7 @@ interface DepositConfirmedProps {
 const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
   propDeposit,
 }) => {
-  const { address } = useChainContext()
+  const { address:userSignerAddress } = useChainContext()
   const { deposit, confirmations } = useDeposit(propDeposit)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
@@ -57,6 +57,8 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
 
   const networkName = deposit.lockAndMint.params.lockNetwork
   const depositAmount = deposit.deposit.depositDetails.amount
+
+  const forwardTo = deposit.lockAndMint.params.forwardTo || userSignerAddress
 
   const { output: renOutput } = useRenOutput(
     deposit.lockAndMint.params.lockNetwork,
@@ -178,10 +180,10 @@ const DepositSwapConfirmed: React.FC<DepositConfirmedProps> = ({
             title={deposit.lockAndMint.params.to}
           >
             <Box h={8} w={8}>
-              <Jazzicon address={address!} />
+              <Jazzicon address={forwardTo!} />
             </Box>
             <Text fontWeight="semibold">
-              {centeredTruncateText(address!, 15)}
+              {centeredTruncateText(forwardTo!, 15)}
             </Text>
           </HStack>
         </Box>
@@ -343,7 +345,7 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
   }
 
   return (
-    <VStack spacing="4">
+    <VStack spacing="4" textAlign="center">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -366,11 +368,11 @@ const Deposit: React.FC<{ deposit: WrappedLockAndMintDeposit }> = ({
           </CircularProgressLabel>
         </CircularProgress>
       </motion.div>
-      <Heading>Waiting for {confirmations?.target} confirmations</Heading>
-      {/* TODO: give the user an estimate of time */}
+      <Heading>Waiting for<br />{confirmations?.target} confirmations</Heading>
+      <Text>Do not close this tab.</Text>
       <Text>
-        We need to wait for the miners on the chain to confirm your transaction.
-        This could take a little while.
+        The miners need to confirm your transaction.<br />
+        This usually takes between 30 and 90 minutes.
       </Text>
     </VStack>
   )

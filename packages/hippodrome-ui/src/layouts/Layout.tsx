@@ -1,4 +1,4 @@
-import { Text, Image, HStack, Link, Heading, VStack } from "@chakra-ui/react"
+import { Text, Image, HStack, Link, Heading, VStack, Box } from "@chakra-ui/react"
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import React from "react"
 import { useLocation, Link as RouterLink } from "react-router-dom"
@@ -25,10 +25,6 @@ const navLinks: NavLink[] = [
   {
     title: "Swap",
     link: "/",
-  },
-  {
-    title: "earn",
-    link: "/stake",
   },
 ]
 
@@ -97,20 +93,20 @@ const Layout: React.FC = ({ children }) => {
       </HStack>
 
       {!address && (
-        <>
-          {location.pathname === "/ptg" ? (
+        <Box pb="100">
+          {location.pathname.startsWith("/ptg") ? (
             <PTGSplashScreen />
           ) : (
             <SplashScreen />
           )}
-        </>
+        </Box>
       )}
       {address && supportedNetworks.includes(chain.chainId!) && children}
       {address && !supportedNetworks.includes(chain.chainId!) && (
         <WrongNetwork />
       )}
 
-      <VStack mt="10" spacing="8" flexGrow={1} justifyContent="center">
+      <VStack spacing="8" flexGrow={1} justifyContent="center">
         <Heading size="sm">Powered by</Heading>
         <HStack spacing="8">
           <a

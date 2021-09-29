@@ -34,6 +34,7 @@ export const doSwap = async (
   if (!input) {
     throw new Error("no input token");
   }
+  const forwardTo = lockAndMintParams.forwardTo || address
 
   const renTx = await deposit.deposit.queryTx();
   if (!renTx.out || (renTx.out && renTx.out.revert)) {
@@ -51,19 +52,6 @@ export const doSwap = async (
     amount,
     renTx.out.nhash,
     renTx.out.signature!
-  );
-
-  const shifterApproveInput = await tokenContractFromAddress(
-    input
-  ).populateTransaction.approve(shifter.address, constants.MaxUint256);
-  const shifterApproveOutput = await tokenContractFromAddress(
-    output
-  ).populateTransaction.approve(shifter.address, constants.MaxUint256);
-
-  const shiftTx = await shifter.populateTransaction.shift(
-    [input, output],
-    safeAddress,
-    address
   );
 
   const swapAmount = amount;
@@ -89,7 +77,22 @@ export const doSwap = async (
       },
     ]);
   }
-  txs = txs.concat([shifterApproveInput, shifterApproveOutput, shiftTx]);
+  // if we're just gonna forward to the safe address anyway, no need for these extra transactions
+  if (forwardTo !== safeAddress) {
+    const shifterApproveInput = await tokenContractFromAddress(
+      input
+    ).populateTransaction.approve(shifter.address, constants.MaxUint256);
+    const shifterApproveOutput = await tokenContractFromAddress(
+      output
+    ).populateTransaction.approve(shifter.address, constants.MaxUint256);
+  
+    const shiftTx = await shifter.populateTransaction.shift(
+      [input, output],
+      safeAddress,
+      forwardTo
+    );
+    txs = txs.concat([shifterApproveInput, shifterApproveOutput, shiftTx]);
+  }
 
   const tx = await relayer.multisend(txs);
   await tx.wait();
