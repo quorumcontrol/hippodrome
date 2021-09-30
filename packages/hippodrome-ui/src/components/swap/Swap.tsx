@@ -26,7 +26,7 @@ import {
 } from "../../models/tokenList"
 import SwapFees from "./SwapFees"
 import { parseValueToHex } from "../../utils/parse"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { mintUrl } from "../../utils/urls"
 import { useMemo } from "react"
 import { useChainContext } from "../../hooks/useChainContext"
@@ -34,9 +34,11 @@ import { useRenOutput } from "../../hooks/useRen"
 import { constants } from "ethers"
 
 const Swap: React.FC = () => {
+  const { to } = useParams<{to: string}>()
+
   const { safeAddress, chain } = useChainContext()
   const [amount, setAmount] = useState(0)
-  const [inputToken, setInputToken] = useState("DOGE")
+  const [inputToken, setInputToken] = useState("BTC")
   const history = useHistory()
   const [outputToken, setOutputToken] = useState(
     "0xc0f14c88250e680ecd70224b7fba82b7c6560d12" // wPTG
@@ -72,7 +74,8 @@ const Swap: React.FC = () => {
         inputToken, 
         to: safeAddress!,
         nonce, 
-        swap: outputToken
+        swap: outputToken,
+        forwardTo: to,
       }))
     } catch (err) {
       console.error("error: ", err)
@@ -97,7 +100,7 @@ const Swap: React.FC = () => {
           Convert {selectedInputToken?.symbol} to {selectedOutputToken?.name}
         </Heading>
         <SmallText fontSize="10" color="gray.400">
-          Converted coins are on Polygon Network
+          Received coins are on the Polygon network
         </SmallText>
       </VStack>
 
@@ -161,6 +164,22 @@ const Swap: React.FC = () => {
             />
           </HStack>
         </Box>
+        {to && (
+          <Box 
+            w="100%" 
+          >
+            <SmallText>To Wallet:</SmallText>
+            <Box
+              background="gray.900"
+              px="3"
+              py="3"
+              marginTop="3"
+              rounded="lg" 
+            >
+              {to}
+            </Box>
+          </Box>
+        )}
       </VStack>
 
       <SwapFees

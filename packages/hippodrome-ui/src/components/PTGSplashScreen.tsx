@@ -2,8 +2,13 @@ import { Heading, Text, VStack, Box, Link } from "@chakra-ui/react"
 import React from "react"
 import "@fontsource/zen-dots"
 import ConnectButton from "./ConnectButton"
+import { useParams } from "react-router-dom"
 
 const PTGSplashScreen = () => {
+  const params = useParams<{to: string}>()
+  console.log(params)
+  const { to } = params
+
   return (
     <VStack paddingX="200px" spacing="16">
       <VStack paddingX="100px" spacing="20">
@@ -25,8 +30,8 @@ const PTGSplashScreen = () => {
             or{" "}
             <Box as="span" color="brandOrange.500">
               Dogecoin
-            </Box>{" "}
-            to get{" "}
+            </Box>{" "}<br />
+            for{" "}
             <Box as="span" color="brandOrange.500">
               PTG
             </Box>
@@ -43,8 +48,11 @@ const PTGSplashScreen = () => {
               Crypto Colossuem
             </Link>
           </Text>
+          <ConnectButton text="Get PTG now" />
+          {to && 
+            <p>Game wallet: {to}</p>
+          }
         </VStack>
-        <ConnectButton text="Swap token now" />
       </VStack>
     </VStack>
   )

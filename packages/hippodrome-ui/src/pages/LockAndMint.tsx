@@ -15,12 +15,14 @@ const Transaction: React.FC = () => {
   }>()
   const query = useQuery()
   const swap = query.get("swap")
+  const forwardTo = query.get("forwardTo") || undefined
 
   const { lockAndMint, deposits, loading } = useLockAndMint({
     lockNetwork: asset,
     to,
     nonce: parseInt(nonce),
     outputToken: (swap || ''),
+    forwardTo,
   })
 
   if (loading) {
