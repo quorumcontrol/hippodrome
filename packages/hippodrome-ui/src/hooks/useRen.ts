@@ -97,6 +97,30 @@ export const useLockAndMint = (params:LockAndMintParams) => {
   };
 };
 
+export const useDebugger = (params:LockAndMintParams) => {
+  const { chain } = useChainContext()
+  const [ready, setReady] = useState(false)
+
+  const lockAndMintWrappers = useMemo(() => {
+    console.log('memo')
+    return Array(params.nonce).fill(true).map((_, i) => {
+      return getLockAndMint(chain, {...params, nonce: i});
+    })
+  }, [params, chain])
+
+  useEffect(() => {
+    Promise.all(lockAndMintWrappers.map((lm) => lm.ready)).then(() => {
+      console.log('set ready')
+      setReady(true)
+    })
+  }, [lockAndMintWrappers])
+
+  return {
+    lockAndMints: lockAndMintWrappers,
+    loading: !ready
+  };
+};
+
 export const useRenOutput = (networkName: KnownInputChains, amount:BigNumberish) => {
   const { fees } = useRenFees(networkName);
 

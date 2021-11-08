@@ -12,6 +12,7 @@ import Stake from "./pages/Stake";
 import { ChainProvider } from "./hooks/useChainContext";
 import LockAndMint from "./pages/LockAndMint";
 import theme from "./theme";
+import Debug from "./pages/Debug";
 
 interface RouteWithLayoutParams extends RouteProps {}
 
@@ -31,6 +32,9 @@ export const App: React.FC = () => (
         <Switch>
           <RouteWithLayout path="/transaction/mint/:asset/:to/:nonce" exact>
             <LockAndMint />
+          </RouteWithLayout>
+          <RouteWithLayout path="/debug/:asset/:to/:nonce" exact>
+            <Debug />
           </RouteWithLayout>
           <RouteWithLayout path="/stake">
             <Stake />
