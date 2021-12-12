@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import {
   Box,
@@ -221,6 +221,18 @@ const AriPage: React.FC = () => {
     outputToken: (swap || ''),
     forwardTo,
   })
+
+  useEffect(() => {
+    const doAsync = async () => {
+      if (deposits && deposits.length > 0) {
+        const renTx = await deposits[0].deposit.queryTx();
+        console.log('ren: ', renTx)
+        console.log(Buffer.from((renTx as any).out.hash).toString('hex'))
+      }
+    }
+    
+    doAsync()
+  }, [deposits])
 
   if (loading) {
     return (

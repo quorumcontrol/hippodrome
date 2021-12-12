@@ -130,7 +130,7 @@ export const doAriSwap = async (
   // const shifter = getBalanceShifter(chainInstance);
   const amount = BigNumber.from(renTx.out.amount.toString());
 
-  const mintTx = await minter.temporaryMint(
+  const mintTx = await minter.populateTransaction.temporaryMint(
     safeAddress,
     utils.keccak256(Buffer.from(lockAndMintParams.nonce.toString())),
     lockAndMintParams.lockNetwork,
@@ -139,9 +139,11 @@ export const doAriSwap = async (
     renTx.out.signature!
   );
 
-  console.log('ari: ', mintTx.hash, mintTx)
+  const tx = await relayer.multisend([mintTx])
 
-  await mintTx.wait().catch((err) => {
+  console.log('ari: ', tx.hash, mintTx)
+
+  await tx.wait().catch((err) => {
     console.error('ari: ', err)
   });
 
