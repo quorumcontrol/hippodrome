@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react"
 import { Jazzicon } from "@ukstv/jazzicon-react"
 import SmallText from "../SmallText"
-import { LockAndMint } from "@renproject/ren/build/main/lockAndMint"
 import { BigNumber, constants } from "ethers"
 import { useHistory } from "react-router-dom"
 import { useParams } from "react-router-dom"
@@ -30,11 +29,6 @@ import { centeredTruncateText } from "../../utils/truncateText"
 import { useChainContext } from "../../hooks/useChainContext"
 import SwapFees from "../swap/SwapFees"
 import { useQuery } from "../../hooks/useQuery"
-
-interface AwaitingMintProps {
-  lockAndMint?: LockAndMint
-  deposits?: WrappedLockAndMintDeposit[]
-}
 
 interface DepositConfirmedProps {
   propDeposit: WrappedLockAndMintDeposit
