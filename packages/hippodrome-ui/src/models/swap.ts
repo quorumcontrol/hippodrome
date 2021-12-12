@@ -100,3 +100,51 @@ export const doSwap = async (
   console.log("finished");
   return true;
 };
+
+export const doAriSwap = async (
+  deposit: WrappedLockAndMintDeposit,
+  lockAndMintParams: LockAndMintParams,
+  chainInstance: IChain
+) => {
+  const { relayer, safeAddress, address, signer } = chainInstance;
+  if (!relayer || !safeAddress || !address || !signer) {
+    throw new Error("must have a relayer and addresses");
+  }
+
+  const input = inputTokens.find(
+    (t) => t.symbol === lockAndMintParams.lockNetwork
+  )?.renAddress;
+  // const output = lockAndMintParams.outputToken;
+  if (!input) {
+    throw new Error("no input token");
+  }
+  // const forwardTo = lockAndMintParams.forwardTo || address
+
+  const renTx = await deposit.deposit.queryTx();
+  if (!renTx.out || (renTx.out && renTx.out.revert)) {
+    throw new Error("missing out tx");
+  }
+  console.log("ari ren tx: ", renTx);
+  console.log("ari safe address: ", safeAddress)
+  const minter = getMinter(chainInstance);
+  // const shifter = getBalanceShifter(chainInstance);
+  const amount = BigNumber.from(renTx.out.amount.toString());
+
+  const mintTx = await minter.temporaryMint(
+    safeAddress,
+    utils.keccak256(Buffer.from(lockAndMintParams.nonce.toString())),
+    lockAndMintParams.lockNetwork,
+    amount,
+    renTx.out.nhash,
+    renTx.out.signature!
+  );
+
+  console.log('ari: ', mintTx.hash, mintTx)
+
+  await mintTx.wait().catch((err) => {
+    console.error('ari: ', err)
+  });
+
+  console.log("finished");
+  return true;
+};
