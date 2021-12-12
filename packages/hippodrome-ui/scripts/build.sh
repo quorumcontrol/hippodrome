@@ -4,7 +4,7 @@ set -x -e
 
 pushd ../contracts
 export FIRST_RUN=true
-yarn install || true #WTF netlify? why you no build
+yarn install --ignore-engines || true #WTF netlify? why you no build
 yarn build
 popd
 
