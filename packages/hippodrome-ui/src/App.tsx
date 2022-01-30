@@ -11,7 +11,6 @@ import Swap from "./pages/Swap";
 import Stake from "./pages/Stake";
 import { ChainProvider } from "./hooks/useChainContext";
 import LockAndMint from "./pages/LockAndMint";
-import Ari from './components/transaction/AriAwaitingMint'
 import theme from "./theme";
 import Debug from "./pages/Debug";
 
@@ -33,9 +32,6 @@ export const App: React.FC = () => (
         <Switch>
           <RouteWithLayout path="/transaction/mint/:asset/:to/:nonce" exact>
             <LockAndMint />
-          </RouteWithLayout>
-          <RouteWithLayout path="/ari/:asset/:to/:nonce" exact>
-            <Ari />
           </RouteWithLayout>
           <RouteWithLayout path="/debug/:asset/:to/:nonce" exact>
             <Debug />
