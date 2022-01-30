@@ -29,7 +29,7 @@ const navLinks: NavLink[] = [
 ]
 
 const Layout: React.FC = ({ children }) => {
-  const { address, chain } = useChainContext()
+  const { address, chain, safeAddress } = useChainContext()
   const location = useLocation()
 
   return (
@@ -122,6 +122,7 @@ const Layout: React.FC = ({ children }) => {
           <Image src={oneInch} h="32px" />
           <Image src={gnosis} h="32px" />
         </HStack>
+        <Text size="sm">Safe address: {safeAddress}</Text>
       </VStack>
     </VStack>
   )
