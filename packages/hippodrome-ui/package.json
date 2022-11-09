@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/qrcode.react": "^1.0.1",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-select": "^4.0.15",
