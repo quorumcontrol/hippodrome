@@ -10,8 +10,8 @@ import debug from 'debug'
 
 const params = new URLSearchParams(window.location.search)
 
-const disabledRelayer = params.get("disableRelayer")
-if (disabledRelayer) {
+const ledgerRelayer = params.get("ledgerRelayer")
+if (ledgerRelayer) {
   debug.enable("*")
 }
 
@@ -44,7 +44,16 @@ export const userHasSafe = async (address:string) => {
 }
 
 export const createRelayer = (userSigner: Signer, provider:providers.Provider, chainId:number ) => {
-  if (chainId === 31337 || disabledRelayer) {
+  if (chainId === 31337) {
+    return new GnosisLocalRelayer({
+      transmitSigner: userSigner,
+      userSigner,
+      chainId,
+    })
+  }
+
+  if (ledgerRelayer) {
+    console.log("--------------------- using ledger signer")
     return new GnosisLocalRelayer({
       transmitSigner: userSigner,
       userSigner,
