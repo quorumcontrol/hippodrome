@@ -24,8 +24,8 @@
     "ethers": "^5.3.1",
     "exponential-backoff": "^3.1.0",
     "framer-motion": "^4.0.0",
-    "kasumah-relay-wrapper": "^0.0.39",
-    "kasumah-wallet": "^0.0.39",
+    "kasumah-relay-wrapper": "^0.0.48",
+    "kasumah-wallet": "^0.0.48",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/qrcode.react": "^1.0.1",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-select": "^4.0.15",

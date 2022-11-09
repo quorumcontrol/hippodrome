@@ -6,6 +6,14 @@ import axios from 'axios'
 import { backOff } from "exponential-backoff";
 import { constants, providers, Signer, VoidSigner } from 'ethers';
 import { GnosisSafe__factory } from 'kasumah-wallet/dist/types/ethers-contracts';
+import debug from 'debug'
+
+const params = new URLSearchParams(window.location.search)
+
+const disabledRelayer = params.get("disableRelayer")
+if (disabledRelayer) {
+  debug.enable("*")
+}
 
 const voidSigner = new VoidSigner(constants.AddressZero)
 
@@ -36,7 +44,7 @@ export const userHasSafe = async (address:string) => {
 }
 
 export const createRelayer = (userSigner: Signer, provider:providers.Provider, chainId:number ) => {
-  if (chainId === 31337) {
+  if (chainId === 31337 || disabledRelayer) {
     return new GnosisLocalRelayer({
       transmitSigner: userSigner,
       userSigner,
