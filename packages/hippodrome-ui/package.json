@@ -24,7 +24,7 @@
     "ethers": "^5.3.1",
     "exponential-backoff": "^3.1.0",
     "framer-motion": "^4.0.0",
-    "kasumah-relay-wrapper": "0.0.49",
+    "kasumah-relay-wrapper": "0.0.50",
     "kasumah-wallet": "0.0.49",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",

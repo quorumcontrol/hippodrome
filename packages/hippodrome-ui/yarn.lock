@@ -9683,10 +9683,10 @@ jssha@2.3.1:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-kasumah-relay-wrapper@0.0.49:
-  version "0.0.49"
-  resolved "https://registry.yarnpkg.com/kasumah-relay-wrapper/-/kasumah-relay-wrapper-0.0.49.tgz#d953da65684bf07e3a3566841cad7b9b5462601c"
-  integrity sha512-Pa1pWFJUz48crZwiyvoUVIlZFJa/OqHwwh92vl+LEAp0T1b1BFaprSWG9soomJRXEE8H6N2nHo5NOOP2pLiKCw==
+kasumah-relay-wrapper@0.0.50:
+  version "0.0.50"
+  resolved "https://registry.yarnpkg.com/kasumah-relay-wrapper/-/kasumah-relay-wrapper-0.0.50.tgz#6f4cf1ff411dba3909cce29f8d3a222fc7e0f678"
+  integrity sha512-4WcOFWBr+qKzUqH0FnAPBDdnvI5uQaL7Uzs0zjAJSxyyMNhiq7aZjqdgH6WaK8XRUgA5/1aR9InOTlwIZ8K+7A==
   dependencies:
     axios "^0.21.1"
     debug "^4.3.1"
