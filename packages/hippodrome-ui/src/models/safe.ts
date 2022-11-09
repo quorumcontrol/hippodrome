@@ -1,6 +1,6 @@
 import chainInstance from './chain'
 import {
-  GnosisBiconomy, GnosisLocalRelayer,
+  GnosisBiconomy, GnosisLocalLedgerRelayer, GnosisLocalRelayer,
 } from 'kasumah-relay-wrapper/dist/src/relayers'
 import axios from 'axios'
 import { backOff } from "exponential-backoff";
@@ -54,7 +54,7 @@ export const createRelayer = (userSigner: Signer, provider:providers.Provider, c
 
   if (ledgerRelayer) {
     console.log("--------------------- using ledger signer")
-    return new GnosisLocalRelayer({
+    return new GnosisLocalLedgerRelayer({
       transmitSigner: userSigner,
       userSigner,
       chainId,
