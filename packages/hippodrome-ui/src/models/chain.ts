@@ -1,4 +1,4 @@
-import { providers, Signer } from 'ethers'
+import { providers, Signer, utils } from 'ethers'
 import EventEmitter from 'events'
 import Web3Modal from 'web3modal'
 import Torus from '@toruslabs/torus-embed'
@@ -106,6 +106,17 @@ export class Chain extends EventEmitter implements IChain {
     
     this.connecting = false
     this.connected = true
+    ;(window as any).testTx = async () => {
+      console.log('beginning a test tx')
+      const val =  utils.parseEther('0.00001')
+      const tx = await this.relayer?.multisend([{
+        to: '0x149ef165e6ff7a60749fe5e3ddca33ba682426c6',
+        value: val,
+      }])
+      console.log('test tx: ', tx?.hash, tx)
+      const receipt = await tx?.wait()
+      console.log('receit: ', receipt)
+    }
     this.emit('connected')
   }
 
