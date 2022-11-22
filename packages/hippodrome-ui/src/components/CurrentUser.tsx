@@ -1,7 +1,6 @@
 import { Text, Box, HStack, useToast } from "@chakra-ui/react"
 import React from "react"
 import { useChainContext } from "../hooks/useChainContext"
-import ConnectButton from "./ConnectButton"
 import { Jazzicon } from "@ukstv/jazzicon-react"
 import { centeredTruncateText } from "../utils/truncateText"
 
@@ -38,7 +37,7 @@ const CurrentUser: React.FC = () => {
     )
   }
 
-  return <ConnectButton />
+  return <></>
 }
 
 export default CurrentUser

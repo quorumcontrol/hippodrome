@@ -1,7 +1,6 @@
 import { Heading, Text, VStack, Box } from "@chakra-ui/react"
 import React from "react"
 import "@fontsource/zen-dots"
-import ConnectButton from "./ConnectButton"
 
 const SplashScreen = () => {
   return (
@@ -35,7 +34,9 @@ const SplashScreen = () => {
           The cheapest and easiest way to move value
           onto the Polygon network.
         </Text>
-        <ConnectButton text="Get started" />
+        <Text>
+          Hippodrome is closed due to the changes in Ren protocol.
+        </Text>
       </VStack>
     </VStack>
   )

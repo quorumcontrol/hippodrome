@@ -1,36 +1,37 @@
-import { Text, Image, HStack, Link, Heading, VStack, Box } from "@chakra-ui/react"
-import { ExternalLinkIcon } from "@chakra-ui/icons"
-import React from "react"
-import { useLocation, Link as RouterLink } from "react-router-dom"
-import CurrentUser from "../components/CurrentUser"
-import { useChainContext } from "../hooks/useChainContext"
-import logoURl from "../assets/logo.png"
-import SplashScreen from "../components/SplashScreens"
-import WrongNetwork from "../components/WrongNetwork"
-import renVm from "../assets/poweredByLogos/poweredByRenVM.svg"
-import polygon from "../assets/poweredByLogos/polygon_logo.png"
-import biconomy from "../assets/poweredByLogos/biconomy-white.svg"
-import oneInch from "../assets/poweredByLogos/1inch_color_white.svg"
-import gnosis from "../assets/poweredByLogos/gnosis-logo.svg"
-import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg"
-import { supportedNetworks } from "../models/chain"
-import PTGSplashScreen from "../components/PTGSplashScreen"
+import {
+  Text,
+  Image,
+  HStack,
+  Link,
+  Heading,
+  VStack,
+  Box,
+} from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import React from "react";
+import { useLocation, Link as RouterLink } from "react-router-dom";
+import CurrentUser from "../components/CurrentUser";
+import { useChainContext } from "../hooks/useChainContext";
+import logoURl from "../assets/logo.png";
+import SplashScreen from "../components/SplashScreens";
+import renVm from "../assets/poweredByLogos/poweredByRenVM.svg";
+import polygon from "../assets/poweredByLogos/polygon_logo.png";
+import biconomy from "../assets/poweredByLogos/biconomy-white.svg";
+import oneInch from "../assets/poweredByLogos/1inch_color_white.svg";
+import gnosis from "../assets/poweredByLogos/gnosis-logo.svg";
+import cryptoColosseum from "../assets/poweredByLogos/cryptocolosseum-logo.svg";
 
 interface NavLink {
-  title: string
-  link: "/stake" | "/"
+  title: string;
+  link: "/stake" | "/";
 }
 
 const navLinks: NavLink[] = [
-  {
-    title: "Swap",
-    link: "/",
-  },
-]
+];
 
 const Layout: React.FC = ({ children }) => {
-  const { address, chain, safeAddress } = useChainContext()
-  const location = useLocation()
+  const { address, safeAddress } = useChainContext();
+  const location = useLocation();
 
   return (
     <VStack
@@ -73,7 +74,7 @@ const Layout: React.FC = ({ children }) => {
               >
                 {navlink.title}
               </Link>
-            )
+            );
           })}
           <Link
             fontWeight="bold"
@@ -94,16 +95,8 @@ const Layout: React.FC = ({ children }) => {
 
       {!address && (
         <Box pb="100">
-          {location.pathname.startsWith("/ptg") ? (
-            <PTGSplashScreen />
-          ) : (
-            <SplashScreen />
-          )}
+          <SplashScreen />
         </Box>
-      )}
-      {address && supportedNetworks.includes(chain.chainId!) && children}
-      {address && !supportedNetworks.includes(chain.chainId!) && (
-        <WrongNetwork />
       )}
 
       <VStack spacing="8" flexGrow={1} justifyContent="center">
@@ -125,7 +118,7 @@ const Layout: React.FC = ({ children }) => {
         <Text size="sm">Safe address: {safeAddress}</Text>
       </VStack>
     </VStack>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
